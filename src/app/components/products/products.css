@@ -1,0 +1,18 @@
+.fade-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
+  mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
+}
+
+@media (min-width: 640px) {
+  .fade-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 96px, black calc(100% - 96px), transparent);
+    mask-image: linear-gradient(to right, transparent, black 96px, black calc(100% - 96px), transparent);
+  }
+}
+
+@media (min-width: 1024px) {
+  .fade-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 160px, black calc(100% - 160px), transparent);
+    mask-image: linear-gradient(to right, transparent, black 160px, black calc(100% - 160px), transparent);
+  }
+}

@@ -1,0 +1,83 @@
+<header class="relative bg-navy-500 shadow-lg shadow-navy-900/20">
+  <nav class="mx-auto flex h-20 max-w-7xl items-center gap-4 px-6 lg:px-10">
+    <div class="flex flex-1 items-center">
+      <a href="#top" class="flex items-center gap-3" (click)="navigateTo($event, '#top')">
+        <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm border-2 border-white/80">
+          <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round">
+            <path d="M7 4 L7 20" />
+            <path d="M7 4 L15 4 Q19 4 19 8 Q19 12 15 12 L7 12" />
+            <path d="M4 20 L14 20" />
+            <path d="M5 17 L13 9" />
+          </svg>
+        </span>
+        <span class="flex flex-col leading-none">
+          <span class="font-display text-xl font-extrabold tracking-tight text-white">PLASTIBAN</span>
+          <span class="text-[10px] font-medium tracking-wide text-white/80">Technical Industry S.A.R.L</span>
+        </span>
+      </a>
+    </div>
+
+    <div class="hidden flex-1 items-center justify-center gap-8 lg:flex">
+      @for (link of links; track link.href) {
+        <a
+          [href]="link.href"
+          (click)="navigateTo($event, link.href)"
+          class="text-sm font-medium text-white/90 transition hover:text-white"
+        >
+          {{ link.label }}
+        </a>
+      }
+    </div>
+
+    <div class="flex flex-1 items-center justify-end">
+      <a
+        href="#contact"
+        (click)="navigateTo($event, '#contact')"
+        class="hidden items-center rounded-full bg-orange-450 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-450/90 lg:inline-flex"
+      >
+        Get a Quote
+      </a>
+
+      <button
+        type="button"
+        class="flex h-10 w-10 items-center justify-center rounded-md text-white lg:hidden"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen()"
+        aria-label="Toggle navigation menu"
+      >
+        @if (!menuOpen()) {
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        } @else {
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        }
+      </button>
+    </div>
+  </nav>
+
+  @if (menuOpen()) {
+    <div class="absolute inset-x-0 top-full border-t border-white/10 bg-navy-500 px-6 py-4 shadow-lg shadow-navy-900/20 lg:hidden">
+      <div class="flex flex-col gap-4">
+        @for (link of links; track link.href) {
+          <a
+            [href]="link.href"
+            class="text-sm font-medium text-white/90"
+            (click)="navigateTo($event, link.href)"
+          >
+            {{ link.label }}
+          </a>
+        }
+        <a
+          href="#contact"
+          class="inline-flex items-center justify-center rounded-full bg-orange-450 px-6 py-2.5 text-sm font-semibold text-white"
+          (click)="navigateTo($event, '#contact')"
+        >
+          Get a Quote
+        </a>
+      </div>
+    </div>
+  }
+</header>

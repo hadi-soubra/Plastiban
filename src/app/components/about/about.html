@@ -1,0 +1,47 @@
+<section
+  id="about"
+  class="flex min-h-[calc(100dvh-var(--header-h))] scroll-mt-[var(--header-h)] flex-col justify-center bg-cream-50 px-6 py-16 lg:px-10"
+>
+  <div class="mx-auto grid w-full max-w-7xl gap-16 lg:grid-cols-[minmax(0,380px)_1fr] lg:gap-20">
+    <div>
+      <p class="font-display text-7xl font-extrabold leading-none text-navy-900 sm:text-8xl">1989</p>
+      <p class="mt-4 text-xs font-bold uppercase tracking-widest text-orange-450">The year it began</p>
+
+      <div class="mt-8 grid grid-cols-2 gap-x-8 gap-y-8 border-t border-navy-900/10 pt-8">
+        @for (stat of sideStats; track stat.label) {
+          <div>
+            <p class="font-display text-3xl font-extrabold text-navy-900">{{ stat.value }}</p>
+            <p class="mt-1 text-sm text-slate-500">{{ stat.label }}</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div>
+      <p class="text-xs font-bold uppercase tracking-widest text-orange-450">Who we are</p>
+      <h2 class="mt-3 font-display text-3xl font-extrabold leading-tight text-navy-900 sm:text-4xl lg:text-[2.75rem]">
+        A family of makers, refining the craft of packaging for three decades.
+      </h2>
+      <p class="mt-6 max-w-2xl text-base leading-relaxed text-slate-600">
+        Plastiban Technical Industry S.A.R.L was founded in 1989. Our path has led us to
+        continuous growth, thanks to a dedicated and faithful team of professionals who have
+        worked with us to continuously innovate and improve our techniques and methodologies,
+        turning everyday packaging into something considered and enduring.
+      </p>
+
+      <div class="mt-10 grid gap-4 sm:grid-cols-2">
+        @for (feature of features; track feature.title) {
+          <div class="flex gap-4 rounded-xl bg-white p-6 shadow-sm shadow-navy-900/5">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-orange-450/15">
+              <span class="h-2.5 w-2.5 rotate-45 bg-orange-450"></span>
+            </span>
+            <div>
+              <p class="font-semibold text-navy-900">{{ feature.title }}</p>
+              <p class="mt-1 hidden text-sm leading-relaxed text-slate-500 sm:block">{{ feature.description }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
