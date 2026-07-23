@@ -1,9 +1,5 @@
-import { Component } from '@angular/core';
-
-interface Stat {
-  value: string;
-  label: string;
-}
+import { Component, inject } from '@angular/core';
+import { TranslationService } from '../../i18n/translation.service';
 
 @Component({
   selector: 'app-hero',
@@ -12,10 +8,5 @@ interface Stat {
   styleUrl: './hero.css',
 })
 export class Hero {
-  protected readonly stats: Stat[] = [
-    { value: '35+', label: 'Years of craft' },
-    { value: '2', label: 'Countries served' },
-    { value: '2', label: 'Production sites' },
-    { value: '100%', label: 'In-house control' },
-  ];
+  protected readonly i18n = inject(TranslationService);
 }

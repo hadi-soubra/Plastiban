@@ -11,95 +11,360 @@ import {
   viewChild,
 } from '@angular/core';
 import { TiltDirective } from '../../directives/tilt.directive';
+import { RevealDirective } from '../../directives/reveal.directive';
+import { TranslationService } from '../../i18n/translation.service';
+import { Lang } from '../../i18n/translations';
 
-type Category = 'Cardboard Boxes' | 'Plastic Boxes' | 'Hard Boxes' | 'Digital Printing' | 'Souvenir Boxes';
+type CategoryId = 'cardboard' | 'plastic' | 'hard' | 'printing' | 'souvenir';
+
+/** A string that exists in both languages, resolved at render time by `text()`. */
+type Localized = Record<Lang, string>;
 
 interface Product {
-  name: string;
-  description: string;
+  name: Localized;
+  description: Localized;
   image: string;
   // Display-only label shown in the card badge. Does not affect filtering.
-  subCategory: string;
-  category: Category;
+  subCategory: Localized;
+  category: CategoryId;
 }
 
-const CATEGORIES: Category[] = [
-  'Cardboard Boxes',
-  'Plastic Boxes',
-  'Hard Boxes',
-  'Digital Printing',
-  'Souvenir Boxes',
-];
+const CATEGORIES: CategoryId[] = ['cardboard', 'plastic', 'hard', 'printing', 'souvenir'];
 
-const PRODUCTS_BY_CATEGORY: Record<
-  Category,
-  Array<{ name: string; description: string; image: string; subCategory: string }>
-> = {
-  'Cardboard Boxes': [
-    { name: 'Corrugated Shipping Box', description: 'Standard shipping box for e-commerce orders.', image: 'cardboard_boxes_1.png', subCategory: 'Corrugated' },
-    { name: 'Double Wall Export Carton', description: 'Reinforced carton for heavy export loads.', image: 'cardboard_boxes_2.png', subCategory: 'Export' },
-    { name: 'Die-Cut Retail Box', description: 'Custom die-cut box for retail display.', image: 'cardboard_boxes_3.png', subCategory: 'Retail' },
-    { name: 'Mailer Box', description: 'Self-locking mailer for direct-to-consumer shipping.', image: 'cardboard_boxes_4.png', subCategory: 'Mailer' },
-    { name: 'Corrugated Tray', description: 'Open tray for produce and bulk goods.', image: 'cardboard_boxes_5.png', subCategory: 'Tray' },
-    { name: 'Archive Storage Box', description: 'Stackable box for document archiving.', image: 'cardboard_boxes_6.png', subCategory: 'Archive' },
-    { name: 'Pizza Box', description: 'Grease-resistant box for food delivery.', image: 'cardboard_boxes_7.png', subCategory: 'Food' },
-    { name: 'Moving Box', description: 'Heavy-duty box for household moving.', image: 'cardboard_boxes_8.png', subCategory: 'Moving' },
-    { name: 'Printed Carton', description: 'Full-color printed carton for branding.', image: 'cardboard_boxes_9.png', subCategory: 'Printed' },
-    { name: 'Flat Pack Carton', description: 'Space-saving flat-pack carton.', image: 'cardboard_boxes_10.png', subCategory: 'Flat Pack' },
+const CATEGORY_LABEL_KEYS: Record<CategoryId, string> = {
+  cardboard: 'category.cardboard',
+  plastic: 'category.plastic',
+  hard: 'category.hard',
+  printing: 'category.printing',
+  souvenir: 'category.souvenir',
+};
+
+type ProductSeed = Omit<Product, 'category'>;
+
+const PRODUCTS_BY_CATEGORY: Record<CategoryId, ProductSeed[]> = {
+  cardboard: [
+    {
+      name: { en: 'Corrugated Shipping Box', ar: 'علبة شحن مضلّعة' },
+      description: { en: 'Standard shipping box for e-commerce orders.', ar: 'علبة شحن قياسية لطلبات التجارة الإلكترونية.' },
+      image: 'cardboard_boxes_1.png',
+      subCategory: { en: 'Corrugated', ar: 'مضلّع' },
+    },
+    {
+      name: { en: 'Double Wall Export Carton', ar: 'كرتونة تصدير مزدوجة الجدار' },
+      description: { en: 'Reinforced carton for heavy export loads.', ar: 'كرتونة معزّزة للأحمال الثقيلة والتصدير.' },
+      image: 'cardboard_boxes_2.png',
+      subCategory: { en: 'Export', ar: 'تصدير' },
+    },
+    {
+      name: { en: 'Die-Cut Retail Box', ar: 'علبة تجزئة مقصوصة بالقالب' },
+      description: { en: 'Custom die-cut box for retail display.', ar: 'علبة مقصوصة حسب الطلب للعرض في المتاجر.' },
+      image: 'cardboard_boxes_3.png',
+      subCategory: { en: 'Retail', ar: 'تجزئة' },
+    },
+    {
+      name: { en: 'Mailer Box', ar: 'علبة بريدية' },
+      description: { en: 'Self-locking mailer for direct-to-consumer shipping.', ar: 'علبة ذاتية الإغلاق للشحن المباشر إلى المستهلك.' },
+      image: 'cardboard_boxes_4.png',
+      subCategory: { en: 'Mailer', ar: 'بريدي' },
+    },
+    {
+      name: { en: 'Corrugated Tray', ar: 'صينية مضلّعة' },
+      description: { en: 'Open tray for produce and bulk goods.', ar: 'صينية مفتوحة للخضار والبضائع السائبة.' },
+      image: 'cardboard_boxes_5.png',
+      subCategory: { en: 'Tray', ar: 'صينية' },
+    },
+    {
+      name: { en: 'Archive Storage Box', ar: 'علبة أرشفة' },
+      description: { en: 'Stackable box for document archiving.', ar: 'علبة قابلة للتكديس لحفظ المستندات.' },
+      image: 'cardboard_boxes_6.png',
+      subCategory: { en: 'Archive', ar: 'أرشفة' },
+    },
+    {
+      name: { en: 'Pizza Box', ar: 'علبة بيتزا' },
+      description: { en: 'Grease-resistant box for food delivery.', ar: 'علبة مقاومة للدهون لتوصيل الطعام.' },
+      image: 'cardboard_boxes_7.png',
+      subCategory: { en: 'Food', ar: 'أغذية' },
+    },
+    {
+      name: { en: 'Moving Box', ar: 'علبة نقل أثاث' },
+      description: { en: 'Heavy-duty box for household moving.', ar: 'علبة متينة لنقل الأثاث المنزلي.' },
+      image: 'cardboard_boxes_8.png',
+      subCategory: { en: 'Moving', ar: 'نقل' },
+    },
+    {
+      name: { en: 'Printed Carton', ar: 'كرتونة مطبوعة' },
+      description: { en: 'Full-color printed carton for branding.', ar: 'كرتونة مطبوعة بألوان كاملة لإبراز العلامة التجارية.' },
+      image: 'cardboard_boxes_9.png',
+      subCategory: { en: 'Printed', ar: 'مطبوع' },
+    },
+    {
+      name: { en: 'Flat Pack Carton', ar: 'كرتونة مسطّحة التغليف' },
+      description: { en: 'Space-saving flat-pack carton.', ar: 'كرتونة مسطّحة توفّر المساحة عند التخزين.' },
+      image: 'cardboard_boxes_10.png',
+      subCategory: { en: 'Flat Pack', ar: 'مسطّح' },
+    },
   ],
-  'Plastic Boxes': [
-    { name: 'Stackable Storage Bin', description: 'Durable bin for warehouse storage.', image: 'plastic_boxes_1.png', subCategory: 'Storage' },
-    { name: 'Clear Display Box', description: 'Transparent box for retail display.', image: 'plastic_boxes_2.png', subCategory: 'Display' },
-    { name: 'Hinged Container', description: 'Snap-lid container for small parts.', image: 'plastic_boxes_3.png', subCategory: 'Hinged' },
-    { name: 'Produce Crate', description: 'Ventilated crate for fresh produce.', image: 'plastic_boxes_4.png', subCategory: 'Produce' },
-    { name: 'Modular Tote Box', description: 'Stackable tote for logistics.', image: 'plastic_boxes_5.png', subCategory: 'Tote' },
-    { name: 'Injection Molded Case', description: 'Precision case for tools or parts.', image: 'plastic_boxes_6.png', subCategory: 'Molded' },
-    { name: 'Food-Grade Container', description: 'Sealed container for food storage.', image: 'plastic_boxes_7.png', subCategory: 'Food Grade' },
-    { name: 'Divided Organizer Box', description: 'Compartmented box for small items.', image: 'plastic_boxes_8.png', subCategory: 'Organizer' },
-    { name: 'Nesting Crate', description: 'Space-saving nesting crate.', image: 'plastic_boxes_9.png', subCategory: 'Nesting' },
-    { name: 'Industrial Parts Bin', description: 'Heavy-duty bin for industrial parts.', image: 'plastic_boxes_10.png', subCategory: 'Industrial' },
+  plastic: [
+    {
+      name: { en: 'Stackable Storage Bin', ar: 'صندوق تخزين قابل للتكديس' },
+      description: { en: 'Durable bin for warehouse storage.', ar: 'صندوق متين لتخزين المستودعات.' },
+      image: 'plastic_boxes_1.png',
+      subCategory: { en: 'Storage', ar: 'تخزين' },
+    },
+    {
+      name: { en: 'Clear Display Box', ar: 'علبة عرض شفافة' },
+      description: { en: 'Transparent box for retail display.', ar: 'علبة شفافة للعرض في المتاجر.' },
+      image: 'plastic_boxes_2.png',
+      subCategory: { en: 'Display', ar: 'عرض' },
+    },
+    {
+      name: { en: 'Hinged Container', ar: 'حاوية بغطاء مفصلي' },
+      description: { en: 'Snap-lid container for small parts.', ar: 'حاوية بغطاء يُغلق بإحكام للقطع الصغيرة.' },
+      image: 'plastic_boxes_3.png',
+      subCategory: { en: 'Hinged', ar: 'مفصلي' },
+    },
+    {
+      name: { en: 'Produce Crate', ar: 'صندوق خضار' },
+      description: { en: 'Ventilated crate for fresh produce.', ar: 'صندوق مهوّى للخضار والفواكه الطازجة.' },
+      image: 'plastic_boxes_4.png',
+      subCategory: { en: 'Produce', ar: 'خضار' },
+    },
+    {
+      name: { en: 'Modular Tote Box', ar: 'صندوق نقل معياري' },
+      description: { en: 'Stackable tote for logistics.', ar: 'صندوق قابل للتكديس للخدمات اللوجستية.' },
+      image: 'plastic_boxes_5.png',
+      subCategory: { en: 'Tote', ar: 'نقل' },
+    },
+    {
+      name: { en: 'Injection Molded Case', ar: 'علبة مصنّعة بالحقن' },
+      description: { en: 'Precision case for tools or parts.', ar: 'علبة دقيقة للأدوات أو القطع.' },
+      image: 'plastic_boxes_6.png',
+      subCategory: { en: 'Molded', ar: 'حقن' },
+    },
+    {
+      name: { en: 'Food-Grade Container', ar: 'حاوية غذائية' },
+      description: { en: 'Sealed container for food storage.', ar: 'حاوية محكمة الإغلاق لحفظ الأطعمة.' },
+      image: 'plastic_boxes_7.png',
+      subCategory: { en: 'Food Grade', ar: 'غذائي' },
+    },
+    {
+      name: { en: 'Divided Organizer Box', ar: 'علبة تنظيم مقسّمة' },
+      description: { en: 'Compartmented box for small items.', ar: 'علبة بفواصل داخلية للأغراض الصغيرة.' },
+      image: 'plastic_boxes_8.png',
+      subCategory: { en: 'Organizer', ar: 'تنظيم' },
+    },
+    {
+      name: { en: 'Nesting Crate', ar: 'صندوق متداخل' },
+      description: { en: 'Space-saving nesting crate.', ar: 'صندوق متداخل يوفّر المساحة.' },
+      image: 'plastic_boxes_9.png',
+      subCategory: { en: 'Nesting', ar: 'متداخل' },
+    },
+    {
+      name: { en: 'Industrial Parts Bin', ar: 'صندوق قطع صناعية' },
+      description: { en: 'Heavy-duty bin for industrial parts.', ar: 'صندوق شديد التحمّل لقطع الغيار الصناعية.' },
+      image: 'plastic_boxes_10.png',
+      subCategory: { en: 'Industrial', ar: 'صناعي' },
+    },
   ],
-  'Hard Boxes': [
-    { name: 'Rigid Gift Box', description: 'Sturdy rigid box for premium gifting.', image: 'hard_boxes_1.png', subCategory: 'Gift' },
-    { name: 'Magnetic Closure Box', description: 'Rigid box with magnetic flap closure.', image: 'hard_boxes_2.png', subCategory: 'Magnetic' },
-    { name: 'Two-Piece Rigid Box', description: 'Classic lid-and-base rigid box.', image: 'hard_boxes_3.png', subCategory: 'Two-Piece' },
-    { name: 'Rigid Presentation Case', description: 'Display-ready rigid case.', image: 'hard_boxes_4.png', subCategory: 'Presentation' },
-    { name: 'Rigid Jewelry Box', description: 'Compact rigid box for jewelry.', image: 'hard_boxes_5.png', subCategory: 'Jewelry' },
-    { name: 'Rigid Bottle Box', description: 'Fitted rigid box for bottles.', image: 'hard_boxes_6.png', subCategory: 'Bottle' },
-    { name: 'Rigid Drawer Box', description: 'Sliding drawer-style rigid box.', image: 'hard_boxes_7.png', subCategory: 'Drawer' },
-    { name: "Rigid Book-Style Box", description: 'Book-shaped rigid box with hinge.', image: 'hard_boxes_8.png', subCategory: 'Book-Style' },
-    { name: 'Rigid Sample Box', description: 'Small rigid box for product samples.', image: 'hard_boxes_9.png', subCategory: 'Sample' },
-    { name: "Rigid Collector's Box", description: 'Premium rigid box for collectibles.', image: 'hard_boxes_10.png', subCategory: 'Collector' },
+  hard: [
+    {
+      name: { en: 'Rigid Gift Box', ar: 'علبة هدايا صلبة' },
+      description: { en: 'Sturdy rigid box for premium gifting.', ar: 'علبة صلبة متينة للهدايا الفاخرة.' },
+      image: 'hard_boxes_1.png',
+      subCategory: { en: 'Gift', ar: 'هدايا' },
+    },
+    {
+      name: { en: 'Magnetic Closure Box', ar: 'علبة بإغلاق مغناطيسي' },
+      description: { en: 'Rigid box with magnetic flap closure.', ar: 'علبة صلبة بغطاء يُغلق مغناطيسياً.' },
+      image: 'hard_boxes_2.png',
+      subCategory: { en: 'Magnetic', ar: 'مغناطيسي' },
+    },
+    {
+      name: { en: 'Two-Piece Rigid Box', ar: 'علبة صلبة من قطعتين' },
+      description: { en: 'Classic lid-and-base rigid box.', ar: 'علبة صلبة كلاسيكية بغطاء وقاعدة.' },
+      image: 'hard_boxes_3.png',
+      subCategory: { en: 'Two-Piece', ar: 'قطعتان' },
+    },
+    {
+      name: { en: 'Rigid Presentation Case', ar: 'علبة عرض صلبة' },
+      description: { en: 'Display-ready rigid case.', ar: 'علبة صلبة جاهزة للعرض.' },
+      image: 'hard_boxes_4.png',
+      subCategory: { en: 'Presentation', ar: 'عرض' },
+    },
+    {
+      name: { en: 'Rigid Jewelry Box', ar: 'علبة مجوهرات صلبة' },
+      description: { en: 'Compact rigid box for jewelry.', ar: 'علبة صلبة صغيرة للمجوهرات.' },
+      image: 'hard_boxes_5.png',
+      subCategory: { en: 'Jewelry', ar: 'مجوهرات' },
+    },
+    {
+      name: { en: 'Rigid Bottle Box', ar: 'علبة زجاجات صلبة' },
+      description: { en: 'Fitted rigid box for bottles.', ar: 'علبة صلبة مفصّلة على قياس الزجاجات.' },
+      image: 'hard_boxes_6.png',
+      subCategory: { en: 'Bottle', ar: 'زجاجات' },
+    },
+    {
+      name: { en: 'Rigid Drawer Box', ar: 'علبة صلبة بدرج' },
+      description: { en: 'Sliding drawer-style rigid box.', ar: 'علبة صلبة بدرج منزلق.' },
+      image: 'hard_boxes_7.png',
+      subCategory: { en: 'Drawer', ar: 'درج' },
+    },
+    {
+      name: { en: 'Rigid Book-Style Box', ar: 'علبة صلبة على شكل كتاب' },
+      description: { en: 'Book-shaped rigid box with hinge.', ar: 'علبة صلبة بشكل كتاب مزوّدة بمفصلة.' },
+      image: 'hard_boxes_8.png',
+      subCategory: { en: 'Book-Style', ar: 'كتاب' },
+    },
+    {
+      name: { en: 'Rigid Sample Box', ar: 'علبة عيّنات صلبة' },
+      description: { en: 'Small rigid box for product samples.', ar: 'علبة صلبة صغيرة لعيّنات المنتجات.' },
+      image: 'hard_boxes_9.png',
+      subCategory: { en: 'Sample', ar: 'عيّنات' },
+    },
+    {
+      name: { en: "Rigid Collector's Box", ar: 'علبة صلبة للمقتنيات' },
+      description: { en: 'Premium rigid box for collectibles.', ar: 'علبة صلبة فاخرة للمقتنيات النادرة.' },
+      image: 'hard_boxes_10.png',
+      subCategory: { en: 'Collector', ar: 'مقتنيات' },
+    },
   ],
-  'Digital Printing': [
-    { name: 'Custom Printed Label', description: 'High-resolution custom label printing.', image: 'digital_printing_1.png', subCategory: 'Label' },
-    { name: 'Branded Tissue Paper', description: 'Printed tissue paper for gift wrap.', image: 'digital_printing_2.png', subCategory: 'Tissue' },
-    { name: 'Printed Ribbon', description: 'Custom branded ribbon.', image: 'digital_printing_3.png', subCategory: 'Ribbon' },
-    { name: 'Product Hang Tag', description: 'Printed tag for apparel and gifts.', image: 'digital_printing_4.png', subCategory: 'Hang Tag' },
-    { name: 'Custom Sticker Sheet', description: 'Die-cut sticker sheet, full color.', image: 'digital_printing_5.png', subCategory: 'Stickers' },
-    { name: 'Printed Wrapping Paper', description: 'Custom pattern wrapping paper.', image: 'digital_printing_6.png', subCategory: 'Wrapping' },
-    { name: 'Branded Sleeve', description: 'Printed sleeve for cups or packaging.', image: 'digital_printing_7.png', subCategory: 'Sleeve' },
-    { name: 'Custom Insert Card', description: 'Printed insert for unboxing experience.', image: 'digital_printing_8.png', subCategory: 'Insert' },
-    { name: 'Printed Poly Mailer', description: 'Custom printed poly shipping mailer.', image: 'digital_printing_9.png', subCategory: 'Poly Mailer' },
-    { name: 'Branded Packing Tape', description: 'Printed tape for branded sealing.', image: 'digital_printing_10.png', subCategory: 'Tape' },
+  printing: [
+    {
+      name: { en: 'Custom Printed Label', ar: 'ملصق مطبوع حسب الطلب' },
+      description: { en: 'High-resolution custom label printing.', ar: 'طباعة ملصقات عالية الدقة حسب الطلب.' },
+      image: 'digital_printing_1.png',
+      subCategory: { en: 'Label', ar: 'ملصق' },
+    },
+    {
+      name: { en: 'Branded Tissue Paper', ar: 'ورق حرير بعلامتك التجارية' },
+      description: { en: 'Printed tissue paper for gift wrap.', ar: 'ورق حرير مطبوع لتغليف الهدايا.' },
+      image: 'digital_printing_2.png',
+      subCategory: { en: 'Tissue', ar: 'ورق حرير' },
+    },
+    {
+      name: { en: 'Printed Ribbon', ar: 'شريط مطبوع' },
+      description: { en: 'Custom branded ribbon.', ar: 'شريط مطبوع يحمل علامتك التجارية.' },
+      image: 'digital_printing_3.png',
+      subCategory: { en: 'Ribbon', ar: 'شريط' },
+    },
+    {
+      name: { en: 'Product Hang Tag', ar: 'بطاقة تعليق للمنتج' },
+      description: { en: 'Printed tag for apparel and gifts.', ar: 'بطاقة مطبوعة للألبسة والهدايا.' },
+      image: 'digital_printing_4.png',
+      subCategory: { en: 'Hang Tag', ar: 'بطاقة تعليق' },
+    },
+    {
+      name: { en: 'Custom Sticker Sheet', ar: 'ورقة ملصقات مخصّصة' },
+      description: { en: 'Die-cut sticker sheet, full color.', ar: 'ورقة ملصقات مقصوصة بالقالب بألوان كاملة.' },
+      image: 'digital_printing_5.png',
+      subCategory: { en: 'Stickers', ar: 'ملصقات' },
+    },
+    {
+      name: { en: 'Printed Wrapping Paper', ar: 'ورق تغليف مطبوع' },
+      description: { en: 'Custom pattern wrapping paper.', ar: 'ورق تغليف بنقشة مخصّصة.' },
+      image: 'digital_printing_6.png',
+      subCategory: { en: 'Wrapping', ar: 'تغليف' },
+    },
+    {
+      name: { en: 'Branded Sleeve', ar: 'غلاف بعلامتك التجارية' },
+      description: { en: 'Printed sleeve for cups or packaging.', ar: 'غلاف مطبوع للأكواب أو العبوات.' },
+      image: 'digital_printing_7.png',
+      subCategory: { en: 'Sleeve', ar: 'غلاف' },
+    },
+    {
+      name: { en: 'Custom Insert Card', ar: 'بطاقة إدراج مخصّصة' },
+      description: { en: 'Printed insert for unboxing experience.', ar: 'بطاقة مطبوعة تُثري تجربة فتح العلبة.' },
+      image: 'digital_printing_8.png',
+      subCategory: { en: 'Insert', ar: 'إدراج' },
+    },
+    {
+      name: { en: 'Printed Poly Mailer', ar: 'مغلّف شحن بلاستيكي مطبوع' },
+      description: { en: 'Custom printed poly shipping mailer.', ar: 'مغلّف شحن بلاستيكي مطبوع حسب الطلب.' },
+      image: 'digital_printing_9.png',
+      subCategory: { en: 'Poly Mailer', ar: 'مغلّف شحن' },
+    },
+    {
+      name: { en: 'Branded Packing Tape', ar: 'شريط لاصق بعلامتك التجارية' },
+      description: { en: 'Printed tape for branded sealing.', ar: 'شريط لاصق مطبوع لإغلاق الطرود.' },
+      image: 'digital_printing_10.png',
+      subCategory: { en: 'Tape', ar: 'شريط لاصق' },
+    },
   ],
-  'Souvenir Boxes': [
-    { name: 'Keepsake Memory Box', description: 'Decorative box for keepsakes.', image: 'souvenir_boxes_1.png', subCategory: 'Keepsake' },
-    { name: 'Travel Souvenir Box', description: 'Compact box for travel mementos.', image: 'souvenir_boxes_2.png', subCategory: 'Travel' },
-    { name: 'Wooden-Style Souvenir Case', description: 'Wood-finish case for souvenirs.', image: 'souvenir_boxes_3.png', subCategory: 'Wooden' },
-    { name: 'Cultural Gift Box', description: 'Box designed for cultural gift items.', image: 'souvenir_boxes_4.png', subCategory: 'Cultural' },
-    { name: 'Miniature Display Box', description: 'Small box for miniature collectibles.', image: 'souvenir_boxes_5.png', subCategory: 'Miniature' },
-    { name: 'Anniversary Keepsake Box', description: 'Box for anniversary keepsakes.', image: 'souvenir_boxes_6.png', subCategory: 'Anniversary' },
-    { name: 'Engraved Souvenir Case', description: 'Case designed for engraved items.', image: 'souvenir_boxes_7.png', subCategory: 'Engraved' },
-    { name: 'Festival Gift Box', description: 'Festive box for seasonal souvenirs.', image: 'souvenir_boxes_8.png', subCategory: 'Festival' },
-    { name: 'Tourist Gift Set Box', description: 'Box for tourist gift assortments.', image: 'souvenir_boxes_9.png', subCategory: 'Tourist' },
-    { name: 'Commemorative Box', description: 'Box for commemorative items.', image: 'souvenir_boxes_10.png', subCategory: 'Commemorative' },
+  souvenir: [
+    {
+      name: { en: 'Keepsake Memory Box', ar: 'علبة ذكريات' },
+      description: { en: 'Decorative box for keepsakes.', ar: 'علبة مزخرفة لحفظ الذكريات.' },
+      image: 'souvenir_boxes_1.png',
+      subCategory: { en: 'Keepsake', ar: 'ذكريات' },
+    },
+    {
+      name: { en: 'Travel Souvenir Box', ar: 'علبة تذكارات السفر' },
+      description: { en: 'Compact box for travel mementos.', ar: 'علبة صغيرة لتذكارات الأسفار.' },
+      image: 'souvenir_boxes_2.png',
+      subCategory: { en: 'Travel', ar: 'سفر' },
+    },
+    {
+      name: { en: 'Wooden-Style Souvenir Case', ar: 'علبة تذكارية بمظهر خشبي' },
+      description: { en: 'Wood-finish case for souvenirs.', ar: 'علبة بتشطيب خشبي للتذكارات.' },
+      image: 'souvenir_boxes_3.png',
+      subCategory: { en: 'Wooden', ar: 'خشبي' },
+    },
+    {
+      name: { en: 'Cultural Gift Box', ar: 'علبة هدايا تراثية' },
+      description: { en: 'Box designed for cultural gift items.', ar: 'علبة مصمّمة للهدايا التراثية.' },
+      image: 'souvenir_boxes_4.png',
+      subCategory: { en: 'Cultural', ar: 'تراثي' },
+    },
+    {
+      name: { en: 'Miniature Display Box', ar: 'علبة عرض مصغّرة' },
+      description: { en: 'Small box for miniature collectibles.', ar: 'علبة صغيرة للمجسّمات المصغّرة.' },
+      image: 'souvenir_boxes_5.png',
+      subCategory: { en: 'Miniature', ar: 'مصغّر' },
+    },
+    {
+      name: { en: 'Anniversary Keepsake Box', ar: 'علبة ذكرى سنوية' },
+      description: { en: 'Box for anniversary keepsakes.', ar: 'علبة لحفظ هدايا الذكرى السنوية.' },
+      image: 'souvenir_boxes_6.png',
+      subCategory: { en: 'Anniversary', ar: 'ذكرى سنوية' },
+    },
+    {
+      name: { en: 'Engraved Souvenir Case', ar: 'علبة تذكارية محفورة' },
+      description: { en: 'Case designed for engraved items.', ar: 'علبة مصمّمة للقطع المحفورة.' },
+      image: 'souvenir_boxes_7.png',
+      subCategory: { en: 'Engraved', ar: 'محفور' },
+    },
+    {
+      name: { en: 'Festival Gift Box', ar: 'علبة هدايا الأعياد' },
+      description: { en: 'Festive box for seasonal souvenirs.', ar: 'علبة احتفالية للتذكارات الموسمية.' },
+      image: 'souvenir_boxes_8.png',
+      subCategory: { en: 'Festival', ar: 'أعياد' },
+    },
+    {
+      name: { en: 'Tourist Gift Set Box', ar: 'علبة هدايا سياحية' },
+      description: { en: 'Box for tourist gift assortments.', ar: 'علبة لمجموعات الهدايا السياحية.' },
+      image: 'souvenir_boxes_9.png',
+      subCategory: { en: 'Tourist', ar: 'سياحي' },
+    },
+    {
+      name: { en: 'Commemorative Box', ar: 'علبة تذكارية' },
+      description: { en: 'Box for commemorative items.', ar: 'علبة للقطع التذكارية.' },
+      image: 'souvenir_boxes_10.png',
+      subCategory: { en: 'Commemorative', ar: 'تذكاري' },
+    },
   ],
 };
 
 const PRODUCTS: Product[] = CATEGORIES.flatMap((category) =>
   PRODUCTS_BY_CATEGORY[category].map((item) => ({ ...item, category })),
 );
+
+/** How many cards fan out on each side of the front one. */
+const DECK_REACH = 4;
+
+/** Folds an unbounded slot number back onto a valid list index. */
+function wrap(value: number, count: number): number {
+  return ((value % count) + count) % count;
+}
 
 function shuffled<T>(list: T[]): T[] {
   const result = [...list];
@@ -112,18 +377,23 @@ function shuffled<T>(list: T[]): T[] {
 
 @Component({
   selector: 'app-products',
-  imports: [TiltDirective],
+  imports: [TiltDirective, RevealDirective],
   templateUrl: './products.html',
   styleUrl: './products.css',
+  host: {
+    '(document:keydown)': 'onKeydown($event)',
+  },
 })
 export class Products implements OnDestroy {
+  protected readonly i18n = inject(TranslationService);
+
   protected readonly categories = CATEGORIES;
-  protected readonly activeCategory = signal<Category | 'All'>('All');
+  protected readonly activeCategory = signal<CategoryId | 'all'>('all');
   protected readonly brokenImages = signal<ReadonlySet<string>>(new Set());
 
   protected readonly filteredProducts = computed(() => {
     const active = this.activeCategory();
-    return active === 'All'
+    return active === 'all'
       ? shuffled(PRODUCTS)
       : PRODUCTS.filter((product) => product.category === active);
   });
@@ -133,8 +403,75 @@ export class Products implements OnDestroy {
     return [...list, ...list];
   });
 
+  /**
+   * Position of the front card in *slot* space, which is deliberately unbounded:
+   * it keeps counting past the ends of the list so dragging never hits a seam.
+   * The real product index is this value folded back into range.
+   */
+  protected readonly lightboxAnchor = signal<number | null>(null);
+
+  /**
+   * Index of whichever card is at the front *right now* — it follows the drag,
+   * so the counter ticks over as the fan slides rather than only on release.
+   */
+  protected readonly lightboxIndex = computed(() => {
+    const count = this.filteredProducts().length;
+    if (this.lightboxAnchor() === null || count === 0) {
+      return null;
+    }
+    return wrap(Math.round(this.deckPosition()), count);
+  });
+
+  protected readonly lightboxProduct = computed(() => {
+    const index = this.lightboxIndex();
+    return index === null ? null : (this.filteredProducts()[index] ?? null);
+  });
+
+  /** Drives the fan's spacing; cards re-place themselves as the window resizes. */
+  private readonly viewportWidth = signal(typeof window === 'undefined' ? 1440 : window.innerWidth);
+
+  /** How far the fan spreads either side — never so far a product repeats. */
+  protected readonly deckReach = computed(() => {
+    const count = this.filteredProducts().length;
+    return Math.max(1, Math.min(DECK_REACH, Math.floor((count - 1) / 2)));
+  });
+
+  /**
+   * Where the fan currently sits, as a fractional slot. At rest it equals the
+   * anchor; mid-drag it moves continuously with the pointer.
+   */
+  protected readonly deckPosition = computed(() => {
+    const anchor = this.lightboxAnchor();
+    return anchor === null ? 0 : anchor - this.dragUnits();
+  });
+
+  /**
+   * The slice of the catalogue rendered as the fan. It re-centres on wherever
+   * the fan currently *is* rather than where it last came to rest, so cards keep
+   * appearing at the edges throughout a drag and you can keep going forever.
+   */
+  protected readonly deckCards = computed(() => {
+    const list = this.filteredProducts();
+    const count = list.length;
+    if (this.lightboxAnchor() === null || count === 0) {
+      return [];
+    }
+    const reach = this.deckReach();
+    const centre = Math.round(this.deckPosition());
+    const cards = [];
+    for (let offset = -reach; offset <= reach; offset++) {
+      const slot = centre + offset;
+      cards.push({ product: list[wrap(slot, count)], slot });
+    }
+    return cards;
+  });
+
   private readonly viewport = viewChild<ElementRef<HTMLDivElement>>('viewport');
   private readonly track = viewChild<ElementRef<HTMLDivElement>>('track');
+  private readonly pills = viewChild<ElementRef<HTMLDivElement>>('pills');
+
+  protected readonly pillsCanScrollStart = signal(false);
+  protected readonly pillsCanScrollEnd = signal(false);
 
   private readonly zone = inject(NgZone);
 
@@ -149,12 +486,32 @@ export class Products implements OnDestroy {
   private dragPointerId: number | null = null;
   private dragStartX = 0;
   private dragStartScroll = 0;
+  private pointerStart: { x: number; y: number } | null = null;
+  /** Set once a pointer travels far enough to count as a drag rather than a tap. */
+  private dragMoved = false;
+  private deckPointerStart: { x: number; y: number } | null = null;
+  /** True once a deck gesture has travelled far enough to be a drag, not a tap. */
+  private deckMoved = false;
+  /** Live drag position in card units; folded into every card's transform. */
+  protected readonly dragUnits = signal(0);
+  protected readonly dragging = signal(false);
 
   constructor() {
     afterNextRender(() => {
       this.measure();
       this.setupInteractions();
+      this.zone.runOutsideAngular(() => {
+        window.addEventListener('resize', this.onResize, { passive: true });
+      });
+      this.updatePillOverflow();
       this.rafId = requestAnimationFrame(this.step);
+    });
+
+    // Translated category names are a different length, so the row may start or
+    // stop overflowing when the language changes.
+    effect(() => {
+      this.i18n.lang();
+      queueMicrotask(() => this.updatePillOverflow());
     });
 
     effect(() => {
@@ -168,6 +525,15 @@ export class Products implements OnDestroy {
         this.measure();
       });
     });
+
+    // Lock the page behind the lightbox so a scroll gesture can't drift the
+    // section underneath while the overlay is up.
+    effect(() => {
+      const open = this.lightboxAnchor() !== null;
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -175,6 +541,10 @@ export class Products implements OnDestroy {
     if (this.resumeTimer) {
       clearTimeout(this.resumeTimer);
     }
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+    }
+    window.removeEventListener('resize', this.onResize);
     const el = this.viewport()?.nativeElement;
     if (el) {
       el.removeEventListener('pointerdown', this.onPointerDown);
@@ -186,12 +556,41 @@ export class Products implements OnDestroy {
     }
   }
 
+  /** Resolves a localized string for the active language. */
+  protected text(value: Localized): string {
+    return value[this.i18n.lang()];
+  }
+
+  protected categoryLabel(category: CategoryId): string {
+    return this.i18n.t(CATEGORY_LABEL_KEYS[category]);
+  }
+
+  /**
+   * Whether the category row has more pills hidden past either edge. Chrome
+   * reports scrollLeft as a negative offset under RTL, so distance travelled is
+   * taken as an absolute value and both directions share one calculation.
+   */
+  updatePillOverflow(): void {
+    const el = this.pills()?.nativeElement;
+    if (!el) {
+      return;
+    }
+    const travelled = Math.abs(el.scrollLeft);
+    const maximum = el.scrollWidth - el.clientWidth;
+    this.pillsCanScrollStart.set(travelled > 1);
+    this.pillsCanScrollEnd.set(travelled < maximum - 1);
+  }
+
   private readonly step = (ts: number): void => {
     const el = this.viewport()?.nativeElement;
     const dt = this.lastTs ? Math.min(ts - this.lastTs, 50) : 16;
     this.lastTs = ts;
-    if (el && this.singleSetWidth > 0 && !this.pausedByUser) {
-      this.scrollPos += this.speedPxPerMs * dt;
+    const paused = this.pausedByUser || this.lightboxAnchor() !== null;
+    if (el && this.singleSetWidth > 0 && !paused) {
+      // The strip travels the way the language reads: right-to-left in English,
+      // left-to-right in Arabic. The list is duplicated, so the wrap at either
+      // end lands on identical content and the reversal stays seamless.
+      this.scrollPos += this.directionSign() * this.speedPxPerMs * dt;
       if (this.scrollPos >= this.singleSetWidth) {
         this.scrollPos -= this.singleSetWidth;
       } else if (this.scrollPos < 0) {
@@ -210,11 +609,11 @@ export class Products implements OnDestroy {
     this.singleSetWidth = trackEl ? trackEl.scrollWidth / 2 : 0;
   }
 
-  setCategory(category: Category | 'All'): void {
+  setCategory(category: CategoryId | 'all'): void {
     this.activeCategory.set(category);
   }
 
-  pillClasses(category: Category | 'All'): string {
+  pillClasses(category: CategoryId | 'all'): string {
     const base = 'shrink-0 rounded-full px-5 py-2 text-sm font-semibold transition';
     return this.activeCategory() === category
       ? `${base} bg-navy-900 text-white`
@@ -224,6 +623,198 @@ export class Products implements OnDestroy {
   onImageError(image: string): void {
     this.brokenImages.update((set) => new Set(set).add(image));
   }
+
+  // --- Lightbox -------------------------------------------------------------
+
+  /**
+   * `trackIndex` addresses the doubled marquee list, so it is folded back onto
+   * the real product list. A click that followed a drag is ignored — otherwise
+   * every swipe of the carousel would pop the overlay open.
+   */
+  openLightbox(trackIndex: number): void {
+    if (this.dragMoved) {
+      return;
+    }
+    const count = this.filteredProducts().length;
+    if (count === 0) {
+      return;
+    }
+    this.lightboxAnchor.set(trackIndex % count);
+  }
+
+  closeLightbox(): void {
+    this.lightboxAnchor.set(null);
+  }
+
+  /** Backdrop taps dismiss, but a drag that ended on the backdrop must not. */
+  onBackdropClick(): void {
+    if (this.deckMoved) {
+      this.deckMoved = false;
+      return;
+    }
+    this.closeLightbox();
+  }
+
+  onDeckPointerDown(event: PointerEvent): void {
+    this.deckPointerStart = { x: event.clientX, y: event.clientY };
+    this.deckMoved = false;
+  }
+
+  /**
+   * Drives the fan straight from the pointer: one card-gap of travel moves the
+   * fan by exactly one card, so dragging feels like sliding the whole hand
+   * rather than triggering a step. Identical for mouse and touch.
+   */
+  onDeckPointerMove(event: PointerEvent): void {
+    const start = this.deckPointerStart;
+    if (!start) {
+      return;
+    }
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+
+    if (!this.deckMoved) {
+      if (Math.hypot(dx, dy) < 8) {
+        return;
+      }
+      // A mostly-vertical drag isn't meant for the fan; let it go entirely so it
+      // can't nudge the cards sideways.
+      if (Math.abs(dx) < Math.abs(dy)) {
+        this.deckPointerStart = null;
+        return;
+      }
+      this.deckMoved = true;
+      this.dragging.set(true);
+    }
+
+    // Unclamped on purpose: the rendered window follows deckPosition, so fresh
+    // cards keep arriving at the edges no matter how far the drag runs. The sign
+    // flips in Arabic so the cards still follow the pointer exactly.
+    this.dragUnits.set((dx / this.cardGap()) * this.directionSign());
+  }
+
+  onDeckPointerUp(): void {
+    const start = this.deckPointerStart;
+    this.deckPointerStart = null;
+    if (!start || !this.deckMoved) {
+      this.releaseDrag();
+      return;
+    }
+    // Settle on whichever card is nearest to the front, then let the CSS
+    // transition carry the fan the rest of the way.
+    const shift = -Math.round(this.dragUnits());
+    this.releaseDrag();
+    if (shift !== 0) {
+      this.stepLightbox(shift);
+    }
+  }
+
+  onDeckPointerCancel(): void {
+    this.deckPointerStart = null;
+    this.deckMoved = false;
+    this.releaseDrag();
+  }
+
+  private releaseDrag(): void {
+    this.dragUnits.set(0);
+    this.dragging.set(false);
+  }
+
+  stepLightbox(delta: number): void {
+    const count = this.filteredProducts().length;
+    const current = this.lightboxAnchor();
+    if (current === null || count === 0) {
+      return;
+    }
+    // Deliberately not wrapped — the anchor stays continuous so the fan's slots
+    // never jump, and lightboxIndex folds it back into range for display.
+    this.lightboxAnchor.set(current + delta);
+  }
+
+  /** Brings a card that is sitting off to one side of the fan to the front. */
+  focusCard(slot: number): void {
+    if (this.deckMoved) {
+      return;
+    }
+    this.lightboxAnchor.set(slot);
+  }
+
+  /** Horizontal distance between neighbouring cards; also the drag-to-card ratio. */
+  private cardGap(): number {
+    const width = this.viewportWidth();
+    return width < 640 ? 40 : width < 1024 ? 82 : 104;
+  }
+
+  /**
+   * Mirrors the fan for Arabic: later products sit to the left and the deck
+   * advances left-to-right, matching the direction the page is read in.
+   */
+  private directionSign(): number {
+    return this.i18n.isRtl() ? -1 : 1;
+  }
+
+  /**
+   * A card's placement in the fan, from how far it sits from the front. The live
+   * drag amount is folded in here, so the whole fan tracks the pointer
+   * continuously instead of jumping a card at a time.
+   */
+  protected cardTransform(slot: number): string {
+    const offset = slot - this.deckPosition();
+    const width = this.viewportWidth();
+    const angle = width < 640 ? 6 : 7;
+    const lift = width < 640 ? 10 : 14;
+    const distance = Math.abs(offset);
+    const scale = Math.max(0.6, 1 - distance * 0.055);
+    // Only the horizontal placement and the tilt mirror; the arc's lift and the
+    // depth scaling are the same whichever way the fan runs.
+    const across = offset * this.directionSign();
+    return (
+      `translateX(${(across * this.cardGap()).toFixed(1)}px) ` +
+      `translateY(${(distance * lift).toFixed(1)}px) ` +
+      `rotate(${(across * angle).toFixed(1)}deg) ` +
+      `scale(${scale.toFixed(3)})`
+    );
+  }
+
+  /**
+   * Solid through most of the fan, fading out only across the last card's worth
+   * of distance — so cards joining at the edge mid-drag fade in instead of
+   * blinking into existence.
+   */
+  protected cardOpacity(slot: number): number {
+    const distance = Math.abs(slot - this.deckPosition());
+    return Math.max(0, Math.min(1, (this.deckReach() - distance) / 1.1));
+  }
+
+  protected cardZIndex(slot: number): number {
+    return 100 - Math.round(Math.abs(slot - this.deckPosition()) * 10);
+  }
+
+  protected isFrontCard(slot: number): boolean {
+    return Math.abs(slot - this.deckPosition()) < 0.5;
+  }
+
+  protected onKeydown(event: KeyboardEvent): void {
+    if (this.lightboxAnchor() === null) {
+      return;
+    }
+    if (event.key === 'Escape') {
+      this.closeLightbox();
+      return;
+    }
+    // Arrow keys follow the on-screen arrows, which mirror in RTL.
+    const forward = this.i18n.isRtl() ? 'ArrowLeft' : 'ArrowRight';
+    const backward = this.i18n.isRtl() ? 'ArrowRight' : 'ArrowLeft';
+    if (event.key === forward) {
+      event.preventDefault();
+      this.stepLightbox(1);
+    } else if (event.key === backward) {
+      event.preventDefault();
+      this.stepLightbox(-1);
+    }
+  }
+
+  // --- Carousel interaction -------------------------------------------------
 
   private setupInteractions(): void {
     const el = this.viewport()?.nativeElement;
@@ -279,6 +870,13 @@ export class Products implements OnDestroy {
     this.scheduleResume();
   };
 
+  private readonly onResize = (): void => {
+    this.zone.run(() => {
+      this.viewportWidth.set(window.innerWidth);
+      this.updatePillOverflow();
+    });
+  };
+
   private readonly onWheel = (): void => {
     this.pauseForUser();
     this.scheduleResume();
@@ -290,6 +888,8 @@ export class Products implements OnDestroy {
       return;
     }
     this.pauseForUser();
+    this.pointerStart = { x: event.clientX, y: event.clientY };
+    this.dragMoved = false;
 
     if (event.pointerType !== 'mouse') {
       // Touch: let the browser own the scroll natively; we resume once it goes
@@ -300,10 +900,26 @@ export class Products implements OnDestroy {
     this.dragPointerId = event.pointerId;
     this.dragStartX = event.clientX;
     this.dragStartScroll = el.scrollLeft;
-    el.setPointerCapture(event.pointerId);
+    // Capture is deliberately NOT taken here. While a pointer is captured the
+    // browser retargets the resulting `click` to the capturing element, so
+    // capturing on pointerdown would stop every card click from ever reaching
+    // the card's own handler. Capture is taken in onPointerMove instead, once
+    // the gesture has proven itself to be a drag rather than a click.
   };
 
   private readonly onPointerMove = (event: PointerEvent): void => {
+    if (this.pointerStart && !this.dragMoved) {
+      const dx = event.clientX - this.pointerStart.x;
+      const dy = event.clientY - this.pointerStart.y;
+      if (Math.hypot(dx, dy) > 8) {
+        this.dragMoved = true;
+        // Now that this is unambiguously a drag, take capture so the gesture
+        // keeps working if the pointer leaves the strip mid-drag.
+        if (this.isDragging && this.dragPointerId !== null) {
+          this.viewport()?.nativeElement.setPointerCapture(this.dragPointerId);
+        }
+      }
+    }
     if (!this.isDragging) {
       return;
     }
@@ -317,9 +933,12 @@ export class Products implements OnDestroy {
 
   private readonly onPointerUp = (): void => {
     const el = this.viewport()?.nativeElement;
+    this.pointerStart = null;
     if (this.isDragging) {
       this.isDragging = false;
-      if (el && this.dragPointerId !== null) {
+      // Capture is only taken once a drag passes the threshold, so releasing it
+      // unconditionally would throw on a plain click.
+      if (el && this.dragPointerId !== null && el.hasPointerCapture(this.dragPointerId)) {
         el.releasePointerCapture(this.dragPointerId);
       }
       this.dragPointerId = null;

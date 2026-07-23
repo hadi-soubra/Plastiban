@@ -1,0 +1,16 @@
+{
+  "name": "Plastiban Technical Industry S.A.R.L",
+  "short_name": "Plastiban",
+  "description": "Packaging and industrial plastics, engineered to endure.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#12194a",
+  "theme_color": "#12194a",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

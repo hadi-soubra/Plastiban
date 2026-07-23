@@ -1,3 +1,34 @@
 .hero-bg {
   background-color: #12194a;
 }
+
+.hero-title,
+.hero-sub {
+  animation: hero-enter 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.hero-title {
+  animation-delay: 0.05s;
+}
+
+.hero-sub {
+  animation-delay: 0.2s;
+}
+
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-title,
+  .hero-sub {
+    animation: none;
+  }
+}

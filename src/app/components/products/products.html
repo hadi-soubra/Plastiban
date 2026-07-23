@@ -1,64 +1,194 @@
 <section
   id="products"
   class="flex min-h-[calc(100dvh-var(--header-h))] scroll-mt-[var(--header-h)] flex-col justify-center overflow-hidden bg-cream-50 px-6 py-16 lg:px-10"
+  aria-labelledby="products-heading"
 >
   <div class="mx-auto w-full max-w-7xl">
-    <div class="mx-auto max-w-2xl text-center">
-      <p class="text-xs font-bold uppercase tracking-widest text-orange-450">Portfolio</p>
-      <h2 class="mt-3 font-display text-3xl font-extrabold text-navy-900 sm:text-4xl">Our Products</h2>
-      <p class="mt-4 text-base leading-relaxed text-slate-600">
-        Standard lines and fully bespoke designs, produced for clients across Lebanon and the
-        United Arab Emirates.
-      </p>
+    <div class="mx-auto max-w-2xl text-center" appReveal>
+      <p class="text-xs font-bold uppercase tracking-widest text-orange-450">{{ i18n.t('products.eyebrow') }}</p>
+      <h2 id="products-heading" class="mt-3 font-display text-3xl font-extrabold text-navy-900 sm:text-4xl">
+        {{ i18n.t('products.heading') }}
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-slate-600">{{ i18n.t('products.intro') }}</p>
+      <p class="mt-3 text-xs font-medium text-slate-400">{{ i18n.t('products.hint') }}</p>
     </div>
-
   </div>
 
-  <div class="mt-10 w-full overflow-x-auto no-scrollbar">
-    <div class="mx-auto flex w-max flex-nowrap gap-3 px-6">
-      <button type="button" (click)="setCategory('All')" [class]="pillClasses('All')">All</button>
+  <div class="relative mt-10 w-full">
+    <!-- Each edge hint appears only when there is actually more to reach that
+         way, so it reads as information rather than permanent decoration. -->
+    @if (pillsCanScrollStart()) {
+      <div
+        [class]="i18n.isRtl() ? 'pill-fade start-0 pill-fade-to-left' : 'pill-fade start-0 pill-fade-to-right'"
+        aria-hidden="true"
+      >
+        <svg viewBox="0 0 24 24" [class]="i18n.isRtl() ? 'h-4 w-4 rotate-180 text-orange-450' : 'h-4 w-4 text-orange-450'" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 5l-7 7 7 7" />
+        </svg>
+      </div>
+    }
+    @if (pillsCanScrollEnd()) {
+      <div
+        [class]="i18n.isRtl() ? 'pill-fade pill-fade-end end-0 pill-fade-to-right' : 'pill-fade pill-fade-end end-0 pill-fade-to-left'"
+        aria-hidden="true"
+      >
+        <svg viewBox="0 0 24 24" [class]="i18n.isRtl() ? 'h-4 w-4 rotate-180 text-orange-450' : 'h-4 w-4 text-orange-450'" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
+    }
+
+    <div #pills class="w-full overflow-x-auto no-scrollbar" (scroll)="updatePillOverflow()">
+      <div class="mx-auto flex w-max flex-nowrap gap-3 px-6" role="group" [attr.aria-label]="i18n.t('products.filters')">
+      <button
+        type="button"
+        (click)="setCategory('all')"
+        [class]="pillClasses('all')"
+        [attr.aria-pressed]="activeCategory() === 'all'"
+      >
+        {{ i18n.t('products.all') }}
+      </button>
       @for (category of categories; track category) {
-        <button type="button" (click)="setCategory(category)" [class]="pillClasses(category)">
-          {{ category }}
+        <button
+          type="button"
+          (click)="setCategory(category)"
+          [class]="pillClasses(category)"
+          [attr.aria-pressed]="activeCategory() === category"
+        >
+          {{ categoryLabel(category) }}
         </button>
       }
+      </div>
     </div>
   </div>
 
   <div class="relative mt-4 w-full lg:mt-14">
+    <!-- The marquee drives scrollLeft directly, whose sign flips under RTL, so
+         the strip itself always stays LTR; card contents follow the page dir. -->
     <div
       #viewport
+      dir="ltr"
       class="fade-mask no-scrollbar scroll-auto cursor-grab touch-pan-x overflow-x-auto py-6 active:cursor-grabbing lg:py-10"
     >
       <div #track class="flex w-max gap-6 px-6 lg:px-10">
         @for (product of trackProducts(); track $index) {
-          <div
+          <button
             appTilt
-            class="w-72 shrink-0 select-none overflow-hidden rounded-2xl bg-white shadow-sm shadow-navy-900/5"
+            type="button"
+            [attr.dir]="i18n.dir()"
+            (click)="openLightbox($index)"
+            class="flex w-72 shrink-0 cursor-pointer select-none flex-col overflow-hidden rounded-2xl bg-white text-start shadow-sm shadow-navy-900/5 outline-none focus-visible:ring-2 focus-visible:ring-orange-450"
           >
-            <div class="relative flex h-44 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-200 via-orange-100 to-indigo-100">
+            <div class="relative flex h-44 shrink-0 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-200 via-orange-100 to-indigo-100">
               @if (!brokenImages().has(product.image)) {
                 <img
                   [src]="'/products/' + product.image"
-                  [alt]="product.name"
+                  [alt]="text(product.name)"
                   (error)="onImageError(product.image)"
                   class="absolute inset-0 h-full w-full object-cover"
+                  width="288"
+                  height="176"
+                  loading="lazy"
+                  decoding="async"
                   draggable="false"
                 />
               } @else {
                 <span class="font-display text-lg font-bold tracking-widest text-navy-900/20">PLASTIBAN</span>
               }
-              <span class="absolute left-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-orange-450">
-                {{ product.subCategory }}
+              <span class="absolute start-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-orange-450">
+                {{ text(product.subCategory) }}
               </span>
             </div>
             <div class="p-6">
-              <p class="font-semibold text-navy-900">{{ product.name }}</p>
-              <p class="mt-1 text-sm text-slate-500">{{ product.description }}</p>
+              <p class="font-semibold text-navy-900">{{ text(product.name) }}</p>
+              <p class="mt-1 text-sm text-slate-500">{{ text(product.description) }}</p>
             </div>
-          </div>
+          </button>
         }
       </div>
     </div>
   </div>
+
+  @if (lightboxProduct(); as product) {
+    <div
+      class="lightbox fixed inset-0 z-[60] flex flex-col items-center justify-center gap-4 bg-navy-950/85 p-4 backdrop-blur-sm sm:p-8"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-label]="i18n.t('lightbox.title')"
+      (click)="onBackdropClick()"
+      (pointerdown)="onDeckPointerDown($event)"
+      (pointermove)="onDeckPointerMove($event)"
+      (pointerup)="onDeckPointerUp()"
+      (pointercancel)="onDeckPointerCancel()"
+    >
+      <button
+        type="button"
+        (click)="closeLightbox()"
+        [attr.aria-label]="i18n.t('lightbox.close')"
+        class="absolute end-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-navy-950/70 text-white backdrop-blur-sm transition hover:bg-navy-950/90 sm:end-6 sm:top-6"
+      >
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+
+      <!-- The fan. Cards are stacked on one spot and pushed out by transform, so
+           re-ordering is a pure transform change that CSS can transition. The
+           deck is always LTR: it is a spatial arrangement, not a line of text. -->
+      <div
+        dir="ltr"
+        class="deck relative flex w-full select-none items-start justify-center"
+        [class.is-dragging]="dragging()"
+      >
+        <!-- Tracked by slot, not by product: slots are unique and monotonic, so a
+             card leaving one edge is destroyed rather than being reused and flown
+             across the screen when the same product wraps in on the other side. -->
+        @for (card of deckCards(); track card.slot) {
+          <button
+            type="button"
+            (click)="focusCard(card.slot); $event.stopPropagation()"
+            [style.transform]="cardTransform(card.slot)"
+            [style.opacity]="cardOpacity(card.slot)"
+            [style.zIndex]="cardZIndex(card.slot)"
+            [attr.dir]="i18n.dir()"
+            [attr.aria-current]="isFrontCard(card.slot) ? 'true' : null"
+            [attr.aria-label]="text(card.product.name)"
+            [attr.tabindex]="isFrontCard(card.slot) ? 0 : -1"
+            class="deck-card absolute flex h-[286px] w-[min(66vw,232px)] flex-col overflow-hidden rounded-2xl bg-white text-start shadow-2xl shadow-navy-950/60 sm:h-[312px] sm:w-[252px] lg:w-[268px]"
+          >
+            <div class="relative flex h-40 shrink-0 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-200 via-orange-100 to-indigo-100 sm:h-44">
+              @if (!brokenImages().has(card.product.image)) {
+                <img
+                  [src]="'/products/' + card.product.image"
+                  [alt]="text(card.product.name)"
+                  (error)="onImageError(card.product.image)"
+                  class="absolute inset-0 h-full w-full object-cover"
+                  decoding="async"
+                  draggable="false"
+                />
+              } @else {
+                <span class="font-display text-lg font-bold tracking-widest text-navy-900/20">PLASTIBAN</span>
+              }
+              <span class="absolute start-4 top-4 rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-orange-450">
+                {{ text(card.product.subCategory) }}
+              </span>
+            </div>
+            <div class="p-5">
+              <p class="font-semibold text-navy-900">{{ text(card.product.name) }}</p>
+              <p class="mt-1 text-sm leading-relaxed text-slate-500">{{ text(card.product.description) }}</p>
+            </div>
+          </button>
+        }
+      </div>
+
+      <!-- Forced LTR: bidi otherwise flips "3 / 50" into "50 / 3". -->
+      <p dir="ltr" class="text-xs font-medium text-slate-400">
+        {{ (lightboxIndex() ?? 0) + 1 }} / {{ filteredProducts().length }}
+      </p>
+
+      <p class="text-[11px] font-medium uppercase tracking-widest text-white/35">
+        {{ i18n.t('lightbox.dragHint') }}
+      </p>
+    </div>
+  }
 </section>

@@ -1,38 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { RevealDirective } from '../../directives/reveal.directive';
+import { TranslationService } from '../../i18n/translation.service';
 
 interface Service {
   index: string;
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
 }
 
 @Component({
   selector: 'app-services',
-  imports: [],
+  imports: [RevealDirective],
   templateUrl: './services.html',
   styleUrl: './services.css',
 })
 export class Services {
+  protected readonly i18n = inject(TranslationService);
+
   protected readonly services: Service[] = [
     {
       index: '01',
-      title: 'Creative Conception',
-      description: 'Design and creative direction for packaging and product identity, from concept to prototype.',
+      titleKey: 'services.creative.title',
+      descriptionKey: 'services.creative.description',
     },
     {
       index: '02',
-      title: 'Manufacturing',
-      description: 'End-to-end production of boxes, trays and bags in a full range of sizes and finishes.',
+      titleKey: 'services.manufacturing.title',
+      descriptionKey: 'services.manufacturing.description',
     },
     {
       index: '03',
-      title: 'Industrial Plastics',
-      description: 'Technical plastics manufacturing built on decades of process expertise.',
+      titleKey: 'services.plastics.title',
+      descriptionKey: 'services.plastics.description',
     },
     {
       index: '04',
-      title: 'Logistics & Transfer',
-      description: 'Reliable delivery and logistics for clients locally and abroad.',
+      titleKey: 'services.logistics.title',
+      descriptionKey: 'services.logistics.description',
     },
   ];
 }

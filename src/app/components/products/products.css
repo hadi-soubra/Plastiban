@@ -3,6 +3,116 @@
   mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
 }
 
+/* Edge hints for the category row. The fade is the section's own background so
+   the pills appear to slide underneath it; the chevron carries the accent
+   colour, which a solid orange bar would misread as a control. */
+.pill-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  width: 60px;
+  align-items: center;
+  justify-content: flex-start;
+  padding-inline: 8px;
+  pointer-events: none;
+}
+
+.pill-fade-end {
+  justify-content: flex-end;
+}
+
+.pill-fade-to-right {
+  background: linear-gradient(to right, var(--color-cream-50) 42%, transparent);
+}
+
+.pill-fade-to-left {
+  background: linear-gradient(to left, var(--color-cream-50) 42%, transparent);
+}
+
+.lightbox {
+  animation: lightbox-fade 0.2s ease-out;
+}
+
+.lightbox-panel {
+  animation: lightbox-pop 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The cards are absolutely placed, so the row needs an explicit height: the card
+   itself plus headroom for how far the outermost ones swing down as they rotate.
+   They anchor to the top of the box so that swing has somewhere to go. */
+.deck {
+  height: 360px;
+  cursor: grab;
+  /* The fan owns horizontal gestures; the browser keeps vertical ones. */
+  touch-action: pan-y;
+}
+
+.deck.is-dragging {
+  cursor: grabbing;
+}
+
+@media (min-width: 640px) {
+  .deck {
+    height: 396px;
+  }
+}
+
+.deck-card {
+  /* Pivot just below the card so rotation fans the tops apart while the bottoms
+     stay gathered, the way a hand of cards actually opens. */
+  transform-origin: 50% 106%;
+  transition:
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease;
+  will-change: transform;
+}
+
+/* While a finger or mouse is down the fan must track it exactly — a transition
+   here would lag the pointer and break the sense of holding the cards. */
+.deck.is-dragging .deck-card {
+  transition: none;
+}
+
+.deck-card:focus-visible {
+  outline: 2px solid var(--color-orange-450);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deck-card {
+    transition: none;
+  }
+}
+
+@keyframes lightbox-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lightbox-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox,
+  .lightbox-panel {
+    animation: none;
+  }
+}
+
 @media (min-width: 640px) {
   .fade-mask {
     -webkit-mask-image: linear-gradient(to right, transparent, black 96px, black calc(100% - 96px), transparent);

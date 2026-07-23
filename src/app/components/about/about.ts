@@ -1,33 +1,43 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { RevealDirective } from '../../directives/reveal.directive';
+import { TranslationService } from '../../i18n/translation.service';
 
 interface SideStat {
   value: string;
-  label: string;
+  labelKey: string;
 }
 
 interface Feature {
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
 }
 
 @Component({
   selector: 'app-about',
-  imports: [],
+  imports: [RevealDirective],
   templateUrl: './about.html',
   styleUrl: './about.css',
 })
 export class About {
+  protected readonly i18n = inject(TranslationService);
+
   protected readonly sideStats: SideStat[] = [
-    { value: '1989', label: 'Founded' },
-    { value: '35+', label: 'Years operating' },
-    { value: '2', label: 'Countries' },
-    { value: '∞', label: 'Refinements' },
+    { value: '1989', labelKey: 'about.stat.founded' },
+    { value: '35+', labelKey: 'about.stat.years' },
+    { value: '2', labelKey: 'about.stat.countries' },
+    { value: '∞', labelKey: 'about.stat.refinements' },
   ];
 
   protected readonly features: Feature[] = [
-    { title: 'Faithful team', description: 'Professionals invested in every project.' },
-    { title: 'Continuous innovation', description: 'Always improving techniques & methods.' },
-    { title: 'Design to delivery', description: 'One partner across the whole journey.' },
-    { title: 'Local & global', description: 'Serving Lebanon and the U.A.E.' },
+    { titleKey: 'about.feature.team.title', descriptionKey: 'about.feature.team.description' },
+    {
+      titleKey: 'about.feature.innovation.title',
+      descriptionKey: 'about.feature.innovation.description',
+    },
+    {
+      titleKey: 'about.feature.endToEnd.title',
+      descriptionKey: 'about.feature.endToEnd.description',
+    },
+    { titleKey: 'about.feature.reach.title', descriptionKey: 'about.feature.reach.description' },
   ];
 }

@@ -4,6 +4,7 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", "Noto Sans Arabic", ui-sans-serif, system-ui, sans-serif;
 
   --color-navy-950: #0d1238;
   --color-navy-900: #12194a;
@@ -29,6 +30,46 @@ html {
 
 body {
   font-family: var(--font-sans);
+}
+
+/* Latin faces have no Arabic coverage, so the whole page switches type stack
+   when the Arabic locale is active (class set by TranslationService). */
+html.lang-ar body,
+html.lang-ar .font-display {
+  font-family: var(--font-arabic);
+}
+
+/* Arabic letterforms already carry their own rhythm — the tight Latin tracking
+   used across the design turns into visible gaps between joined glyphs. */
+html.lang-ar [class*="tracking-"] {
+  letter-spacing: 0;
+}
+
+/* Scroll-reveal, applied by RevealDirective. The directive only adds `reveal`
+   when motion is allowed and IntersectionObserver exists, so content is never
+   left stranded at opacity 0. */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .no-scrollbar {
@@ -62,6 +103,13 @@ body {
   color: var(--color-cream-50);
   box-shadow: 0 2px 8px rgba(13, 18, 56, 0.25);
   white-space: nowrap;
+}
+
+/* The map canvas is pinned to LTR so Leaflet's offsets stay correct; the label
+   text itself still needs to read right-to-left in Arabic. */
+html.lang-ar .plastiban-map-tooltip {
+  direction: rtl;
+  font-family: var(--font-arabic);
 }
 
 .plastiban-map-tooltip.leaflet-tooltip-right::before {

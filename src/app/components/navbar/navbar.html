@@ -1,41 +1,88 @@
-<header class="relative bg-navy-500 shadow-lg shadow-navy-900/20">
-  <nav class="mx-auto flex h-20 max-w-7xl items-center gap-4 px-6 lg:px-10">
-    <div class="flex flex-1 items-center">
-      <a href="#top" class="flex items-center gap-3" (click)="navigateTo($event, '#top')">
+<header
+  class="relative bg-navy-500 transition-shadow duration-300"
+  [class]="scrolled() ? 'shadow-xl shadow-navy-950/40' : 'shadow-lg shadow-navy-900/20'"
+>
+  <nav class="mx-auto flex h-20 max-w-7xl items-center gap-4 px-6 lg:px-10" [attr.aria-label]="i18n.t('nav.primary')">
+    <div class="flex min-w-0 flex-1 items-center">
+      <a href="#top" class="flex min-w-0 items-center gap-3" (click)="navigateTo($event, '#top')">
         <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm border-2 border-white/80">
-          <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round">
+          <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" aria-hidden="true">
             <path d="M7 4 L7 20" />
             <path d="M7 4 L15 4 Q19 4 19 8 Q19 12 15 12 L7 12" />
             <path d="M4 20 L14 20" />
             <path d="M5 17 L13 9" />
           </svg>
         </span>
-        <span class="flex flex-col leading-none">
-          <span class="font-display text-xl font-extrabold tracking-tight text-white">PLASTIBAN</span>
-          <span class="text-[10px] font-medium tracking-wide text-white/80">Technical Industry S.A.R.L</span>
+        <span class="flex min-w-0 flex-col leading-none">
+          <span class="font-display text-xl font-extrabold tracking-tight text-white">{{ i18n.t('brand.name') }}</span>
+          <!-- Hidden on the narrowest screens: with the language pill in the bar
+               there is no longer room for the legal name on one line. -->
+          <span class="mt-0.5 hidden whitespace-nowrap text-[10px] font-medium tracking-wide text-white/80 min-[420px]:block">
+            {{ i18n.t('brand.legal') }}
+          </span>
         </span>
       </a>
     </div>
 
     <div class="hidden flex-1 items-center justify-center gap-8 lg:flex">
+      <a
+        href="#top"
+        (click)="navigateTo($event, '#top')"
+        [attr.aria-label]="i18n.t('nav.home')"
+        [attr.aria-current]="isActive('top') ? 'true' : null"
+        class="relative flex items-center py-1 transition-colors"
+        [class]="isActive('top') ? 'text-white' : 'text-white/70 hover:text-white'"
+      >
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 10.5 12 3l9 7.5" />
+          <path d="M5.5 9.5V20a1 1 0 0 0 1 1H10v-5h4v5h3.5a1 1 0 0 0 1-1V9.5" />
+        </svg>
+        <span
+          class="absolute inset-x-0 -bottom-1 h-0.5 origin-center rounded-full bg-orange-450 transition-transform duration-300"
+          [class]="isActive('top') ? 'scale-x-100' : 'scale-x-0'"
+          aria-hidden="true"
+        ></span>
+      </a>
+
       @for (link of links; track link.href) {
         <a
           [href]="link.href"
           (click)="navigateTo($event, link.href)"
-          class="text-sm font-medium text-white/90 transition hover:text-white"
+          [attr.aria-current]="isActive(link.id) ? 'true' : null"
+          class="relative py-1 text-sm font-medium transition-colors"
+          [class]="isActive(link.id) ? 'text-white' : 'text-white/70 hover:text-white'"
         >
-          {{ link.label }}
+          {{ i18n.t(link.labelKey) }}
+          <span
+            class="absolute inset-x-0 -bottom-1 h-0.5 origin-center rounded-full bg-orange-450 transition-transform duration-300"
+            [class]="isActive(link.id) ? 'scale-x-100' : 'scale-x-0'"
+            aria-hidden="true"
+          ></span>
         </a>
       }
     </div>
 
-    <div class="flex flex-1 items-center justify-end">
+    <div class="flex flex-1 items-center justify-end gap-2">
+      <button
+        type="button"
+        (click)="toggleLang()"
+        [attr.aria-label]="i18n.t('lang.switch')"
+        [attr.lang]="i18n.isRtl() ? 'en' : 'ar'"
+        class="inline-flex items-center gap-1.5 rounded-full border border-white/25 px-3 py-1.5 text-xs font-semibold text-white transition hover:border-white/60 hover:bg-white/10"
+      >
+        <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18" />
+        </svg>
+        {{ i18n.t('lang.other') }}
+      </button>
+
       <a
         href="#contact"
         (click)="navigateTo($event, '#contact')"
         class="hidden items-center rounded-full bg-orange-450 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-450/90 lg:inline-flex"
       >
-        Get a Quote
+        {{ i18n.t('nav.quote') }}
       </a>
 
       <button
@@ -43,14 +90,14 @@
         class="flex h-10 w-10 items-center justify-center rounded-md text-white lg:hidden"
         (click)="toggleMenu()"
         [attr.aria-expanded]="menuOpen()"
-        aria-label="Toggle navigation menu"
+        [attr.aria-label]="i18n.t('nav.toggleMenu')"
       >
         @if (!menuOpen()) {
-          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
             <path d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         } @else {
-          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
             <path d="M6 6l12 12M18 6L6 18" />
           </svg>
         }
@@ -61,13 +108,28 @@
   @if (menuOpen()) {
     <div class="absolute inset-x-0 top-full border-t border-white/10 bg-navy-500 px-6 py-4 shadow-lg shadow-navy-900/20 lg:hidden">
       <div class="flex flex-col gap-4">
+        <a
+          href="#top"
+          class="flex items-center gap-2 text-sm font-medium transition-colors"
+          [class]="isActive('top') ? 'text-orange-300' : 'text-white/90'"
+          [attr.aria-current]="isActive('top') ? 'true' : null"
+          (click)="navigateTo($event, '#top')"
+        >
+          <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 10.5 12 3l9 7.5" />
+            <path d="M5.5 9.5V20a1 1 0 0 0 1 1H10v-5h4v5h3.5a1 1 0 0 0 1-1V9.5" />
+          </svg>
+          {{ i18n.t('nav.home') }}
+        </a>
         @for (link of links; track link.href) {
           <a
             [href]="link.href"
-            class="text-sm font-medium text-white/90"
+            class="text-sm font-medium transition-colors"
+            [class]="isActive(link.id) ? 'text-orange-300' : 'text-white/90'"
+            [attr.aria-current]="isActive(link.id) ? 'true' : null"
             (click)="navigateTo($event, link.href)"
           >
-            {{ link.label }}
+            {{ i18n.t(link.labelKey) }}
           </a>
         }
         <a
@@ -75,7 +137,7 @@
           class="inline-flex items-center justify-center rounded-full bg-orange-450 px-6 py-2.5 text-sm font-semibold text-white"
           (click)="navigateTo($event, '#contact')"
         >
-          Get a Quote
+          {{ i18n.t('nav.quote') }}
         </a>
       </div>
     </div>
