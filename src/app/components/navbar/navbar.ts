@@ -61,7 +61,17 @@ export class Navbar implements OnDestroy {
     event.preventDefault();
     this.closeMenu();
     const target = document.getElementById(href.replace('#', ''));
-    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Phones jump straight to the section. A smooth scroll there means a long
+    // travel through several full-height sections on a small screen, which
+    // reads as a delay rather than as motion. `instant` is required over
+    // `auto` — `auto` defers to the `scroll-behavior: smooth` set on <html>.
+    const behavior: ScrollBehavior = this.prefersInstantJump() ? 'instant' : 'smooth';
+    target?.scrollIntoView({ behavior, block: 'start' });
+  }
+
+  /** Mirrors the desktop-only breakpoint that gates section snapping. */
+  private prefersInstantJump(): boolean {
+    return typeof window !== 'undefined' && !window.matchMedia('(min-width: 1024px)').matches;
   }
 
   protected isActive(id: string): boolean {
