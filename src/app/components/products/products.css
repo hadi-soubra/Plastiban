@@ -43,7 +43,8 @@
    itself plus headroom for how far the outermost ones swing down as they rotate.
    They anchor to the top of the box so that swing has somewhere to go. */
 .deck {
-  height: 360px;
+  /* Card height plus the headroom the fan needs when the outer cards rotate. */
+  height: 432px;
   cursor: grab;
   /* The fan owns horizontal gestures; the browser keeps vertical ones. */
   touch-action: pan-y;
@@ -55,7 +56,13 @@
 
 @media (min-width: 640px) {
   .deck {
-    height: 396px;
+    height: 472px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .deck {
+    height: 488px;
   }
 }
 

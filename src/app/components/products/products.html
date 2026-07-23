@@ -79,15 +79,17 @@
             (click)="openLightbox($index)"
             class="flex w-72 shrink-0 cursor-pointer select-none flex-col overflow-hidden rounded-2xl bg-white text-start shadow-sm shadow-navy-900/5 outline-none focus-visible:ring-2 focus-visible:ring-orange-450"
           >
-            <div class="relative flex h-44 shrink-0 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-200 via-orange-100 to-indigo-100">
+            <!-- Product shots are always square, so the slot is square too: the
+                 image fills it edge to edge without any crop. -->
+            <div class="relative flex aspect-square shrink-0 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-200 via-orange-100 to-indigo-100">
               @if (!brokenImages().has(product.image)) {
                 <img
-                  [src]="'/products/' + product.image"
+                  [src]="imageSrc(product)"
                   [alt]="text(product.name)"
                   (error)="onImageError(product.image)"
                   class="absolute inset-0 h-full w-full object-cover"
                   width="288"
-                  height="176"
+                  height="288"
                   loading="lazy"
                   decoding="async"
                   draggable="false"
@@ -154,12 +156,13 @@
             [attr.aria-current]="isFrontCard(card.slot) ? 'true' : null"
             [attr.aria-label]="text(card.product.name)"
             [attr.tabindex]="isFrontCard(card.slot) ? 0 : -1"
-            class="deck-card absolute flex h-[286px] w-[min(66vw,232px)] flex-col overflow-hidden rounded-2xl bg-white text-start shadow-2xl shadow-navy-950/60 sm:h-[312px] sm:w-[252px] lg:w-[268px]"
+            class="deck-card absolute flex h-[358px] w-[min(66vw,232px)] flex-col overflow-hidden rounded-2xl bg-white text-start shadow-2xl shadow-navy-950/60 sm:h-[388px] sm:w-[252px] lg:h-[404px] lg:w-[268px]"
           >
-            <div class="relative flex h-40 shrink-0 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-200 via-orange-100 to-indigo-100 sm:h-44">
+            <!-- Square slot for square sources: full image, no crop. -->
+            <div class="relative flex aspect-square shrink-0 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-200 via-orange-100 to-indigo-100">
               @if (!brokenImages().has(card.product.image)) {
                 <img
-                  [src]="'/products/' + card.product.image"
+                  [src]="imageSrc(card.product)"
                   [alt]="text(card.product.name)"
                   (error)="onImageError(card.product.image)"
                   class="absolute inset-0 h-full w-full object-cover"

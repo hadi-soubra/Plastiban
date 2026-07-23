@@ -15,7 +15,7 @@ import { RevealDirective } from '../../directives/reveal.directive';
 import { TranslationService } from '../../i18n/translation.service';
 import { Lang } from '../../i18n/translations';
 
-type CategoryId = 'cardboard' | 'plastic' | 'hard' | 'printing' | 'souvenir';
+type CategoryId = 'cardboard' | 'plastic' | 'hard' | 'printing' | 'souvenir' | 'bags' | 'ribbons';
 
 /** A string that exists in both languages, resolved at render time by `text()`. */
 type Localized = Record<Lang, string>;
@@ -23,13 +23,22 @@ type Localized = Record<Lang, string>;
 interface Product {
   name: Localized;
   description: Localized;
+  /** File name only; the folder it lives in is the category id. */
   image: string;
   // Display-only label shown in the card badge. Does not affect filtering.
   subCategory: Localized;
   category: CategoryId;
 }
 
-const CATEGORIES: CategoryId[] = ['cardboard', 'plastic', 'hard', 'printing', 'souvenir'];
+const CATEGORIES: CategoryId[] = [
+  'cardboard',
+  'plastic',
+  'hard',
+  'printing',
+  'souvenir',
+  'bags',
+  'ribbons',
+];
 
 const CATEGORY_LABEL_KEYS: Record<CategoryId, string> = {
   cardboard: 'category.cardboard',
@@ -37,6 +46,19 @@ const CATEGORY_LABEL_KEYS: Record<CategoryId, string> = {
   hard: 'category.hard',
   printing: 'category.printing',
   souvenir: 'category.souvenir',
+  bags: 'category.bags',
+  ribbons: 'category.ribbons',
+};
+
+/** Folder under `public/products` holding each category's shots. */
+const CATEGORY_FOLDERS: Record<CategoryId, string> = {
+  cardboard: 'cardboard_boxes',
+  plastic: 'plastic_boxes',
+  hard: 'hard_cover_boxes',
+  printing: 'digital_printing',
+  souvenir: 'souvenir_boxes',
+  bags: 'cardboard_bags',
+  ribbons: 'ribbons',
 };
 
 type ProductSeed = Omit<Product, 'category'>;
@@ -170,61 +192,61 @@ const PRODUCTS_BY_CATEGORY: Record<CategoryId, ProductSeed[]> = {
     {
       name: { en: 'Rigid Gift Box', ar: 'علبة هدايا صلبة' },
       description: { en: 'Sturdy rigid box for premium gifting.', ar: 'علبة صلبة متينة للهدايا الفاخرة.' },
-      image: 'hard_boxes_1.png',
+      image: 'hard_cover_boxes_1.png',
       subCategory: { en: 'Gift', ar: 'هدايا' },
     },
     {
       name: { en: 'Magnetic Closure Box', ar: 'علبة بإغلاق مغناطيسي' },
       description: { en: 'Rigid box with magnetic flap closure.', ar: 'علبة صلبة بغطاء يُغلق مغناطيسياً.' },
-      image: 'hard_boxes_2.png',
+      image: 'hard_cover_boxes_2.png',
       subCategory: { en: 'Magnetic', ar: 'مغناطيسي' },
     },
     {
       name: { en: 'Two-Piece Rigid Box', ar: 'علبة صلبة من قطعتين' },
       description: { en: 'Classic lid-and-base rigid box.', ar: 'علبة صلبة كلاسيكية بغطاء وقاعدة.' },
-      image: 'hard_boxes_3.png',
+      image: 'hard_cover_boxes_3.png',
       subCategory: { en: 'Two-Piece', ar: 'قطعتان' },
     },
     {
       name: { en: 'Rigid Presentation Case', ar: 'علبة عرض صلبة' },
       description: { en: 'Display-ready rigid case.', ar: 'علبة صلبة جاهزة للعرض.' },
-      image: 'hard_boxes_4.png',
+      image: 'hard_cover_boxes_4.png',
       subCategory: { en: 'Presentation', ar: 'عرض' },
     },
     {
       name: { en: 'Rigid Jewelry Box', ar: 'علبة مجوهرات صلبة' },
       description: { en: 'Compact rigid box for jewelry.', ar: 'علبة صلبة صغيرة للمجوهرات.' },
-      image: 'hard_boxes_5.png',
+      image: 'hard_cover_boxes_5.png',
       subCategory: { en: 'Jewelry', ar: 'مجوهرات' },
     },
     {
       name: { en: 'Rigid Bottle Box', ar: 'علبة زجاجات صلبة' },
       description: { en: 'Fitted rigid box for bottles.', ar: 'علبة صلبة مفصّلة على قياس الزجاجات.' },
-      image: 'hard_boxes_6.png',
+      image: 'hard_cover_boxes_6.png',
       subCategory: { en: 'Bottle', ar: 'زجاجات' },
     },
     {
       name: { en: 'Rigid Drawer Box', ar: 'علبة صلبة بدرج' },
       description: { en: 'Sliding drawer-style rigid box.', ar: 'علبة صلبة بدرج منزلق.' },
-      image: 'hard_boxes_7.png',
+      image: 'hard_cover_boxes_7.png',
       subCategory: { en: 'Drawer', ar: 'درج' },
     },
     {
       name: { en: 'Rigid Book-Style Box', ar: 'علبة صلبة على شكل كتاب' },
       description: { en: 'Book-shaped rigid box with hinge.', ar: 'علبة صلبة بشكل كتاب مزوّدة بمفصلة.' },
-      image: 'hard_boxes_8.png',
+      image: 'hard_cover_boxes_8.png',
       subCategory: { en: 'Book-Style', ar: 'كتاب' },
     },
     {
       name: { en: 'Rigid Sample Box', ar: 'علبة عيّنات صلبة' },
       description: { en: 'Small rigid box for product samples.', ar: 'علبة صلبة صغيرة لعيّنات المنتجات.' },
-      image: 'hard_boxes_9.png',
+      image: 'hard_cover_boxes_9.png',
       subCategory: { en: 'Sample', ar: 'عيّنات' },
     },
     {
       name: { en: "Rigid Collector's Box", ar: 'علبة صلبة للمقتنيات' },
       description: { en: 'Premium rigid box for collectibles.', ar: 'علبة صلبة فاخرة للمقتنيات النادرة.' },
-      image: 'hard_boxes_10.png',
+      image: 'hard_cover_boxes_10.png',
       subCategory: { en: 'Collector', ar: 'مقتنيات' },
     },
   ],
@@ -350,6 +372,130 @@ const PRODUCTS_BY_CATEGORY: Record<CategoryId, ProductSeed[]> = {
       description: { en: 'Box for commemorative items.', ar: 'علبة للقطع التذكارية.' },
       image: 'souvenir_boxes_10.png',
       subCategory: { en: 'Commemorative', ar: 'تذكاري' },
+    },
+  ],
+  bags: [
+    {
+      name: { en: 'Kraft Shopping Bag', ar: 'كيس تسوّق كرافت' },
+      description: { en: 'Everyday kraft bag with twisted handles.', ar: 'كيس كرافت يومي بمقابض ملفوفة.' },
+      image: 'cardboard_bags_1.png',
+      subCategory: { en: 'Kraft', ar: 'كرافت' },
+    },
+    {
+      name: { en: 'Laminated Boutique Bag', ar: 'كيس بوتيك مغلّف' },
+      description: { en: 'Matt-laminated bag for retail boutiques.', ar: 'كيس بتغليف مطفي لمحلات البوتيك.' },
+      image: 'cardboard_bags_2.png',
+      subCategory: { en: 'Boutique', ar: 'بوتيك' },
+    },
+    {
+      name: { en: 'Rope Handle Gift Bag', ar: 'كيس هدايا بمقبض حبلي' },
+      description: { en: 'Gift bag finished with rope handles.', ar: 'كيس هدايا بمقابض من الحبل.' },
+      image: 'cardboard_bags_3.png',
+      subCategory: { en: 'Gift', ar: 'هدايا' },
+    },
+    {
+      name: { en: 'Food Takeaway Bag', ar: 'كيس طعام للتوصيل' },
+      description: { en: 'Grease-resistant bag for food takeaway.', ar: 'كيس مقاوم للدهون لتوصيل الطعام.' },
+      image: 'cardboard_bags_4.png',
+      subCategory: { en: 'Food', ar: 'أغذية' },
+    },
+    {
+      name: { en: 'Wine Bottle Bag', ar: 'كيس زجاجات' },
+      description: { en: 'Tall bag sized for bottles.', ar: 'كيس طويل مفصّل على قياس الزجاجات.' },
+      image: 'cardboard_bags_5.png',
+      subCategory: { en: 'Bottle', ar: 'زجاجات' },
+    },
+    {
+      name: { en: 'Printed Promotional Bag', ar: 'كيس دعائي مطبوع' },
+      description: { en: 'Full-color bag for events and campaigns.', ar: 'كيس مطبوع بألوان كاملة للفعاليات والحملات.' },
+      image: 'cardboard_bags_6.png',
+      subCategory: { en: 'Promotional', ar: 'دعائي' },
+    },
+    {
+      name: { en: 'Flat Handle Paper Bag', ar: 'كيس ورقي بمقبض مسطّح' },
+      description: { en: 'Classic paper bag with flat handles.', ar: 'كيس ورقي كلاسيكي بمقابض مسطّحة.' },
+      image: 'cardboard_bags_7.png',
+      subCategory: { en: 'Classic', ar: 'كلاسيكي' },
+    },
+    {
+      name: { en: 'Pharmacy Bag', ar: 'كيس صيدلية' },
+      description: { en: 'Compact bag for pharmacy counters.', ar: 'كيس صغير لطاولات الصيدليات.' },
+      image: 'cardboard_bags_8.png',
+      subCategory: { en: 'Pharmacy', ar: 'صيدلية' },
+    },
+    {
+      name: { en: 'Luxury Gusset Bag', ar: 'كيس فاخر موسّع' },
+      description: { en: 'Wide-gusset bag for premium packaging.', ar: 'كيس بجوانب موسّعة للتغليف الفاخر.' },
+      image: 'cardboard_bags_9.png',
+      subCategory: { en: 'Luxury', ar: 'فاخر' },
+    },
+    {
+      name: { en: 'Recycled Paper Bag', ar: 'كيس ورق معاد تدويره' },
+      description: { en: 'Bag made from recycled paper stock.', ar: 'كيس مصنوع من ورق معاد تدويره.' },
+      image: 'cardboard_bags_10.png',
+      subCategory: { en: 'Recycled', ar: 'معاد تدويره' },
+    },
+  ],
+  ribbons: [
+    {
+      name: { en: 'Satin Ribbon', ar: 'شريط ساتان' },
+      description: { en: 'Smooth satin ribbon for gift finishing.', ar: 'شريط ساتان ناعم لتزيين الهدايا.' },
+      image: 'ribbons_1.png',
+      subCategory: { en: 'Satin', ar: 'ساتان' },
+    },
+    {
+      name: { en: 'Grosgrain Ribbon', ar: 'شريط غروغران' },
+      description: { en: 'Ribbed ribbon with a firm hold.', ar: 'شريط مضلّع يحافظ على شكله.' },
+      image: 'ribbons_2.png',
+      subCategory: { en: 'Grosgrain', ar: 'غروغران' },
+    },
+    {
+      name: { en: 'Organza Ribbon', ar: 'شريط أورغانزا' },
+      description: { en: 'Sheer ribbon for delicate wrapping.', ar: 'شريط شفاف للتغليف الرقيق.' },
+      image: 'ribbons_3.png',
+      subCategory: { en: 'Organza', ar: 'أورغانزا' },
+    },
+    {
+      name: { en: 'Printed Logo Ribbon', ar: 'شريط مطبوع بالشعار' },
+      description: { en: 'Ribbon printed with your brand logo.', ar: 'شريط مطبوع عليه شعار علامتك التجارية.' },
+      image: 'ribbons_4.png',
+      subCategory: { en: 'Branded', ar: 'مطبوع' },
+    },
+    {
+      name: { en: 'Metallic Ribbon', ar: 'شريط معدني اللمعة' },
+      description: { en: 'Foil-finish ribbon for festive packaging.', ar: 'شريط بلمسة معدنية للتغليف الاحتفالي.' },
+      image: 'ribbons_5.png',
+      subCategory: { en: 'Metallic', ar: 'معدني' },
+    },
+    {
+      name: { en: 'Velvet Ribbon', ar: 'شريط مخمل' },
+      description: { en: 'Soft velvet ribbon for luxury boxes.', ar: 'شريط مخمل ناعم للعلب الفاخرة.' },
+      image: 'ribbons_6.png',
+      subCategory: { en: 'Velvet', ar: 'مخمل' },
+    },
+    {
+      name: { en: 'Pre-Tied Bow', ar: 'عقدة جاهزة' },
+      description: { en: 'Ready-made bow for fast finishing.', ar: 'عقدة جاهزة لتزيين سريع.' },
+      image: 'ribbons_7.png',
+      subCategory: { en: 'Bow', ar: 'عقدة' },
+    },
+    {
+      name: { en: 'Curling Ribbon', ar: 'شريط لولبي' },
+      description: { en: 'Curlable ribbon for gift bundles.', ar: 'شريط قابل للفتل لتزيين الهدايا.' },
+      image: 'ribbons_8.png',
+      subCategory: { en: 'Curling', ar: 'لولبي' },
+    },
+    {
+      name: { en: 'Woven Edge Ribbon', ar: 'شريط بحواف منسوجة' },
+      description: { en: 'Woven-edge ribbon that resists fraying.', ar: 'شريط بحواف منسوجة لا تتفكك.' },
+      image: 'ribbons_9.png',
+      subCategory: { en: 'Woven', ar: 'منسوج' },
+    },
+    {
+      name: { en: 'Recycled Cotton Ribbon', ar: 'شريط قطن معاد تدويره' },
+      description: { en: 'Cotton ribbon from recycled fibre.', ar: 'شريط قطني من ألياف معاد تدويرها.' },
+      image: 'ribbons_10.png',
+      subCategory: { en: 'Recycled', ar: 'معاد تدويره' },
     },
   ],
 };
@@ -559,6 +705,11 @@ export class Products implements OnDestroy {
   /** Resolves a localized string for the active language. */
   protected text(value: Localized): string {
     return value[this.i18n.lang()];
+  }
+
+  /** Product shots are filed under a folder per category. */
+  protected imageSrc(product: Product): string {
+    return `/products/${CATEGORY_FOLDERS[product.category]}/${product.image}`;
   }
 
   protected categoryLabel(category: CategoryId): string {

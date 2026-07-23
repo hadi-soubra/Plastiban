@@ -78,9 +78,11 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'category.cardboard': 'Cardboard Boxes',
     'category.plastic': 'Plastic Boxes',
-    'category.hard': 'Hard Boxes',
+    'category.hard': 'Hard Cover Boxes',
     'category.printing': 'Digital Printing',
     'category.souvenir': 'Souvenir Boxes',
+    'category.bags': 'Cardboard Bags',
+    'category.ribbons': 'Ribbons',
 
     'lightbox.close': 'Close',
     'lightbox.prev': 'Previous product',
@@ -195,9 +197,11 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'category.cardboard': 'علب كرتون',
     'category.plastic': 'علب بلاستيك',
-    'category.hard': 'علب صلبة',
+    'category.hard': 'علب بغلاف صلب',
     'category.printing': 'طباعة رقمية',
     'category.souvenir': 'علب تذكارية',
+    'category.bags': 'أكياس كرتون',
+    'category.ribbons': 'شرائط',
 
     'lightbox.close': 'إغلاق',
     'lightbox.prev': 'المنتج السابق',
