@@ -507,6 +507,9 @@ const PRODUCTS: Product[] = CATEGORIES.flatMap((category) =>
 /** How many cards fan out on each side of the front one. */
 const DECK_REACH = 4;
 
+/** How many times the catalogue is repeated across the marquee track. */
+const TRACK_COPIES = 3;
+
 /** Folds an unbounded slot number back onto a valid list index. */
 function wrap(value: number, count: number): number {
   return ((value % count) + count) % count;
@@ -544,9 +547,15 @@ export class Products implements OnDestroy {
       : PRODUCTS.filter((product) => product.category === active);
   });
 
+  /**
+   * The list repeated three times. Two copies would be enough for the marquee's
+   * one-way drift, but the user can drag either way: parking the viewport on the
+   * middle copy leaves a whole set of runway behind *and* ahead, so a backwards
+   * drag has real content to reveal instead of dead-ending on scrollLeft = 0.
+   */
   protected readonly trackProducts = computed(() => {
     const list = this.filteredProducts();
-    return [...list, ...list];
+    return [...list, ...list, ...list];
   });
 
   /**
@@ -644,7 +653,7 @@ export class Products implements OnDestroy {
 
   constructor() {
     afterNextRender(() => {
-      this.measure();
+      this.recentre();
       this.setupInteractions();
       this.zone.runOutsideAngular(() => {
         window.addEventListener('resize', this.onResize, { passive: true });
@@ -662,14 +671,7 @@ export class Products implements OnDestroy {
 
     effect(() => {
       this.filteredProducts();
-      queueMicrotask(() => {
-        const el = this.viewport()?.nativeElement;
-        if (el) {
-          el.scrollLeft = 0;
-        }
-        this.scrollPos = 0;
-        this.measure();
-      });
+      queueMicrotask(() => this.recentre());
     });
 
     // Lock the page behind the lightbox so a scroll gesture can't drift the
@@ -739,14 +741,9 @@ export class Products implements OnDestroy {
     const paused = this.pausedByUser || this.lightboxAnchor() !== null;
     if (el && this.singleSetWidth > 0 && !paused) {
       // The strip travels the way the language reads: right-to-left in English,
-      // left-to-right in Arabic. The list is duplicated, so the wrap at either
-      // end lands on identical content and the reversal stays seamless.
-      this.scrollPos += this.directionSign() * this.speedPxPerMs * dt;
-      if (this.scrollPos >= this.singleSetWidth) {
-        this.scrollPos -= this.singleSetWidth;
-      } else if (this.scrollPos < 0) {
-        this.scrollPos += this.singleSetWidth;
-      }
+      // left-to-right in Arabic. The list is repeated, so the wrap at either end
+      // lands on identical content and the reversal stays seamless.
+      this.scrollPos = this.normalize(this.scrollPos + this.directionSign() * this.speedPxPerMs * dt);
       // Drive the scroll from our own float accumulator instead of reading
       // scrollLeft back each frame: mobile Safari floors scrollLeft to an
       // integer, so sub-pixel increments were lost and the marquee never moved.
@@ -757,7 +754,40 @@ export class Products implements OnDestroy {
 
   private measure(): void {
     const trackEl = this.track()?.nativeElement;
-    this.singleSetWidth = trackEl ? trackEl.scrollWidth / 2 : 0;
+    this.singleSetWidth = trackEl ? trackEl.scrollWidth / TRACK_COPIES : 0;
+  }
+
+  /** Parks the strip on the middle copy, so both directions have runway. */
+  private recentre(): void {
+    const el = this.viewport()?.nativeElement;
+    this.measure();
+    this.scrollPos = this.singleSetWidth;
+    if (el) {
+      el.scrollLeft = this.scrollPos;
+    }
+  }
+
+  /**
+   * Folds a scroll offset back onto the middle copy. Every copy is identical, so
+   * shifting by exactly one set width is invisible — it just buys back the
+   * runway the gesture spent. Returns the offset unchanged when there is nothing
+   * to fold onto.
+   */
+  private normalize(scroll: number): number {
+    const width = this.singleSetWidth;
+    if (width <= 0) {
+      return scroll;
+    }
+    // Folded on a half-set of slack rather than at the copy's exact edge: a
+    // touch scroll is folded by writing scrollLeft, which cuts the fling short
+    // on iOS, so the boundary is kept well away from where a swipe comes to rest.
+    if (scroll < width * 0.5) {
+      return scroll + width;
+    }
+    if (scroll >= width * 1.5) {
+      return scroll - width;
+    }
+    return scroll;
   }
 
   setCategory(category: CategoryId | 'all'): void {
@@ -1000,7 +1030,11 @@ export class Products implements OnDestroy {
     this.resumeTimer = setTimeout(() => {
       const el = this.viewport()?.nativeElement;
       if (el) {
-        this.scrollPos = el.scrollLeft;
+        // Hand a folded position back to the marquee: a fling that ran past the
+        // slack, or one the browser clamped at either end, must not become the
+        // accumulator the auto-advance carries on from.
+        this.scrollPos = this.normalize(el.scrollLeft);
+        el.scrollLeft = this.scrollPos;
       }
       this.pausedByUser = false;
       this.resumeTimer = null;
@@ -1016,7 +1050,15 @@ export class Products implements OnDestroy {
     }
     const el = this.viewport()?.nativeElement;
     if (el) {
-      this.scrollPos = el.scrollLeft;
+      // Touch and wheel scroll the element themselves, so fold them back onto
+      // the middle copy here. A whole set has to be crossed before this fires,
+      // so it stays clear of the ordinary swipe that would otherwise have its
+      // momentum cut short by the write.
+      const folded = this.normalize(el.scrollLeft);
+      if (folded !== el.scrollLeft) {
+        el.scrollLeft = folded;
+      }
+      this.scrollPos = folded;
     }
     this.scheduleResume();
   };
@@ -1078,8 +1120,15 @@ export class Products implements OnDestroy {
     if (!el) {
       return;
     }
+    // Fold the drag back onto the middle copy as it goes, and shift the gesture's
+    // origin by the same amount so the card under the pointer doesn't move. This
+    // is what lets a backwards drag keep going instead of jamming on scrollLeft = 0.
     const delta = event.clientX - this.dragStartX;
-    el.scrollLeft = this.dragStartScroll - delta;
+    const target = this.dragStartScroll - delta;
+    const folded = this.normalize(target);
+    this.dragStartScroll += folded - target;
+    el.scrollLeft = folded;
+    this.scrollPos = folded;
   };
 
   private readonly onPointerUp = (): void => {
@@ -1094,7 +1143,8 @@ export class Products implements OnDestroy {
       }
       this.dragPointerId = null;
       if (el) {
-        this.scrollPos = el.scrollLeft;
+        this.scrollPos = this.normalize(el.scrollLeft);
+        el.scrollLeft = this.scrollPos;
       }
       // Mouse drag ended — resume promptly.
       this.pausedByUser = false;

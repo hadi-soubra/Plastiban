@@ -1,6 +1,6 @@
 <section
   id="products"
-  class="flex min-h-[calc(100dvh-var(--header-h))] scroll-mt-[var(--header-h)] flex-col justify-center overflow-hidden bg-cream-50 px-6 py-16 lg:px-10"
+  class="flex min-h-[var(--section-h)] scroll-mt-[var(--header-h)] flex-col justify-center overflow-hidden bg-cream-50 px-6 py-16 lg:px-10"
   aria-labelledby="products-heading"
 >
   <div class="mx-auto w-full max-w-7xl">
@@ -65,10 +65,13 @@
   <div class="relative mt-4 w-full lg:mt-14">
     <!-- The marquee drives scrollLeft directly, whose sign flips under RTL, so
          the strip itself always stays LTR; card contents follow the page dir. -->
+    <!-- touch-action stays at its default: the strip only scrolls on x, so the
+         browser routes horizontal swipes here and vertical ones to the page.
+         Pinning it to pan-x instead swallowed vertical swipes outright. -->
     <div
       #viewport
       dir="ltr"
-      class="fade-mask no-scrollbar scroll-auto cursor-grab touch-pan-x overflow-x-auto py-6 active:cursor-grabbing lg:py-10"
+      class="fade-mask no-scrollbar scroll-auto cursor-grab overflow-x-auto py-6 active:cursor-grabbing lg:py-10"
     >
       <div #track class="flex w-max gap-6 px-6 lg:px-10">
         @for (product of trackProducts(); track $index) {

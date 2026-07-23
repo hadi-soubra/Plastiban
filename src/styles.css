@@ -22,10 +22,32 @@
 
 :root {
   --header-h: 5rem;
+  /* `svh`, not `dvh`: mobile Safari and Chrome recompute `dvh` continuously as
+     the URL bar collapses and expands, and reversing a swipe toggles that bar —
+     which resized every section mid-scroll and read as judder. `svh` assumes the
+     bar is showing, so the height never changes while scrolling. */
+  --section-h: calc(100svh - var(--header-h));
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Section snapping — desktop only. `proximity` only engages once a section edge
+   is already near its resting place, so free scrolling through a long section —
+   or down to the footer — is never hijacked. The alignment point comes from each
+   section's own `scroll-mt-[var(--header-h)]`, which is why no
+   `scroll-padding-top` is set here: the two would stack and overshoot.
+   Touch scrolling has its own momentum that snapping fights, and phone
+   viewports are short enough that sections overflow, so it stays off there. */
+@media (min-width: 1024px) and (min-height: 640px) and (pointer: fine) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+
+  main > * > section[id] {
+    scroll-snap-align: start;
+  }
 }
 
 body {
@@ -64,6 +86,7 @@ html.lang-ar [class*="tracking-"] {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+    scroll-snap-type: none;
   }
 
   .reveal {
