@@ -16,8 +16,12 @@
   --color-cream-50: #f7f5ef;
   --color-cream-100: #faf9f5;
 
-  --color-orange-450: #e8734a;
-  --color-orange-300: #f0a074;
+  /* Royal-blue accent, split by ground. The accent appears both as text on the
+     navy sections and as buttons/links on cream and white, and a single blue
+     can't clear contrast on both: `royal-600` is for light grounds (cream/white),
+     `royal-400` for dark (navy). Pick the one that matches the background. */
+  --color-royal-600: #3055c8;
+  --color-royal-400: #7f9bf0;
 }
 
 :root {
@@ -47,6 +51,16 @@ html {
 
   main > * > section[id] {
     scroll-snap-align: start;
+  }
+
+  /* The footer sits below the last full-height section but is shorter than the
+     viewport, so the bottom of the page lands inside the contact section's snap
+     zone — proximity then drags the reader back up and the footer is never seen.
+     Giving the footer its own snap point with `end` alignment (its bottom to the
+     scrollport's bottom) puts a reachable stop exactly at the document end, so
+     scrolling down past the midpoint snaps the footer fully into view instead. */
+  footer {
+    scroll-snap-align: end;
   }
 }
 
@@ -154,7 +168,7 @@ html.lang-ar .plastiban-map-tooltip {
   align-items: center;
   justify-content: center;
   background: var(--color-navy-900);
-  color: var(--color-orange-450);
+  color: var(--color-royal-400);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -162,6 +176,6 @@ html.lang-ar .plastiban-map-tooltip {
 
 .plastiban-reset-control button:hover {
   background: var(--color-navy-800);
-  color: var(--color-orange-300);
+  color: var(--color-royal-400);
 }
 

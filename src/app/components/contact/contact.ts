@@ -116,8 +116,11 @@ export class Contact implements OnDestroy {
     const icon = L.divIcon({
       className: '',
       html:
+        // Deep royal (--color-royal-600). Hardcoded because Leaflet builds this
+        // marker as a raw HTML string outside Angular/Tailwind, so it can't read
+        // the theme token — keep this in sync if the accent changes.
         '<span style="display:block;width:20px;height:20px;border-radius:9999px;' +
-        'background:#e8734a;border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.5);cursor:pointer"></span>',
+        'background:#3055c8;border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.5);cursor:pointer"></span>',
       iconSize: [20, 20],
       iconAnchor: [10, 10],
     });

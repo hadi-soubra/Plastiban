@@ -6,7 +6,7 @@
   <div class="mx-auto grid w-full max-w-7xl gap-16 lg:grid-cols-[minmax(0,380px)_1fr] lg:gap-20">
     <div appReveal>
       <p class="font-display text-7xl font-extrabold leading-none text-navy-900 sm:text-8xl">1989</p>
-      <p class="mt-4 text-xs font-bold uppercase tracking-widest text-orange-450">{{ i18n.t('about.yearLabel') }}</p>
+      <p class="mt-4 text-xs font-bold uppercase tracking-widest text-royal-600">{{ i18n.t('about.yearLabel') }}</p>
 
       <div class="mt-8 grid grid-cols-2 gap-x-8 gap-y-8 border-t border-navy-900/10 pt-8">
         @for (stat of sideStats; track stat.labelKey; let i = $index) {
@@ -19,7 +19,7 @@
     </div>
 
     <div>
-      <p appReveal class="text-xs font-bold uppercase tracking-widest text-orange-450">{{ i18n.t('about.eyebrow') }}</p>
+      <p appReveal class="text-xs font-bold uppercase tracking-widest text-royal-600">{{ i18n.t('about.eyebrow') }}</p>
       <h2
         id="about-heading"
         [appReveal]="80"
@@ -37,8 +37,8 @@
             [appReveal]="220 + i * 90"
             class="flex gap-4 rounded-xl bg-white p-6 shadow-sm shadow-navy-900/5 transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-navy-900/10"
           >
-            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-orange-450/15">
-              <span class="h-2.5 w-2.5 rotate-45 bg-orange-450"></span>
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-royal-600/15">
+              <span class="h-2.5 w-2.5 rotate-45 bg-royal-600"></span>
             </span>
             <div>
               <p class="font-semibold text-navy-900">{{ i18n.t(feature.titleKey) }}</p>

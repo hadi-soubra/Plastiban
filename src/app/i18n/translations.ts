@@ -14,7 +14,6 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'lang.switch': 'Switch to Arabic',
 
     'brand.name': 'PLASTIBAN',
-    'brand.legal': 'Technical Industry S.A.R.L',
     'brand.full': 'Plastiban Technical Industry S.A.R.L',
 
     'nav.home': 'Home',
@@ -134,7 +133,6 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'lang.switch': 'التبديل إلى الإنكليزية',
 
     'brand.name': 'بلاستيبان',
-    'brand.legal': 'للصناعات التقنية ش.م.م',
     'brand.full': 'بلاستيبان للصناعات التقنية ش.م.م',
 
     'nav.home': 'الرئيسية',
@@ -216,7 +214,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'contact.office.lb.name': 'بلاستيبان للصناعات التقنية ش.م.م',
     'contact.office.lb.address': 'عين التينة - ساقية الجنزير، بيروت، لبنان',
     'contact.office.lb.label': 'عين التينة، بيروت',
-    'contact.office.ae.name': 'مصنع بلاستيبان للتغليف ذ.م.م',
+    'contact.office.ae.name': 'مصنع بلاستيبان للتعبئة والتغليف ذ.م.م',
     'contact.office.ae.address': 'المنطقة الصناعية الجديدة - أم القيوين، الإمارات العربية المتحدة',
     'contact.office.ae.label': 'أم القيوين، الإمارات',
     'contact.map.hint': 'اضغط على أي علامة لفتح الموقع في خرائط غوغل.',

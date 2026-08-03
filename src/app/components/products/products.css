@@ -5,7 +5,7 @@
 
 /* Edge hints for the category row. The fade is the section's own background so
    the pills appear to slide underneath it; the chevron carries the accent
-   colour, which a solid orange bar would misread as a control. */
+   colour, which a solid accent-coloured bar would misread as a control. */
 .pill-fade {
   position: absolute;
   top: 0;
@@ -83,7 +83,7 @@
 }
 
 .deck-card:focus-visible {
-  outline: 2px solid var(--color-orange-450);
+  outline: 2px solid var(--color-royal-600);
   outline-offset: 3px;
 }
 

@@ -11,7 +11,7 @@
          tab order it deserves on a phone. -->
     <div class="grid gap-12 lg:grid-cols-2 lg:gap-x-16 lg:gap-y-8">
       <div class="lg:col-start-1 lg:row-start-1">
-        <p appReveal class="text-xs font-bold uppercase tracking-widest text-orange-450">{{ i18n.t('contact.eyebrow') }}</p>
+        <p appReveal class="text-xs font-bold uppercase tracking-widest text-royal-400">{{ i18n.t('contact.eyebrow') }}</p>
         <h2
           id="contact-heading"
           [appReveal]="80"
@@ -40,7 +40,7 @@
               required
               autocomplete="name"
               [(ngModel)]="model.name"
-              class="w-full rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-orange-450"
+              class="w-full rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-royal-600"
             />
           </div>
 
@@ -56,7 +56,7 @@
                 [attr.aria-label]="i18n.t('contact.form.phone')"
                 [(ngModel)]="model.phone"
                 #phone="ngModel"
-                class="w-full rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-orange-450"
+                class="w-full rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-royal-600"
               />
               <input
                 type="email"
@@ -67,7 +67,7 @@
                 [attr.aria-label]="i18n.t('contact.form.email')"
                 [(ngModel)]="model.email"
                 #email="ngModel"
-                class="w-full rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-orange-450"
+                class="w-full rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-royal-600"
               />
             </div>
             @if ((email.touched || phone.touched || contactForm.submitted) && !hasContactMethod()) {
@@ -90,14 +90,14 @@
               [placeholder]="i18n.t('contact.form.messagePlaceholder')"
               required
               [(ngModel)]="model.message"
-              class="min-h-40 w-full flex-1 resize-none rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-orange-450"
+              class="min-h-40 w-full flex-1 resize-none rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-royal-600"
             ></textarea>
           </div>
 
           <button
             type="submit"
             [disabled]="contactForm.invalid || !hasContactMethod()"
-            class="w-full rounded-lg bg-orange-450 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-orange-450/90 disabled:cursor-not-allowed disabled:opacity-50"
+            class="w-full rounded-lg bg-royal-600 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-royal-600/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {{ i18n.t('contact.form.submit') }}
           </button>
@@ -124,8 +124,8 @@
               }
             </p>
             <div class="mt-3 flex items-center gap-2">
-              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-orange-450/20">
-                <svg viewBox="0 0 24 24" class="h-3.5 w-3.5 text-orange-450" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-royal-400/20">
+                <svg viewBox="0 0 24 24" class="h-3.5 w-3.5 text-royal-400" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                   <path d="M3 6h18v12H3z" />
                   <path d="m3 7 9 6 9-6" />
                 </svg>

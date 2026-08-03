@@ -23,6 +23,5 @@ export class Footer {
   protected readonly socials: SocialLink[] = [
     { icon: 'instagram', labelKey: 'social.instagram', href: SITE.instagram },
     { icon: 'facebook', labelKey: 'social.facebook', href: SITE.facebook },
-    { icon: 'whatsapp', labelKey: 'social.whatsapp', href: SITE.whatsapp },
   ];
 }
