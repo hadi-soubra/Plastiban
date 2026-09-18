@@ -13,17 +13,27 @@ import * as L from 'leaflet';
 import { RevealDirective } from '../../directives/reveal.directive';
 import { TranslationService } from '../../i18n/translation.service';
 
+type OfficeId = 'lb' | 'ae';
+
+/** Lebanon is the head office, so an untouched form is addressed there. */
+const DEFAULT_OFFICE: OfficeId = 'lb';
+
 interface ContactModel {
   name: string;
   email: string;
   phone: string;
   message: string;
+  /** Which of the two offices the message is addressed to. */
+  office: OfficeId;
 }
 
 interface OfficeLocation {
+  id: OfficeId;
   nameKey: string;
   addressKey: string;
   labelKey: string;
+  /** Short country name — the office card carries the full legal entity. */
+  pickerKey: string;
   phones: string[];
   email: string;
   mapUrl: string;
@@ -40,14 +50,22 @@ interface OfficeLocation {
 export class Contact implements OnDestroy {
   protected readonly i18n = inject(TranslationService);
 
-  protected readonly model: ContactModel = { name: '', email: '', phone: '', message: '' };
+  protected readonly model: ContactModel = {
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+    office: DEFAULT_OFFICE,
+  };
   protected readonly submitted = signal(false);
 
   protected readonly offices: OfficeLocation[] = [
     {
+      id: 'lb',
       nameKey: 'contact.office.lb.name',
       addressKey: 'contact.office.lb.address',
       labelKey: 'contact.office.lb.label',
+      pickerKey: 'contact.form.office.lb',
       phones: ['+961 3 227 144', '+961 1 810 454'],
       email: 'info@plastiban.me',
       mapUrl: 'https://maps.app.goo.gl/7RyMES2T4T7TeLbi7',
@@ -55,9 +73,11 @@ export class Contact implements OnDestroy {
       lng: 35.47873,
     },
     {
+      id: 'ae',
       nameKey: 'contact.office.ae.name',
       addressKey: 'contact.office.ae.address',
       labelKey: 'contact.office.ae.label',
+      pickerKey: 'contact.form.office.ae',
       phones: ['+971 56 201 1416'],
       email: 'uae@plastiban.me',
       mapUrl: 'https://maps.app.goo.gl/dqy3dFuh3swR2pY17',
@@ -204,5 +224,6 @@ export class Contact implements OnDestroy {
     this.model.email = '';
     this.model.phone = '';
     this.model.message = '';
+    this.model.office = DEFAULT_OFFICE;
   }
 }

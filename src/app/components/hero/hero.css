@@ -3,7 +3,8 @@
 }
 
 .hero-title,
-.hero-sub {
+.hero-sub,
+.hero-clients {
   animation: hero-enter 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
@@ -13,6 +14,11 @@
 
 .hero-sub {
   animation-delay: 0.2s;
+}
+
+/* Last in, after the claim it backs up has been read. */
+.hero-clients {
+  animation-delay: 0.4s;
 }
 
 @keyframes hero-enter {
@@ -28,7 +34,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero-title,
-  .hero-sub {
+  .hero-sub,
+  .hero-clients {
     animation: none;
   }
 }

@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
+import { Clients } from '../clients/clients';
 import { TranslationService } from '../../i18n/translation.service';
 
 @Component({
   selector: 'app-hero',
-  imports: [],
+  imports: [Clients],
   templateUrl: './hero.html',
   styleUrl: './hero.css',
 })

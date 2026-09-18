@@ -1,0 +1,100 @@
+:host {
+  display: block;
+}
+
+/* The logos dissolve at both edges instead of being cut by the section padding,
+   so the strip reads as continuous rather than as a clipped box. */
+.marquee {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 32px, black calc(100% - 32px), transparent);
+  mask-image: linear-gradient(to right, transparent, black 32px, black calc(100% - 32px), transparent);
+}
+
+@media (min-width: 1024px) {
+  .marquee {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 120px, black calc(100% - 120px), transparent);
+    mask-image: linear-gradient(to right, transparent, black 120px, black calc(100% - 120px), transparent);
+  }
+}
+
+/* The track holds the list twice and slides by exactly half its width, which
+   lands the second copy where the first started — the seam is invisible because
+   the two are identical. Unlike the product carousel this one is never dragged,
+   so a CSS transform does the whole job: no rAF loop, no scrollLeft writes, and
+   the animation stays on the compositor.
+
+   The duration comes from the component so the pace holds as clients are added.
+   `animation-name` and the rest live here; only the length is bound. */
+.marquee-track {
+  animation: marquee-drift linear infinite;
+  will-change: transform;
+}
+
+@keyframes marquee-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* The strip travels the way the language reads — right-to-left in English,
+   left-to-right in Arabic — matching the product carousel. `:host-context` and
+   not a plain `html.lang-ar` descendant selector: view encapsulation stamps its
+   attribute onto every compound in an ordinary selector, including the `html`
+   one, which no element outside this component's template can ever match. */
+:host-context(html.lang-ar) .marquee-track {
+  animation-direction: reverse;
+}
+
+/* Spacing is padding on each cell rather than `gap` on the track. A gap sits
+   *between* items, so N cells would carry N-1 gaps and the join between the two
+   copies would come up one gap short — a small jolt once per lap. Folding the
+   space into the cells makes every copy tile exactly. */
+.marquee-cell {
+  display: flex;
+  height: 2rem;
+  flex: none;
+  align-items: center;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .marquee-cell {
+    height: 2.25rem;
+    padding-inline: 2.25rem;
+  }
+}
+
+.client-logo {
+  height: 100%;
+  width: auto;
+  /* Every logo comes out as one flat white silhouette: brightness(0) crushes it
+     to black whatever its own colours are, and invert lifts that to white.
+     Client artwork arrives in clashing palettes and at clashing weights, and
+     dropped onto the navy as-is the row reads as confetti rather than as a set.
+     Source files therefore need a transparent background — a white panel behind
+     the mark survives the filter as a slab. */
+  filter: brightness(0) invert(1);
+  opacity: 0.55;
+  transition: opacity 0.3s ease;
+}
+
+/* Hovering brings one logo up to full strength; the strip keeps moving through
+   it. Pointer devices only — on touch there is no hover, and :hover sticks after
+   a tap, which would leave one logo lit for good. */
+@media (hover: hover) {
+  .marquee-cell:hover .client-logo {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+
+  .client-logo {
+    transition: none;
+  }
+}

@@ -15,493 +15,157 @@ import { RevealDirective } from '../../directives/reveal.directive';
 import { TranslationService } from '../../i18n/translation.service';
 import { Lang } from '../../i18n/translations';
 
-type CategoryId = 'cardboard' | 'plastic' | 'hard' | 'printing' | 'souvenir' | 'bags' | 'ribbons';
+type CategoryId = 'hard' | 'printed';
 
 /** A string that exists in both languages, resolved at render time by `text()`. */
 type Localized = Record<Lang, string>;
 
-interface Product {
+/**
+ * One sub-category of a category — a product line, not a single shot. Its
+ * pictures live together in `public/products/<category folder>/<folder>`, and
+ * every one of them becomes its own card under the same name and description.
+ */
+interface SubCategory {
+  /** Short label shown as the card title. Does not affect filtering. */
   name: Localized;
   description: Localized;
-  /** File name only; the folder it lives in is the category id. */
-  image: string;
-  // Display-only label shown in the card badge. Does not affect filtering.
-  subCategory: Localized;
-  category: CategoryId;
+  /** Folder holding this line's shots, inside its category's folder. */
+  folder: string;
+  /**
+   * File names in that folder, in the order they should appear. Empty until the
+   * shots arrive — the line still gets one card, showing the placeholder.
+   */
+  images: string[];
 }
 
-const CATEGORIES: CategoryId[] = [
-  'cardboard',
-  'plastic',
-  'hard',
-  'printing',
-  'souvenir',
-  'bags',
-  'ribbons',
-];
+/** One card: a single shot of a sub-category, flattened out of the tree above. */
+interface Product {
+  subCategory: Localized;
+  description: Localized;
+  /** Path under `public`, or empty while the sub-category has no shots yet. */
+  src: string;
+  category: CategoryId;
+  /** Which sub-category this shot came from — what the deal spreads apart. */
+  line: string;
+}
+
+const CATEGORIES: CategoryId[] = ['hard', 'printed'];
 
 const CATEGORY_LABEL_KEYS: Record<CategoryId, string> = {
-  cardboard: 'category.cardboard',
-  plastic: 'category.plastic',
   hard: 'category.hard',
-  printing: 'category.printing',
-  souvenir: 'category.souvenir',
-  bags: 'category.bags',
-  ribbons: 'category.ribbons',
+  printed: 'category.printed',
 };
 
 /** Folder under `public/products` holding each category's shots. */
 const CATEGORY_FOLDERS: Record<CategoryId, string> = {
-  cardboard: 'cardboard_boxes',
-  plastic: 'plastic_boxes',
-  hard: 'hard_cover_boxes',
-  printing: 'digital_printing',
-  souvenir: 'souvenir_boxes',
-  bags: 'cardboard_bags',
-  ribbons: 'ribbons',
+  hard: 'hard_box',
+  printed: 'digital_printed',
 };
 
-type ProductSeed = Omit<Product, 'category'>;
-
-const PRODUCTS_BY_CATEGORY: Record<CategoryId, ProductSeed[]> = {
-  cardboard: [
-    {
-      name: { en: 'Corrugated Shipping Box', ar: 'علبة شحن مضلّعة' },
-      description: { en: 'Standard shipping box for e-commerce orders.', ar: 'علبة شحن قياسية لطلبات التجارة الإلكترونية.' },
-      image: 'cardboard_boxes_1.png',
-      subCategory: { en: 'Corrugated', ar: 'مضلّع' },
-    },
-    {
-      name: { en: 'Double Wall Export Carton', ar: 'كرتونة تصدير مزدوجة الجدار' },
-      description: { en: 'Reinforced carton for heavy export loads.', ar: 'كرتونة معزّزة للأحمال الثقيلة والتصدير.' },
-      image: 'cardboard_boxes_2.png',
-      subCategory: { en: 'Export', ar: 'تصدير' },
-    },
-    {
-      name: { en: 'Die-Cut Retail Box', ar: 'علبة تجزئة مقصوصة بالقالب' },
-      description: { en: 'Custom die-cut box for retail display.', ar: 'علبة مقصوصة حسب الطلب للعرض في المتاجر.' },
-      image: 'cardboard_boxes_3.png',
-      subCategory: { en: 'Retail', ar: 'تجزئة' },
-    },
-    {
-      name: { en: 'Mailer Box', ar: 'علبة بريدية' },
-      description: { en: 'Self-locking mailer for direct-to-consumer shipping.', ar: 'علبة ذاتية الإغلاق للشحن المباشر إلى المستهلك.' },
-      image: 'cardboard_boxes_4.png',
-      subCategory: { en: 'Mailer', ar: 'بريدي' },
-    },
-    {
-      name: { en: 'Corrugated Tray', ar: 'صينية مضلّعة' },
-      description: { en: 'Open tray for produce and bulk goods.', ar: 'صينية مفتوحة للخضار والبضائع السائبة.' },
-      image: 'cardboard_boxes_5.png',
-      subCategory: { en: 'Tray', ar: 'صينية' },
-    },
-    {
-      name: { en: 'Archive Storage Box', ar: 'علبة أرشفة' },
-      description: { en: 'Stackable box for document archiving.', ar: 'علبة قابلة للتكديس لحفظ المستندات.' },
-      image: 'cardboard_boxes_6.png',
-      subCategory: { en: 'Archive', ar: 'أرشفة' },
-    },
-    {
-      name: { en: 'Pizza Box', ar: 'علبة بيتزا' },
-      description: { en: 'Grease-resistant box for food delivery.', ar: 'علبة مقاومة للدهون لتوصيل الطعام.' },
-      image: 'cardboard_boxes_7.png',
-      subCategory: { en: 'Food', ar: 'أغذية' },
-    },
-    {
-      name: { en: 'Moving Box', ar: 'علبة نقل أثاث' },
-      description: { en: 'Heavy-duty box for household moving.', ar: 'علبة متينة لنقل الأثاث المنزلي.' },
-      image: 'cardboard_boxes_8.png',
-      subCategory: { en: 'Moving', ar: 'نقل' },
-    },
-    {
-      name: { en: 'Printed Carton', ar: 'كرتونة مطبوعة' },
-      description: { en: 'Full-color printed carton for branding.', ar: 'كرتونة مطبوعة بألوان كاملة لإبراز العلامة التجارية.' },
-      image: 'cardboard_boxes_9.png',
-      subCategory: { en: 'Printed', ar: 'مطبوع' },
-    },
-    {
-      name: { en: 'Flat Pack Carton', ar: 'كرتونة مسطّحة التغليف' },
-      description: { en: 'Space-saving flat-pack carton.', ar: 'كرتونة مسطّحة توفّر المساحة عند التخزين.' },
-      image: 'cardboard_boxes_10.png',
-      subCategory: { en: 'Flat Pack', ar: 'مسطّح' },
-    },
-  ],
-  plastic: [
-    {
-      name: { en: 'Stackable Storage Bin', ar: 'صندوق تخزين قابل للتكديس' },
-      description: { en: 'Durable bin for warehouse storage.', ar: 'صندوق متين لتخزين المستودعات.' },
-      image: 'plastic_boxes_1.png',
-      subCategory: { en: 'Storage', ar: 'تخزين' },
-    },
-    {
-      name: { en: 'Clear Display Box', ar: 'علبة عرض شفافة' },
-      description: { en: 'Transparent box for retail display.', ar: 'علبة شفافة للعرض في المتاجر.' },
-      image: 'plastic_boxes_2.png',
-      subCategory: { en: 'Display', ar: 'عرض' },
-    },
-    {
-      name: { en: 'Hinged Container', ar: 'حاوية بغطاء مفصلي' },
-      description: { en: 'Snap-lid container for small parts.', ar: 'حاوية بغطاء يُغلق بإحكام للقطع الصغيرة.' },
-      image: 'plastic_boxes_3.png',
-      subCategory: { en: 'Hinged', ar: 'مفصلي' },
-    },
-    {
-      name: { en: 'Produce Crate', ar: 'صندوق خضار' },
-      description: { en: 'Ventilated crate for fresh produce.', ar: 'صندوق مهوّى للخضار والفواكه الطازجة.' },
-      image: 'plastic_boxes_4.png',
-      subCategory: { en: 'Produce', ar: 'خضار' },
-    },
-    {
-      name: { en: 'Modular Tote Box', ar: 'صندوق نقل معياري' },
-      description: { en: 'Stackable tote for logistics.', ar: 'صندوق قابل للتكديس للخدمات اللوجستية.' },
-      image: 'plastic_boxes_5.png',
-      subCategory: { en: 'Tote', ar: 'نقل' },
-    },
-    {
-      name: { en: 'Injection Molded Case', ar: 'علبة مصنّعة بالحقن' },
-      description: { en: 'Precision case for tools or parts.', ar: 'علبة دقيقة للأدوات أو القطع.' },
-      image: 'plastic_boxes_6.png',
-      subCategory: { en: 'Molded', ar: 'حقن' },
-    },
-    {
-      name: { en: 'Food-Grade Container', ar: 'حاوية غذائية' },
-      description: { en: 'Sealed container for food storage.', ar: 'حاوية محكمة الإغلاق لحفظ الأطعمة.' },
-      image: 'plastic_boxes_7.png',
-      subCategory: { en: 'Food Grade', ar: 'غذائي' },
-    },
-    {
-      name: { en: 'Divided Organizer Box', ar: 'علبة تنظيم مقسّمة' },
-      description: { en: 'Compartmented box for small items.', ar: 'علبة بفواصل داخلية للأغراض الصغيرة.' },
-      image: 'plastic_boxes_8.png',
-      subCategory: { en: 'Organizer', ar: 'تنظيم' },
-    },
-    {
-      name: { en: 'Nesting Crate', ar: 'صندوق متداخل' },
-      description: { en: 'Space-saving nesting crate.', ar: 'صندوق متداخل يوفّر المساحة.' },
-      image: 'plastic_boxes_9.png',
-      subCategory: { en: 'Nesting', ar: 'متداخل' },
-    },
-    {
-      name: { en: 'Industrial Parts Bin', ar: 'صندوق قطع صناعية' },
-      description: { en: 'Heavy-duty bin for industrial parts.', ar: 'صندوق شديد التحمّل لقطع الغيار الصناعية.' },
-      image: 'plastic_boxes_10.png',
-      subCategory: { en: 'Industrial', ar: 'صناعي' },
-    },
-  ],
+/**
+ * The real catalogue. Each sub-category owns a folder; listing a file name in
+ * `images` puts that shot on the wall as its own card. The folders are empty for
+ * now, so every line shows a single placeholder card until its pictures land —
+ * drop them in and add their names here, in the order they should appear.
+ */
+const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
   hard: [
     {
-      name: { en: 'Rigid Gift Box', ar: 'علبة هدايا صلبة' },
-      description: { en: 'Sturdy rigid box for premium gifting.', ar: 'علبة صلبة متينة للهدايا الفاخرة.' },
-      image: 'hard_cover_boxes_1.png',
-      subCategory: { en: 'Gift', ar: 'هدايا' },
+      name: { en: 'Top/Base Hard Box', ar: 'علبة صلبة بغطاء وقاعدة' },
+      description: { en: 'Classic two-piece rigid box with a lift-off lid.', ar: 'علبة صلبة من قطعتين بغطاء يُرفع عن القاعدة.' },
+      folder: 'top_base',
+      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg'],
     },
     {
-      name: { en: 'Magnetic Closure Box', ar: 'علبة بإغلاق مغناطيسي' },
-      description: { en: 'Rigid box with magnetic flap closure.', ar: 'علبة صلبة بغطاء يُغلق مغناطيسياً.' },
-      image: 'hard_cover_boxes_2.png',
-      subCategory: { en: 'Magnetic', ar: 'مغناطيسي' },
+      name: { en: 'Magnet Hard Box', ar: 'علبة صلبة مغناطيسية' },
+      description: { en: 'Rigid box that snaps shut on a hidden magnet.', ar: 'علبة صلبة تُغلق بمغناطيس مخفي.' },
+      folder: 'magnet',
+      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg'],
     },
     {
-      name: { en: 'Two-Piece Rigid Box', ar: 'علبة صلبة من قطعتين' },
-      description: { en: 'Classic lid-and-base rigid box.', ar: 'علبة صلبة كلاسيكية بغطاء وقاعدة.' },
-      image: 'hard_cover_boxes_3.png',
-      subCategory: { en: 'Two-Piece', ar: 'قطعتان' },
+      name: { en: 'Hard Box with Ribbon Closing', ar: 'علبة صلبة بإغلاق بشريط' },
+      description: { en: 'Rigid box tied shut with a ribbon in your colours.', ar: 'علبة صلبة تُربط بشريط بألوان علامتك التجارية.' },
+      folder: 'ribbon_closing',
+      images: ['1.jpeg', '2.jpeg'],
     },
     {
-      name: { en: 'Rigid Presentation Case', ar: 'علبة عرض صلبة' },
-      description: { en: 'Display-ready rigid case.', ar: 'علبة صلبة جاهزة للعرض.' },
-      image: 'hard_cover_boxes_4.png',
-      subCategory: { en: 'Presentation', ar: 'عرض' },
-    },
-    {
-      name: { en: 'Rigid Jewelry Box', ar: 'علبة مجوهرات صلبة' },
-      description: { en: 'Compact rigid box for jewelry.', ar: 'علبة صلبة صغيرة للمجوهرات.' },
-      image: 'hard_cover_boxes_5.png',
-      subCategory: { en: 'Jewelry', ar: 'مجوهرات' },
-    },
-    {
-      name: { en: 'Rigid Bottle Box', ar: 'علبة زجاجات صلبة' },
-      description: { en: 'Fitted rigid box for bottles.', ar: 'علبة صلبة مفصّلة على قياس الزجاجات.' },
-      image: 'hard_cover_boxes_6.png',
-      subCategory: { en: 'Bottle', ar: 'زجاجات' },
-    },
-    {
-      name: { en: 'Rigid Drawer Box', ar: 'علبة صلبة بدرج' },
-      description: { en: 'Sliding drawer-style rigid box.', ar: 'علبة صلبة بدرج منزلق.' },
-      image: 'hard_cover_boxes_7.png',
-      subCategory: { en: 'Drawer', ar: 'درج' },
-    },
-    {
-      name: { en: 'Rigid Book-Style Box', ar: 'علبة صلبة على شكل كتاب' },
-      description: { en: 'Book-shaped rigid box with hinge.', ar: 'علبة صلبة بشكل كتاب مزوّدة بمفصلة.' },
-      image: 'hard_cover_boxes_8.png',
-      subCategory: { en: 'Book-Style', ar: 'كتاب' },
-    },
-    {
-      name: { en: 'Rigid Sample Box', ar: 'علبة عيّنات صلبة' },
-      description: { en: 'Small rigid box for product samples.', ar: 'علبة صلبة صغيرة لعيّنات المنتجات.' },
-      image: 'hard_cover_boxes_9.png',
-      subCategory: { en: 'Sample', ar: 'عيّنات' },
-    },
-    {
-      name: { en: "Rigid Collector's Box", ar: 'علبة صلبة للمقتنيات' },
-      description: { en: 'Premium rigid box for collectibles.', ar: 'علبة صلبة فاخرة للمقتنيات النادرة.' },
-      image: 'hard_cover_boxes_10.png',
-      subCategory: { en: 'Collector', ar: 'مقتنيات' },
+      name: { en: 'Drawer Hard Box', ar: 'علبة صلبة بدرج' },
+      description: { en: 'Rigid sleeve and drawer that slides out to reveal the product.', ar: 'علبة صلبة بدرج منزلق يكشف المنتج عند سحبه.' },
+      folder: 'drawer',
+      images: ['1.jpeg', '2.jpeg'],
     },
   ],
-  printing: [
+  printed: [
     {
-      name: { en: 'Custom Printed Label', ar: 'ملصق مطبوع حسب الطلب' },
-      description: { en: 'High-resolution custom label printing.', ar: 'طباعة ملصقات عالية الدقة حسب الطلب.' },
-      image: 'digital_printing_1.png',
-      subCategory: { en: 'Label', ar: 'ملصق' },
+      name: { en: 'Digital Printed Boxes', ar: 'علب مطبوعة رقمياً' },
+      description: { en: 'Full-colour boxes printed straight from your artwork.', ar: 'علب مطبوعة بألوان كاملة مباشرة من تصميمك.' },
+      folder: 'boxes',
+      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg'],
     },
     {
-      name: { en: 'Branded Tissue Paper', ar: 'ورق حرير بعلامتك التجارية' },
-      description: { en: 'Printed tissue paper for gift wrap.', ar: 'ورق حرير مطبوع لتغليف الهدايا.' },
-      image: 'digital_printing_2.png',
-      subCategory: { en: 'Tissue', ar: 'ورق حرير' },
+      name: { en: 'Digital Printed Bags', ar: 'أكياس مطبوعة رقمياً' },
+      description: { en: 'Paper bags carrying your brand, printed to order.', ar: 'أكياس ورقية تحمل علامتك التجارية وتُطبع حسب الطلب.' },
+      folder: 'bags',
+      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg'],
     },
     {
-      name: { en: 'Printed Ribbon', ar: 'شريط مطبوع' },
-      description: { en: 'Custom branded ribbon.', ar: 'شريط مطبوع يحمل علامتك التجارية.' },
-      image: 'digital_printing_3.png',
-      subCategory: { en: 'Ribbon', ar: 'شريط' },
+      name: { en: 'Digital Printed Cards', ar: 'بطاقات مطبوعة رقمياً' },
+      description: { en: 'Thank-you and greeting cards for every occasion.', ar: 'بطاقات شكر وتهنئة لكل المناسبات.' },
+      folder: 'cards',
+      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg'],
     },
     {
-      name: { en: 'Product Hang Tag', ar: 'بطاقة تعليق للمنتج' },
-      description: { en: 'Printed tag for apparel and gifts.', ar: 'بطاقة مطبوعة للألبسة والهدايا.' },
-      image: 'digital_printing_4.png',
-      subCategory: { en: 'Hang Tag', ar: 'بطاقة تعليق' },
+      name: { en: 'Digital Printed Wrapping Papers', ar: 'أوراق تغليف مطبوعة رقمياً' },
+      description: { en: 'Wrapping paper in your own pattern or logo.', ar: 'ورق تغليف بنقشتك أو شعارك الخاص.' },
+      folder: 'wrapping_papers',
+      images: ['1.jpeg'],
     },
     {
-      name: { en: 'Custom Sticker Sheet', ar: 'ورقة ملصقات مخصّصة' },
-      description: { en: 'Die-cut sticker sheet, full color.', ar: 'ورقة ملصقات مقصوصة بالقالب بألوان كاملة.' },
-      image: 'digital_printing_5.png',
-      subCategory: { en: 'Stickers', ar: 'ملصقات' },
+      name: { en: 'Digital Printed Table Numbers', ar: 'أرقام طاولات مطبوعة رقمياً' },
+      description: { en: 'Table numbers for weddings and events.', ar: 'أرقام طاولات للأعراس والمناسبات.' },
+      folder: 'table_numbers',
+      images: ['1.jpeg', '2.jpeg'],
     },
     {
-      name: { en: 'Printed Wrapping Paper', ar: 'ورق تغليف مطبوع' },
-      description: { en: 'Custom pattern wrapping paper.', ar: 'ورق تغليف بنقشة مخصّصة.' },
-      image: 'digital_printing_6.png',
-      subCategory: { en: 'Wrapping', ar: 'تغليف' },
-    },
-    {
-      name: { en: 'Branded Sleeve', ar: 'غلاف بعلامتك التجارية' },
-      description: { en: 'Printed sleeve for cups or packaging.', ar: 'غلاف مطبوع للأكواب أو العبوات.' },
-      image: 'digital_printing_7.png',
-      subCategory: { en: 'Sleeve', ar: 'غلاف' },
-    },
-    {
-      name: { en: 'Custom Insert Card', ar: 'بطاقة إدراج مخصّصة' },
-      description: { en: 'Printed insert for unboxing experience.', ar: 'بطاقة مطبوعة تُثري تجربة فتح العلبة.' },
-      image: 'digital_printing_8.png',
-      subCategory: { en: 'Insert', ar: 'إدراج' },
-    },
-    {
-      name: { en: 'Printed Poly Mailer', ar: 'مغلّف شحن بلاستيكي مطبوع' },
-      description: { en: 'Custom printed poly shipping mailer.', ar: 'مغلّف شحن بلاستيكي مطبوع حسب الطلب.' },
-      image: 'digital_printing_9.png',
-      subCategory: { en: 'Poly Mailer', ar: 'مغلّف شحن' },
-    },
-    {
-      name: { en: 'Branded Packing Tape', ar: 'شريط لاصق بعلامتك التجارية' },
-      description: { en: 'Printed tape for branded sealing.', ar: 'شريط لاصق مطبوع لإغلاق الطرود.' },
-      image: 'digital_printing_10.png',
-      subCategory: { en: 'Tape', ar: 'شريط لاصق' },
-    },
-  ],
-  souvenir: [
-    {
-      name: { en: 'Keepsake Memory Box', ar: 'علبة ذكريات' },
-      description: { en: 'Decorative box for keepsakes.', ar: 'علبة مزخرفة لحفظ الذكريات.' },
-      image: 'souvenir_boxes_1.png',
-      subCategory: { en: 'Keepsake', ar: 'ذكريات' },
-    },
-    {
-      name: { en: 'Travel Souvenir Box', ar: 'علبة تذكارات السفر' },
-      description: { en: 'Compact box for travel mementos.', ar: 'علبة صغيرة لتذكارات الأسفار.' },
-      image: 'souvenir_boxes_2.png',
-      subCategory: { en: 'Travel', ar: 'سفر' },
-    },
-    {
-      name: { en: 'Wooden-Style Souvenir Case', ar: 'علبة تذكارية بمظهر خشبي' },
-      description: { en: 'Wood-finish case for souvenirs.', ar: 'علبة بتشطيب خشبي للتذكارات.' },
-      image: 'souvenir_boxes_3.png',
-      subCategory: { en: 'Wooden', ar: 'خشبي' },
-    },
-    {
-      name: { en: 'Cultural Gift Box', ar: 'علبة هدايا تراثية' },
-      description: { en: 'Box designed for cultural gift items.', ar: 'علبة مصمّمة للهدايا التراثية.' },
-      image: 'souvenir_boxes_4.png',
-      subCategory: { en: 'Cultural', ar: 'تراثي' },
-    },
-    {
-      name: { en: 'Miniature Display Box', ar: 'علبة عرض مصغّرة' },
-      description: { en: 'Small box for miniature collectibles.', ar: 'علبة صغيرة للمجسّمات المصغّرة.' },
-      image: 'souvenir_boxes_5.png',
-      subCategory: { en: 'Miniature', ar: 'مصغّر' },
-    },
-    {
-      name: { en: 'Anniversary Keepsake Box', ar: 'علبة ذكرى سنوية' },
-      description: { en: 'Box for anniversary keepsakes.', ar: 'علبة لحفظ هدايا الذكرى السنوية.' },
-      image: 'souvenir_boxes_6.png',
-      subCategory: { en: 'Anniversary', ar: 'ذكرى سنوية' },
-    },
-    {
-      name: { en: 'Engraved Souvenir Case', ar: 'علبة تذكارية محفورة' },
-      description: { en: 'Case designed for engraved items.', ar: 'علبة مصمّمة للقطع المحفورة.' },
-      image: 'souvenir_boxes_7.png',
-      subCategory: { en: 'Engraved', ar: 'محفور' },
-    },
-    {
-      name: { en: 'Festival Gift Box', ar: 'علبة هدايا الأعياد' },
-      description: { en: 'Festive box for seasonal souvenirs.', ar: 'علبة احتفالية للتذكارات الموسمية.' },
-      image: 'souvenir_boxes_8.png',
-      subCategory: { en: 'Festival', ar: 'أعياد' },
-    },
-    {
-      name: { en: 'Tourist Gift Set Box', ar: 'علبة هدايا سياحية' },
-      description: { en: 'Box for tourist gift assortments.', ar: 'علبة لمجموعات الهدايا السياحية.' },
-      image: 'souvenir_boxes_9.png',
-      subCategory: { en: 'Tourist', ar: 'سياحي' },
-    },
-    {
-      name: { en: 'Commemorative Box', ar: 'علبة تذكارية' },
-      description: { en: 'Box for commemorative items.', ar: 'علبة للقطع التذكارية.' },
-      image: 'souvenir_boxes_10.png',
-      subCategory: { en: 'Commemorative', ar: 'تذكاري' },
-    },
-  ],
-  bags: [
-    {
-      name: { en: 'Kraft Shopping Bag', ar: 'كيس تسوّق كرافت' },
-      description: { en: 'Everyday kraft bag with twisted handles.', ar: 'كيس كرافت يومي بمقابض ملفوفة.' },
-      image: 'cardboard_bags_1.png',
-      subCategory: { en: 'Kraft', ar: 'كرافت' },
-    },
-    {
-      name: { en: 'Laminated Boutique Bag', ar: 'كيس بوتيك مغلّف' },
-      description: { en: 'Matt-laminated bag for retail boutiques.', ar: 'كيس بتغليف مطفي لمحلات البوتيك.' },
-      image: 'cardboard_bags_2.png',
-      subCategory: { en: 'Boutique', ar: 'بوتيك' },
-    },
-    {
-      name: { en: 'Rope Handle Gift Bag', ar: 'كيس هدايا بمقبض حبلي' },
-      description: { en: 'Gift bag finished with rope handles.', ar: 'كيس هدايا بمقابض من الحبل.' },
-      image: 'cardboard_bags_3.png',
-      subCategory: { en: 'Gift', ar: 'هدايا' },
-    },
-    {
-      name: { en: 'Food Takeaway Bag', ar: 'كيس طعام للتوصيل' },
-      description: { en: 'Grease-resistant bag for food takeaway.', ar: 'كيس مقاوم للدهون لتوصيل الطعام.' },
-      image: 'cardboard_bags_4.png',
-      subCategory: { en: 'Food', ar: 'أغذية' },
-    },
-    {
-      name: { en: 'Wine Bottle Bag', ar: 'كيس زجاجات' },
-      description: { en: 'Tall bag sized for bottles.', ar: 'كيس طويل مفصّل على قياس الزجاجات.' },
-      image: 'cardboard_bags_5.png',
-      subCategory: { en: 'Bottle', ar: 'زجاجات' },
-    },
-    {
-      name: { en: 'Printed Promotional Bag', ar: 'كيس دعائي مطبوع' },
-      description: { en: 'Full-color bag for events and campaigns.', ar: 'كيس مطبوع بألوان كاملة للفعاليات والحملات.' },
-      image: 'cardboard_bags_6.png',
-      subCategory: { en: 'Promotional', ar: 'دعائي' },
-    },
-    {
-      name: { en: 'Flat Handle Paper Bag', ar: 'كيس ورقي بمقبض مسطّح' },
-      description: { en: 'Classic paper bag with flat handles.', ar: 'كيس ورقي كلاسيكي بمقابض مسطّحة.' },
-      image: 'cardboard_bags_7.png',
-      subCategory: { en: 'Classic', ar: 'كلاسيكي' },
-    },
-    {
-      name: { en: 'Pharmacy Bag', ar: 'كيس صيدلية' },
-      description: { en: 'Compact bag for pharmacy counters.', ar: 'كيس صغير لطاولات الصيدليات.' },
-      image: 'cardboard_bags_8.png',
-      subCategory: { en: 'Pharmacy', ar: 'صيدلية' },
-    },
-    {
-      name: { en: 'Luxury Gusset Bag', ar: 'كيس فاخر موسّع' },
-      description: { en: 'Wide-gusset bag for premium packaging.', ar: 'كيس بجوانب موسّعة للتغليف الفاخر.' },
-      image: 'cardboard_bags_9.png',
-      subCategory: { en: 'Luxury', ar: 'فاخر' },
-    },
-    {
-      name: { en: 'Recycled Paper Bag', ar: 'كيس ورق معاد تدويره' },
-      description: { en: 'Bag made from recycled paper stock.', ar: 'كيس مصنوع من ورق معاد تدويره.' },
-      image: 'cardboard_bags_10.png',
-      subCategory: { en: 'Recycled', ar: 'معاد تدويره' },
-    },
-  ],
-  ribbons: [
-    {
-      name: { en: 'Satin Ribbon', ar: 'شريط ساتان' },
-      description: { en: 'Smooth satin ribbon for gift finishing.', ar: 'شريط ساتان ناعم لتزيين الهدايا.' },
-      image: 'ribbons_1.png',
-      subCategory: { en: 'Satin', ar: 'ساتان' },
-    },
-    {
-      name: { en: 'Grosgrain Ribbon', ar: 'شريط غروغران' },
-      description: { en: 'Ribbed ribbon with a firm hold.', ar: 'شريط مضلّع يحافظ على شكله.' },
-      image: 'ribbons_2.png',
-      subCategory: { en: 'Grosgrain', ar: 'غروغران' },
-    },
-    {
-      name: { en: 'Organza Ribbon', ar: 'شريط أورغانزا' },
-      description: { en: 'Sheer ribbon for delicate wrapping.', ar: 'شريط شفاف للتغليف الرقيق.' },
-      image: 'ribbons_3.png',
-      subCategory: { en: 'Organza', ar: 'أورغانزا' },
-    },
-    {
-      name: { en: 'Printed Logo Ribbon', ar: 'شريط مطبوع بالشعار' },
-      description: { en: 'Ribbon printed with your brand logo.', ar: 'شريط مطبوع عليه شعار علامتك التجارية.' },
-      image: 'ribbons_4.png',
-      subCategory: { en: 'Branded', ar: 'مطبوع' },
-    },
-    {
-      name: { en: 'Metallic Ribbon', ar: 'شريط معدني اللمعة' },
-      description: { en: 'Foil-finish ribbon for festive packaging.', ar: 'شريط بلمسة معدنية للتغليف الاحتفالي.' },
-      image: 'ribbons_5.png',
-      subCategory: { en: 'Metallic', ar: 'معدني' },
-    },
-    {
-      name: { en: 'Velvet Ribbon', ar: 'شريط مخمل' },
-      description: { en: 'Soft velvet ribbon for luxury boxes.', ar: 'شريط مخمل ناعم للعلب الفاخرة.' },
-      image: 'ribbons_6.png',
-      subCategory: { en: 'Velvet', ar: 'مخمل' },
-    },
-    {
-      name: { en: 'Pre-Tied Bow', ar: 'عقدة جاهزة' },
-      description: { en: 'Ready-made bow for fast finishing.', ar: 'عقدة جاهزة لتزيين سريع.' },
-      image: 'ribbons_7.png',
-      subCategory: { en: 'Bow', ar: 'عقدة' },
-    },
-    {
-      name: { en: 'Curling Ribbon', ar: 'شريط لولبي' },
-      description: { en: 'Curlable ribbon for gift bundles.', ar: 'شريط قابل للفتل لتزيين الهدايا.' },
-      image: 'ribbons_8.png',
-      subCategory: { en: 'Curling', ar: 'لولبي' },
-    },
-    {
-      name: { en: 'Woven Edge Ribbon', ar: 'شريط بحواف منسوجة' },
-      description: { en: 'Woven-edge ribbon that resists fraying.', ar: 'شريط بحواف منسوجة لا تتفكك.' },
-      image: 'ribbons_9.png',
-      subCategory: { en: 'Woven', ar: 'منسوج' },
-    },
-    {
-      name: { en: 'Recycled Cotton Ribbon', ar: 'شريط قطن معاد تدويره' },
-      description: { en: 'Cotton ribbon from recycled fibre.', ar: 'شريط قطني من ألياف معاد تدويرها.' },
-      image: 'ribbons_10.png',
-      subCategory: { en: 'Recycled', ar: 'معاد تدويره' },
+      name: { en: 'Digital Printed Stickers', ar: 'ملصقات مطبوعة رقمياً' },
+      description: { en: 'Die-cut stickers and labels in any shape.', ar: 'ملصقات وبطاقات مقصوصة بأي شكل تريده.' },
+      folder: 'stickers',
+      images: ['1.jpeg'],
     },
   ],
 };
 
+/**
+ * The wall of cards: every shot of every sub-category, in catalogue order. A
+ * sub-category with no shots yet still contributes one card, with an empty `src`
+ * that the template renders as the placeholder.
+ */
 const PRODUCTS: Product[] = CATEGORIES.flatMap((category) =>
-  PRODUCTS_BY_CATEGORY[category].map((item) => ({ ...item, category })),
+  SUBCATEGORIES_BY_CATEGORY[category].flatMap((sub) => {
+    const base = `/products/${CATEGORY_FOLDERS[category]}/${sub.folder}`;
+    const sources = sub.images.length ? sub.images.map((file) => `${base}/${file}`) : [''];
+    return sources.map((src) => ({
+      subCategory: sub.name,
+      description: sub.description,
+      src,
+      category,
+      line: sub.folder,
+    }));
+  }),
+);
+
+/**
+ * The order the cards actually appear in. Catalogue order puts all eight magnet
+ * boxes back to back, which reads as one product photographed eight times, so
+ * the shots are dealt out instead, spreading every line as far apart as the
+ * counts allow. Each category is dealt on its own before the two are woven
+ * together, so a category's own view is mixed as well as the wall — dealing the
+ * whole catalogue at once looks fine until a pill is pressed and the cards that
+ * were separating the magnets disappear. The result is arranged differently on
+ * each visit but holds still while the visitor browses it.
+ */
+const WALL: Product[] = woven(
+  CATEGORIES.map((category) => rotated(deal(PRODUCTS.filter((product) => product.category === category)))),
 );
 
 /** How many cards fan out on each side of the front one. */
@@ -524,6 +188,77 @@ function shuffled<T>(list: T[]): T[] {
   return result;
 }
 
+/**
+ * Interleaves one category's sub-categories so no two neighbouring cards come
+ * from the same one unless the counts leave no choice — always drawing from the
+ * largest pile left is what guarantees that. Each pile is shuffled first, so
+ * which shot of a line comes up where varies too.
+ */
+function deal(list: Product[]): Product[] {
+  const piles = new Map<string, Product[]>();
+  for (const product of list) {
+    const pile = piles.get(product.line);
+    if (pile) {
+      pile.push(product);
+    } else {
+      piles.set(product.line, [product]);
+    }
+  }
+  for (const [line, pile] of piles) {
+    piles.set(line, shuffled(pile));
+  }
+
+  const result: Product[] = [];
+  let previous = '';
+  while (result.length < list.length) {
+    // The largest pile that isn't the line just played; falling back to the
+    // largest outright once that is all that's left to deal.
+    const options = [...piles].filter(([line, pile]) => pile.length > 0 && line !== previous);
+    const pool = options.length ? options : [...piles].filter(([, pile]) => pile.length > 0);
+    const most = Math.max(...pool.map(([, pile]) => pile.length));
+    const tied = pool.filter(([, pile]) => pile.length === most);
+    const [line, pile] = tied[Math.floor(Math.random() * tied.length)];
+    result.push(pile.pop()!);
+    previous = line;
+  }
+  return result;
+}
+
+/**
+ * Starts a dealt run at a random point. Drawing from the largest pile first
+ * means a deal always opens on the same line — the eight magnet boxes — so the
+ * run is cut and rejoined somewhere else instead. Every neighbour in a dealt run
+ * already differs, so the only pair this can push together is the old last card
+ * and the old first: when those two match, the run is left where it is.
+ */
+function rotated(list: Product[]): Product[] {
+  if (list.length < 3 || list[0].line === list[list.length - 1].line) {
+    return list;
+  }
+  const at = Math.floor(Math.random() * list.length);
+  return [...list.slice(at), ...list.slice(0, at)];
+}
+
+/**
+ * Weaves the category runs into one wall, each run keeping its own order so that
+ * filtering the wall back down to a category returns that run intact. Which run
+ * gives up the next card is random, weighted by how much of it is left, so the
+ * categories stay evenly mixed from end to end. Any weave is safe: two cards can
+ * only land side by side if they were already neighbours in one run.
+ */
+function woven(runs: Product[][]): Product[] {
+  const rest = runs.map((run) => [...run].reverse());
+  const result: Product[] = [];
+  let left = rest.reduce((sum, run) => sum + run.length, 0);
+  while (left > 0) {
+    let pick = Math.floor(Math.random() * left);
+    const run = rest.find((candidate) => (pick -= candidate.length) < 0) ?? rest[0];
+    result.push(run.pop()!);
+    left--;
+  }
+  return result;
+}
+
 @Component({
   selector: 'app-products',
   imports: [TiltDirective, RevealDirective],
@@ -540,11 +275,14 @@ export class Products implements OnDestroy {
   protected readonly activeCategory = signal<CategoryId | 'all'>('all');
   protected readonly brokenImages = signal<ReadonlySet<string>>(new Set());
 
+  /**
+   * Filtering the dealt wall rather than the catalogue keeps a category's own
+   * view mixed too, and keeps every card where it was: re-dealing here would
+   * reshuffle the whole strip each time a pill is pressed.
+   */
   protected readonly filteredProducts = computed(() => {
     const active = this.activeCategory();
-    return active === 'all'
-      ? shuffled(PRODUCTS)
-      : PRODUCTS.filter((product) => product.category === active);
+    return active === 'all' ? WALL : WALL.filter((product) => product.category === active);
   });
 
   /**
@@ -709,11 +447,6 @@ export class Products implements OnDestroy {
     return value[this.i18n.lang()];
   }
 
-  /** Product shots are filed under a folder per category. */
-  protected imageSrc(product: Product): string {
-    return `/products/${CATEGORY_FOLDERS[product.category]}/${product.image}`;
-  }
-
   protected categoryLabel(category: CategoryId): string {
     return this.i18n.t(CATEGORY_LABEL_KEYS[category]);
   }
@@ -801,8 +534,8 @@ export class Products implements OnDestroy {
       : `${base} bg-navy-900/5 text-slate-600 hover:bg-navy-900/10`;
   }
 
-  onImageError(image: string): void {
-    this.brokenImages.update((set) => new Set(set).add(image));
+  onImageError(src: string): void {
+    this.brokenImages.update((set) => new Set(set).add(src));
   }
 
   // --- Lightbox -------------------------------------------------------------

@@ -1,0 +1,30 @@
+<div class="mx-auto w-full max-w-7xl border-t border-white/10 pt-8 lg:pt-10">
+  <p class="text-center text-xs font-bold uppercase tracking-widest text-royal-400">
+    {{ i18n.t('clients.eyebrow') }}
+  </p>
+
+  <!-- Pinned LTR on the window, not just the track — the same place the product
+       carousel pins its viewport. The track is wider than the window, and an RTL
+       block context aligns an overflowing child to its right edge, which parks
+       the track a whole viewport off to the left and leaves the strip looking
+       empty until the loop drags content back into view. Held LTR, the track
+       starts flush at the left edge in both languages and the window is full on
+       load; the direction of travel is mirrored in clients.css instead. -->
+  <div dir="ltr" class="marquee mt-6 overflow-hidden lg:mt-8" role="group" [attr.aria-label]="i18n.t('clients.label')">
+    <div class="marquee-track flex w-max items-center" [style.animationDuration]="lapDuration">
+      @for (client of clients; track client.logo) {
+        <span class="marquee-cell">
+          <img [src]="client.logo" [alt]="client.name" class="client-logo" decoding="async" draggable="false" />
+        </span>
+      }
+      <!-- The second copy is what the loop scrolls into; it carries no meaning of
+           its own, so it is hidden from assistive tech and every client is
+           announced exactly once. -->
+      @for (client of clients; track client.logo) {
+        <span class="marquee-cell" aria-hidden="true">
+          <img [src]="client.logo" alt="" class="client-logo" decoding="async" draggable="false" />
+        </span>
+      }
+    </div>
+  </div>
+</div>

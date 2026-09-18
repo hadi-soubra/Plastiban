@@ -28,6 +28,42 @@
         <h3 class="font-display text-xl font-bold text-navy-900">{{ i18n.t('contact.form.title') }}</h3>
 
         <form class="mt-6 flex flex-1 flex-col gap-5" (ngSubmit)="onSubmit()" #contactForm="ngForm">
+          <!-- Destination first: it frames everything written below it, and the
+               two offices keep separate inboxes. Radios rather than a select —
+               with only two choices, both stay visible and the picked one is
+               readable at a glance, which is the whole point of the control. -->
+          <fieldset>
+            <legend class="mb-1.5 text-sm font-semibold text-navy-900">
+              {{ i18n.t('contact.form.office') }}
+            </legend>
+            <div class="grid grid-cols-2 gap-3">
+              @for (office of offices; track office.id) {
+                <label class="cursor-pointer">
+                  <!-- Visually hidden, not removed: it stays a real radio, so the
+                       group keeps arrow-key navigation and its native semantics.
+                       The focus ring is carried by the label instead. -->
+                  <input
+                    type="radio"
+                    name="office"
+                    [value]="office.id"
+                    [(ngModel)]="model.office"
+                    class="peer sr-only"
+                  />
+                  <!-- Selection is carried by the border alone: the fill stays the
+                       same cream as every other field, so the picker reads as part
+                       of the form rather than as a pair of buttons. Focus uses
+                       `outline`, not another ring, so the two indicators can't
+                       overwrite each other on a focused-and-checked option. -->
+                  <span
+                    class="flex items-center justify-center rounded-lg bg-cream-100 px-4 py-3 text-sm font-semibold text-slate-600 ring-1 ring-navy-900/10 transition peer-hover:bg-navy-900/5 peer-checked:ring-2 peer-checked:ring-navy-900 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-navy-900"
+                  >
+                    {{ i18n.t(office.pickerKey) }}
+                  </span>
+                </label>
+              }
+            </div>
+          </fieldset>
+
           <div>
             <label for="contact-name" class="mb-1.5 block text-sm font-semibold text-navy-900">
               {{ i18n.t('contact.form.name') }}
@@ -40,7 +76,7 @@
               required
               autocomplete="name"
               [(ngModel)]="model.name"
-              class="w-full rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-royal-600"
+              class="w-full rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-navy-900"
             />
           </div>
 
@@ -56,7 +92,7 @@
                 [attr.aria-label]="i18n.t('contact.form.phone')"
                 [(ngModel)]="model.phone"
                 #phone="ngModel"
-                class="w-full rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-royal-600"
+                class="w-full rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-navy-900"
               />
               <input
                 type="email"
@@ -67,7 +103,7 @@
                 [attr.aria-label]="i18n.t('contact.form.email')"
                 [(ngModel)]="model.email"
                 #email="ngModel"
-                class="w-full rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-royal-600"
+                class="w-full rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-navy-900"
               />
             </div>
             @if ((email.touched || phone.touched || contactForm.submitted) && !hasContactMethod()) {
@@ -90,7 +126,7 @@
               [placeholder]="i18n.t('contact.form.messagePlaceholder')"
               required
               [(ngModel)]="model.message"
-              class="min-h-40 w-full flex-1 resize-none rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-royal-600"
+              class="min-h-40 w-full flex-1 resize-none rounded-lg bg-cream-100 px-4 py-3 text-sm text-navy-900 placeholder:text-slate-400 outline-none ring-1 ring-navy-900/10 focus:ring-2 focus:ring-navy-900"
             ></textarea>
           </div>
 
@@ -112,7 +148,7 @@
 
       <div class="space-y-4 lg:col-start-1 lg:row-start-2">
         @for (office of offices; track office.nameKey; let i = $index) {
-          <div [appReveal]="200 + i * 100" class="rounded-xl bg-white/5 p-6 transition hover:bg-white/[0.08]">
+          <div [appReveal]="200 + i * 100" class="rounded-xl bg-white/5 p-6">
             <p class="font-semibold text-white">{{ i18n.t(office.nameKey) }}</p>
             <p class="mt-1 text-sm text-slate-400">{{ i18n.t(office.addressKey) }}</p>
             <!-- The row follows the page direction so it starts on the same

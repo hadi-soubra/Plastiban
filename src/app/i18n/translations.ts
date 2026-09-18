@@ -32,6 +32,9 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'hero.scroll': 'Scroll',
     'hero.scrollAria': 'Scroll to the About section',
 
+    'clients.eyebrow': 'Trusted by',
+    'clients.label': 'Companies we have worked with',
+
     'about.eyebrow': 'Who we are',
     'about.yearLabel': 'The year it began',
     'about.heading': 'A family of makers, refining the craft of packaging for three decades.',
@@ -69,19 +72,12 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'products.eyebrow': 'Portfolio',
     'products.heading': 'Our Products',
-    'products.intro':
-      'Standard lines and fully bespoke designs, produced for clients across Lebanon and the United Arab Emirates.',
     'products.all': 'All',
     'products.hint': 'Tap any product to view it larger.',
     'products.filters': 'Product categories',
 
-    'category.cardboard': 'Cardboard Boxes',
-    'category.plastic': 'Plastic Boxes',
-    'category.hard': 'Hard Cover Boxes',
-    'category.printing': 'Digital Printing',
-    'category.souvenir': 'Souvenir Boxes',
-    'category.bags': 'Cardboard Bags',
-    'category.ribbons': 'Ribbons',
+    'category.hard': 'Hard Box',
+    'category.printed': 'Digital Printed',
 
     'lightbox.close': 'Close',
     'lightbox.prev': 'Previous product',
@@ -102,6 +98,9 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'contact.map.hint': 'Tap a pin to open the location in Google Maps.',
     'contact.map.reset': 'Reset map view',
     'contact.form.title': 'Send us a message',
+    'contact.form.office': 'Send to',
+    'contact.form.office.lb': 'Lebanon',
+    'contact.form.office.ae': 'U.A.E.',
     'contact.form.name': 'Name',
     'contact.form.namePlaceholder': 'Full name',
     'contact.form.contact': 'Contact',
@@ -151,6 +150,9 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'hero.scroll': 'مرّر للأسفل',
     'hero.scrollAria': 'الانتقال إلى قسم من نحن',
 
+    'clients.eyebrow': 'يثقون بنا',
+    'clients.label': 'شركات عملنا معها',
+
     'about.eyebrow': 'من نحن',
     'about.yearLabel': 'عام البداية',
     'about.heading': 'عائلة من الصنّاع، تصقل حرفة التغليف منذ ثلاثة عقود.',
@@ -187,19 +189,12 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'products.eyebrow': 'أعمالنا',
     'products.heading': 'منتجاتنا',
-    'products.intro':
-      'خطوط إنتاج قياسية وتصاميم مخصّصة بالكامل، ننتجها لعملائنا في لبنان والإمارات العربية المتحدة.',
     'products.all': 'الكل',
     'products.hint': 'اضغط على أي منتج لعرضه بحجم أكبر.',
     'products.filters': 'فئات المنتجات',
 
-    'category.cardboard': 'علب كرتون',
-    'category.plastic': 'علب بلاستيك',
-    'category.hard': 'علب بغلاف صلب',
-    'category.printing': 'طباعة رقمية',
-    'category.souvenir': 'علب تذكارية',
-    'category.bags': 'أكياس كرتون',
-    'category.ribbons': 'شرائط',
+    'category.hard': 'علب صلبة',
+    'category.printed': 'طباعة رقمية',
 
     'lightbox.close': 'إغلاق',
     'lightbox.prev': 'المنتج السابق',
@@ -220,6 +215,9 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'contact.map.hint': 'اضغط على أي علامة لفتح الموقع في خرائط غوغل.',
     'contact.map.reset': 'إعادة ضبط عرض الخريطة',
     'contact.form.title': 'أرسل لنا رسالة',
+    'contact.form.office': 'إرسال إلى',
+    'contact.form.office.lb': 'لبنان',
+    'contact.form.office.ae': 'الإمارات',
     'contact.form.name': 'الاسم',
     'contact.form.namePlaceholder': 'الاسم الكامل',
     'contact.form.contact': 'وسيلة التواصل',

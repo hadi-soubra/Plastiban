@@ -1,9 +1,14 @@
+<!-- Two rows rather than a centred column: the headline stays centred in
+     whatever height is left over while the logo strip is anchored to the bottom.
+     An `mt-auto` on the strip would not do this — auto margins swallow the free
+     space before `justify-center` ever sees it, which drags the headline up to
+     the top of the section. -->
 <section
   id="top"
-  class="hero-bg relative flex min-h-[var(--section-h)] scroll-mt-[var(--header-h)] flex-col justify-center overflow-hidden px-6 py-16 lg:px-10"
+  class="hero-bg relative grid min-h-[var(--section-h)] scroll-mt-[var(--header-h)] grid-rows-[1fr_auto] overflow-hidden px-6 py-16 lg:px-10"
   aria-labelledby="hero-heading"
 >
-  <div class="relative mx-auto max-w-7xl">
+  <div class="relative mx-auto flex w-full max-w-7xl items-center">
     <div class="mx-auto max-w-3xl text-center">
       <h1
         id="hero-heading"
@@ -18,4 +23,6 @@
       </p>
     </div>
   </div>
+
+  <app-clients class="hero-clients mt-12 lg:mt-16" />
 </section>

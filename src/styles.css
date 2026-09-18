@@ -49,18 +49,13 @@ html {
     scroll-snap-type: y proximity;
   }
 
-  main > * > section[id] {
+  /* Contact and the footer are both left out. Together they are the tail of the
+     page, which is read by scrolling through it rather than by landing on it —
+     and snapping only one of the two would be the worst of both: the bottom of
+     the document falls inside contact's snap zone, so proximity would keep
+     dragging the reader back up and off the footer. */
+  main > * > section[id]:not(#contact) {
     scroll-snap-align: start;
-  }
-
-  /* The footer sits below the last full-height section but is shorter than the
-     viewport, so the bottom of the page lands inside the contact section's snap
-     zone — proximity then drags the reader back up and the footer is never seen.
-     Giving the footer its own snap point with `end` alignment (its bottom to the
-     scrollport's bottom) puts a reachable stop exactly at the document end, so
-     scrolling down past the midpoint snaps the footer fully into view instead. */
-  footer {
-    scroll-snap-align: end;
   }
 }
 
