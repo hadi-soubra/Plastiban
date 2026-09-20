@@ -116,7 +116,10 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'footer.rights': 'All rights reserved.',
     'footer.follow': 'Follow us',
-    'social.instagram': 'Instagram',
+    'social.instagram.lb': 'Instagram — Lebanon',
+    'social.instagram.ae': 'Instagram — UAE',
+    'social.country.lb': 'Lebanon',
+    'social.country.ae': 'UAE',
     'social.facebook': 'Facebook',
     'social.whatsapp': 'WhatsApp',
 
@@ -233,7 +236,10 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'footer.rights': 'جميع الحقوق محفوظة.',
     'footer.follow': 'تابعنا',
-    'social.instagram': 'إنستغرام',
+    'social.instagram.lb': 'إنستغرام — لبنان',
+    'social.instagram.ae': 'إنستغرام — الإمارات',
+    'social.country.lb': 'لبنان',
+    'social.country.ae': 'الإمارات',
     'social.facebook': 'فيسبوك',
     'social.whatsapp': 'واتساب',
 

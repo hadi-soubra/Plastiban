@@ -1,10 +1,12 @@
 /**
  * Outward-facing links for the business. The Instagram and Facebook handles are
- * placeholders — swap them for the real accounts before going live.
+ * placeholders — swap them for the real accounts before going live. The business
+ * runs one Instagram account per country, so the footer links to both.
  */
 export const SITE = {
   origin: 'https://plastiban.me',
-  instagram: 'https://www.instagram.com/plastiban',
+  instagramLb: 'https://www.instagram.com/plastiban',
+  instagramAe: 'https://www.instagram.com/plastiban.ae',
   facebook: 'https://www.facebook.com/plastiban',
   /** wa.me wants the number in international form with no +, spaces or dashes. */
   whatsapp: 'https://wa.me/9613227144',
