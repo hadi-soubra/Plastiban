@@ -98,13 +98,23 @@ the address that owns the Resend account — fine for testing, not for productio
    | `CONTACT_TO_AE`   | `uae@plastiban.me`   *(confirm — see note)*         | Plaintext |
 
    `RESEND_API_KEY` must be **Secret**, not plaintext — plaintext values are
-   readable by anyone with dashboard access. The recipients are variables rather
-   than hardcoded so a mailbox can change without a code deploy; leave them out
-   and the Worker falls back to the same two addresses.
+   readable by anyone with dashboard access.
 
-   `wrangler.jsonc` deliberately defines no `vars` block, so a deploy cannot
-   overwrite what is set here. If you ever add one, it becomes the source of
-   truth and dashboard edits get reverted on the next deploy.
+   > **A deploy clears plaintext variables set in the dashboard.** Observed on
+   > this project: after a push to `main` rebuilt the Worker, `CONTACT_TO_LB`
+   > and `CONTACT_TO_AE` were gone and only the `RESEND_API_KEY` secret
+   > survived. Secrets persist across deploys; plaintext variables do not.
+   >
+   > So dashboard variables are fine for a quick test, but anything that must
+   > survive belongs in `wrangler.jsonc` under `vars`. The office addresses are
+   > not secret — they are printed on the site's own contact cards — so once the
+   > monitored mailboxes are confirmed, that is where they should live.
+
+   The Worker **refuses to send** when a recipient variable is missing, rather
+   than falling back to a hardcoded address. That is deliberate: with a
+   fallback, a deploy that cleared these would quietly redirect test
+   submissions into the real office inbox with nothing in the response to
+   show it.
 
    If the build needs a specific Node version, add `NODE_VERSION` = `22` under
    **Settings → Build → Variables**.

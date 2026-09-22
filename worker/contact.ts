@@ -13,7 +13,10 @@ export interface Env {
   RESEND_API_KEY: string;
   /** Verified sender, e.g. "Plastiban Website <website@send.plastiban.me>". */
   CONTACT_FROM?: string;
-  /** Recipient overrides, so a mailbox can change without a code deploy. */
+  /**
+   * Where each office's enquiries go. Required — the Worker refuses to send
+   * when one is missing rather than falling back to a guessed address.
+   */
   CONTACT_TO_LB?: string;
   CONTACT_TO_AE?: string;
   /** Optional KV namespace; when bound, it rate-limits by IP across colos. */
@@ -36,10 +39,16 @@ interface Submission {
  * Recipients are resolved from this table, never from the request body — the
  * client only ever names an office. Accepting an address from the client would
  * turn the endpoint into an open relay for our own verified domain.
+ *
+ * There is deliberately no hardcoded fallback address. `wrangler deploy` clears
+ * plaintext variables that were set in the dashboard, and a fallback would turn
+ * that into a silent misdelivery: submissions meant for a test inbox would go
+ * to the real office instead, with nothing in the response to show it. Failing
+ * the send is the louder and safer outcome.
  */
-const RECIPIENTS: Record<OfficeId, { env: keyof Env; fallback: string; label: string }> = {
-  lb: { env: 'CONTACT_TO_LB', fallback: 'info@plastiban.me', label: 'Lebanon' },
-  ae: { env: 'CONTACT_TO_AE', fallback: 'uae@plastiban.me', label: 'U.A.E.' },
+const RECIPIENTS: Record<OfficeId, { env: 'CONTACT_TO_LB' | 'CONTACT_TO_AE'; label: string }> = {
+  lb: { env: 'CONTACT_TO_LB', label: 'Lebanon' },
+  ae: { env: 'CONTACT_TO_AE', label: 'U.A.E.' },
 };
 
 const MAX_LENGTHS: Record<keyof Omit<Submission, 'office' | 'company'>, number> = {
@@ -96,7 +105,11 @@ export async function handleContact(request: Request, env: Env): Promise<Respons
   }
 
   const office = RECIPIENTS[submission.office];
-  const to = (env[office.env] as string | undefined) ?? office.fallback;
+  const to = env[office.env]?.trim();
+  if (!to) {
+    console.error(`${office.env} is not set — refusing to send rather than guess a recipient`);
+    return json({ error: 'send_failed' }, 500);
+  }
   const from = env.CONTACT_FROM ?? 'Plastiban Website <onboarding@resend.dev>';
 
   const response = await fetch('https://api.resend.com/emails', {

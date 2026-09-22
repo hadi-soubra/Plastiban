@@ -10,6 +10,7 @@ RESEND_API_KEY=re_your_key_here
 # Resend only delivers from it to the address that owns the Resend account.
 CONTACT_FROM=Plastiban Website <onboarding@resend.dev>
 
-# Override while testing so nothing reaches the real office inboxes.
+# Required. The Worker refuses to send when either is missing rather than
+# guessing an address, so set both — to your own inbox while testing.
 CONTACT_TO_LB=info@plastiban.me
 CONTACT_TO_AE=uae@plastiban.me
