@@ -9,7 +9,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import * as L from 'leaflet';
 import { RevealDirective } from '../../directives/reveal.directive';
 import { TranslationService } from '../../i18n/translation.service';
@@ -233,7 +233,7 @@ export class Contact implements OnDestroy {
     return !!(this.model.email.trim() || this.model.phone.trim());
   }
 
-  async onSubmit(): Promise<void> {
+  async onSubmit(form: NgForm): Promise<void> {
     if (this.state() === 'sending') {
       return;
     }
@@ -250,11 +250,20 @@ export class Contact implements OnDestroy {
     // Nothing is stored anywhere but the email that was just sent, so the form
     // is only cleared once the send is known to have succeeded — a failure
     // leaves everything typed in place to retry.
+    //
+    // resetForm rather than blanking the model by hand: it also clears the
+    // submitted and touched flags. Emptying the values alone leaves those set,
+    // so the "enter a phone or an email" error immediately fires against the
+    // freshly cleared fields — an error sitting directly under the success
+    // message.
     this.state.set('sent');
-    this.model.name = '';
-    this.model.email = '';
-    this.model.phone = '';
-    this.model.message = '';
-    this.model.office = DEFAULT_OFFICE;
+    form.resetForm({
+      name: '',
+      email: '',
+      phone: '',
+      message: '',
+      office: DEFAULT_OFFICE,
+      company: '',
+    });
   }
 }

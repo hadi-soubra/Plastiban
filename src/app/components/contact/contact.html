@@ -27,7 +27,7 @@
       <div [appReveal]="120" class="flex h-full flex-col rounded-2xl bg-white p-8 lg:col-start-2 lg:row-start-1 lg:row-span-3">
         <h3 class="font-display text-xl font-bold text-navy-900">{{ i18n.t('contact.form.title') }}</h3>
 
-        <form class="relative mt-6 flex flex-1 flex-col gap-5" (ngSubmit)="onSubmit()" #contactForm="ngForm">
+        <form class="relative mt-6 flex flex-1 flex-col gap-5" (ngSubmit)="onSubmit(contactForm)" #contactForm="ngForm">
           <!-- Destination first: it frames everything written below it, and the
                two offices keep separate inboxes. Radios rather than a select —
                with only two choices, both stay visible and the picked one is
