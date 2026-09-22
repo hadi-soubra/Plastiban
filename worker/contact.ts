@@ -124,7 +124,7 @@ export async function handleContact(request: Request, env: Env): Promise<Respons
       // Replying in the mail client answers the visitor directly. Only set when
       // they gave an address; otherwise replies would bounce back to the site.
       ...(submission.email ? { reply_to: [submission.email] } : {}),
-      subject: `Website enquiry (${office.label}) — ${submission.name}`,
+      subject: `Message from ${headerSafe(submission.name)} (${office.label})`,
       text: asText(submission, office.label),
       html: asHtml(submission, office.label),
     }),
@@ -216,7 +216,7 @@ function asHtml(submission: Submission, officeLabel: string): string {
     `<td style="padding:4px 0;color:#0f172a;font-size:14px">${escapeHtml(value || '—')}</td></tr>`;
 
   return `<div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;max-width:560px">
-  <p style="margin:0 0 4px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#3055c8;font-weight:700">Website enquiry</p>
+  <p style="margin:0 0 4px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#3055c8;font-weight:700">Plastiban enquiry</p>
   <p style="margin:0 0 20px;color:#64748b;font-size:13px">Addressed to the ${escapeHtml(officeLabel)} office.</p>
   <table style="border-collapse:collapse">
     ${row('Name', submission.name)}
@@ -226,6 +226,15 @@ function asHtml(submission: Submission, officeLabel: string): string {
   <p style="margin:20px 0 6px;color:#64748b;font-size:13px">Message</p>
   <div style="white-space:pre-wrap;color:#0f172a;font-size:14px;line-height:1.6;padding:12px 16px;background:#f8fafc;border-radius:8px">${escapeHtml(submission.message)}</div>
 </div>`;
+}
+
+/**
+ * The subject is a mail header, and the name in it comes from the form. A
+ * newline in a header is how header injection works, so they are flattened to
+ * spaces before the value is used.
+ */
+function headerSafe(value: string): string {
+  return value.replace(/[\r\n]+/g, ' ').trim();
 }
 
 /** The message is attacker-controlled text landing in an HTML mail body. */
