@@ -24,5 +24,7 @@
     </div>
   </div>
 
-  <app-clients class="hero-clients mt-12 lg:mt-16" />
+  @if (showClients) {
+    <app-clients class="hero-clients mt-12 lg:mt-16" />
+  }
 </section>
