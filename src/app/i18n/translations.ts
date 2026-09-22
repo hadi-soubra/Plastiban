@@ -112,7 +112,12 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'contact.form.message': 'Message',
     'contact.form.messagePlaceholder': 'Tell us about your project',
     'contact.form.submit': 'Send Message',
+    'contact.form.sending': 'Sending…',
     'contact.form.success': "Thanks — your message has been noted. We'll be in touch shortly.",
+    'contact.form.error':
+      "Your message could not be sent. Please try again, or email us directly at the address for your office below.",
+    'contact.form.errorRateLimited':
+      'That is a few messages in a short time. Please wait a little while before sending another.',
 
     'footer.rights': 'All rights reserved.',
     'footer.follow': 'Follow us',
@@ -232,7 +237,12 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'contact.form.message': 'الرسالة',
     'contact.form.messagePlaceholder': 'أخبرنا عن مشروعك',
     'contact.form.submit': 'إرسال الرسالة',
+    'contact.form.sending': 'جارٍ الإرسال…',
     'contact.form.success': 'شكراً لك — وصلتنا رسالتك وسنتواصل معك قريباً.',
+    'contact.form.error':
+      'تعذّر إرسال رسالتك. يُرجى المحاولة مرة أخرى، أو مراسلتنا مباشرةً على بريد المكتب المذكور أدناه.',
+    'contact.form.errorRateLimited':
+      'لقد أرسلت عدة رسائل خلال وقت قصير. يُرجى الانتظار قليلاً قبل إرسال رسالة أخرى.',
 
     'footer.rights': 'جميع الحقوق محفوظة.',
     'footer.follow': 'تابعنا',

@@ -1,0 +1,15 @@
+# Copy to `.dev.vars` for local runs of `npm run dev:functions`.
+# `.dev.vars` is gitignored — never commit a real key.
+#
+# In production these are set in the Cloudflare Pages dashboard under
+# Settings -> Environment variables. RESEND_API_KEY must be an encrypted secret.
+
+RESEND_API_KEY=re_your_key_here
+
+# Until send.plastiban.com is verified in Resend, keep the shared test sender.
+# Resend only delivers from it to the address that owns the Resend account.
+CONTACT_FROM=Plastiban Website <onboarding@resend.dev>
+
+# Override while testing so nothing reaches the real office inboxes.
+CONTACT_TO_LB=info@plastiban.me
+CONTACT_TO_AE=uae@plastiban.me

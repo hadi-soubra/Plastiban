@@ -3,6 +3,7 @@ import {
   ElementRef,
   OnDestroy,
   afterNextRender,
+  computed,
   effect,
   inject,
   signal,
@@ -12,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import * as L from 'leaflet';
 import { RevealDirective } from '../../directives/reveal.directive';
 import { TranslationService } from '../../i18n/translation.service';
+import { ContactService, SubmitFailure } from './contact.service';
 
 type OfficeId = 'lb' | 'ae';
 
@@ -25,7 +27,12 @@ interface ContactModel {
   message: string;
   /** Which of the two offices the message is addressed to. */
   office: OfficeId;
+  /** Honeypot — hidden from people, irresistible to form-filling bots. */
+  company: string;
 }
+
+/** Where the form is in the send cycle; drives the button and the status line. */
+type SubmitState = 'idle' | 'sending' | 'sent' | 'error';
 
 interface OfficeLocation {
   id: OfficeId;
@@ -49,6 +56,7 @@ interface OfficeLocation {
 })
 export class Contact implements OnDestroy {
   protected readonly i18n = inject(TranslationService);
+  private readonly contact = inject(ContactService);
 
   protected readonly model: ContactModel = {
     name: '',
@@ -56,8 +64,15 @@ export class Contact implements OnDestroy {
     phone: '',
     message: '',
     office: DEFAULT_OFFICE,
+    company: '',
   };
-  protected readonly submitted = signal(false);
+  protected readonly state = signal<SubmitState>('idle');
+  /** Which failure message to show; only meaningful while state is 'error'. */
+  private readonly failure = signal<SubmitFailure>('failed');
+
+  protected readonly errorKey = computed(() =>
+    this.failure() === 'rate_limited' ? 'contact.form.errorRateLimited' : 'contact.form.error',
+  );
 
   protected readonly offices: OfficeLocation[] = [
     {
@@ -218,8 +233,24 @@ export class Contact implements OnDestroy {
     return !!(this.model.email.trim() || this.model.phone.trim());
   }
 
-  onSubmit(): void {
-    this.submitted.set(true);
+  async onSubmit(): Promise<void> {
+    if (this.state() === 'sending') {
+      return;
+    }
+    this.state.set('sending');
+
+    try {
+      await this.contact.send({ ...this.model });
+    } catch (failure) {
+      this.failure.set(failure as SubmitFailure);
+      this.state.set('error');
+      return;
+    }
+
+    // Nothing is stored anywhere but the email that was just sent, so the form
+    // is only cleared once the send is known to have succeeded — a failure
+    // leaves everything typed in place to retry.
+    this.state.set('sent');
     this.model.name = '';
     this.model.email = '';
     this.model.phone = '';
