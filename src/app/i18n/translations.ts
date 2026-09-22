@@ -113,7 +113,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'contact.form.messagePlaceholder': 'Tell us about your project',
     'contact.form.submit': 'Send Message',
     'contact.form.sending': 'Sending…',
-    'contact.form.success': "Thanks — your message has been noted. We'll be in touch shortly.",
+    'contact.form.success': "Thanks, your message has been noted. We'll be in touch shortly.",
     'contact.form.error':
       'Your message could not be sent. Please try again, or email us directly at info@plastiban.com for our Lebanon office and uae@plastiban.com for our UAE office.',
     'contact.form.errorRateLimited':
@@ -121,15 +121,15 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'footer.rights': 'All rights reserved.',
     'footer.follow': 'Follow us',
-    'social.instagram.lb': 'Instagram — Lebanon',
-    'social.instagram.ae': 'Instagram — UAE',
+    'social.instagram.lb': 'Instagram (Lebanon)',
+    'social.instagram.ae': 'Instagram (UAE)',
     'social.country.lb': 'Lebanon',
     'social.country.ae': 'UAE',
     'social.facebook': 'Facebook',
     'social.whatsapp': 'WhatsApp',
 
     'seo.title':
-      'Plastiban — Packaging & Industrial Plastics Manufacturer | Lebanon & U.A.E.',
+      'Plastiban - Packaging & Industrial Plastics Manufacturer | Lebanon & U.A.E.',
     'seo.description':
       'Plastiban Technical Industry S.A.R.L has manufactured packaging and technical plastics since 1989. Cardboard, plastic, rigid and souvenir boxes plus digital printing, made in Lebanon and the U.A.E.',
   },
@@ -231,14 +231,14 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'contact.form.contact': 'وسيلة التواصل',
     'contact.form.phone': 'رقم الهاتف',
     'contact.form.email': 'البريد الإلكتروني',
-    'contact.form.contactHint': 'أدخل وسيلة واحدة على الأقل — هاتف أو بريد إلكتروني.',
+    'contact.form.contactHint': 'أدخل وسيلة واحدة على الأقل: هاتف أو بريد إلكتروني.',
     'contact.form.contactError':
       'يرجى إدخال بريد إلكتروني أو رقم هاتف لنتمكّن من التواصل معك.',
     'contact.form.message': 'الرسالة',
     'contact.form.messagePlaceholder': 'أخبرنا عن مشروعك',
     'contact.form.submit': 'إرسال الرسالة',
     'contact.form.sending': 'جارٍ الإرسال…',
-    'contact.form.success': 'شكراً لك — وصلتنا رسالتك وسنتواصل معك قريباً.',
+    'contact.form.success': 'شكراً لك، وصلتنا رسالتك وسنتواصل معك قريباً.',
     'contact.form.error':
       'تعذّر إرسال رسالتك. يُرجى المحاولة مرة أخرى، أو مراسلتنا مباشرةً على info@plastiban.com لمكتب لبنان و uae@plastiban.com لمكتب الإمارات.',
     'contact.form.errorRateLimited':
@@ -246,14 +246,14 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'footer.rights': 'جميع الحقوق محفوظة.',
     'footer.follow': 'تابعنا',
-    'social.instagram.lb': 'إنستغرام — لبنان',
-    'social.instagram.ae': 'إنستغرام — الإمارات',
+    'social.instagram.lb': 'إنستغرام (لبنان)',
+    'social.instagram.ae': 'إنستغرام (الإمارات)',
     'social.country.lb': 'لبنان',
     'social.country.ae': 'الإمارات',
     'social.facebook': 'فيسبوك',
     'social.whatsapp': 'واتساب',
 
-    'seo.title': 'بلاستيبان — تصنيع التغليف والبلاستيك الصناعي | لبنان والإمارات',
+    'seo.title': 'بلاستيبان - تصنيع التغليف والبلاستيك الصناعي | لبنان والإمارات',
     'seo.description':
       'تصنّع بلاستيبان للصناعات التقنية ش.م.م مواد التغليف والبلاستيك التقني منذ عام ١٩٨٩: علب كرتون وبلاستيك وعلب صلبة وتذكارية وطباعة رقمية، صناعة لبنانية وإماراتية.',
   },
