@@ -13,7 +13,7 @@ Visitor submits form
   → POST /api/contact     (same origin, no CORS)
   → worker/index.ts       → worker/contact.ts
   → Resend HTTPS API
-  → info@plastiban.me  (Lebanon)  /  uae@plastiban.me  (U.A.E.)
+  → info@plastiban.com  (Lebanon)  /  uae@plastiban.com  (U.A.E.)
 ```
 
 > Built for Workers rather than Pages because Cloudflare's own guidance is now
@@ -94,8 +94,8 @@ the address that owns the Resend account — fine for testing, not for productio
    |-------------------|-----------------------------------------------------|-----------|
    | `RESEND_API_KEY`  | the `re_...` key from step 1                        | **Secret** |
    | `CONTACT_FROM`    | `Plastiban Website <website@send.plastiban.com>`    | Plaintext |
-   | `CONTACT_TO_LB`   | `info@plastiban.me`  *(confirm — see note)*         | Plaintext |
-   | `CONTACT_TO_AE`   | `uae@plastiban.me`   *(confirm — see note)*         | Plaintext |
+   | `CONTACT_TO_LB`   | `info@plastiban.com`                                | Plaintext |
+   | `CONTACT_TO_AE`   | `uae@plastiban.com`                                 | Plaintext |
 
    `RESEND_API_KEY` must be **Secret**, not plaintext — plaintext values are
    readable by anyone with dashboard access.
@@ -119,12 +119,13 @@ the address that owns the Resend account — fine for testing, not for productio
    If the build needs a specific Node version, add `NODE_VERSION` = `22` under
    **Settings → Build → Variables**.
 
-   > **Unconfirmed:** mailboxes exist on *both* `plastiban.com` and
-   > `plastiban.me`. The `.me` addresses above are what the code shipped with;
-   > whether those or the `.com` equivalents are the monitored inboxes is still
-   > to be checked. Changing these variables needs no code deploy — but the
-   > addresses *displayed* on the contact cards are in
-   > `src/app/components/contact/contact.ts` and would need a code change too.
+   > Mailboxes exist on *both* `plastiban.com` and `plastiban.me`. The site
+   > now uses the `.com` addresses throughout — they are what the contact cards
+   > display, what the form's error message tells visitors to write to, and what
+   > these variables should be set to. Changing the variables needs no code
+   > deploy, but the displayed addresses live in
+   > `src/app/components/contact/contact.ts`, `src/app/i18n/translations.ts` and
+   > the JSON-LD in `src/index.html`, so moving them again is a code change.
 
 The first deploy lands on a free `*.workers.dev` URL. Test the form there
 before touching any DNS.

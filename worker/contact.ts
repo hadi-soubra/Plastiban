@@ -11,7 +11,7 @@ type OfficeId = 'lb' | 'ae';
 export interface Env {
   /** Resend API key. Set as an encrypted secret in the Pages dashboard. */
   RESEND_API_KEY: string;
-  /** Verified sender, e.g. "Plastiban Website <website@send.plastiban.me>". */
+  /** Verified sender, e.g. "Plastiban Website <website@send.plastiban.com>". */
   CONTACT_FROM?: string;
   /**
    * Where each office's enquiries go. Required — the Worker refuses to send

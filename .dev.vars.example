@@ -12,5 +12,5 @@ CONTACT_FROM=Plastiban Website <onboarding@resend.dev>
 
 # Required. The Worker refuses to send when either is missing rather than
 # guessing an address, so set both — to your own inbox while testing.
-CONTACT_TO_LB=info@plastiban.me
-CONTACT_TO_AE=uae@plastiban.me
+CONTACT_TO_LB=info@plastiban.com
+CONTACT_TO_AE=uae@plastiban.com

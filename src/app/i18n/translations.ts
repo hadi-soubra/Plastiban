@@ -115,7 +115,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'contact.form.sending': 'Sending…',
     'contact.form.success': "Thanks — your message has been noted. We'll be in touch shortly.",
     'contact.form.error':
-      "Your message could not be sent. Please try again, or email us directly at the address for your office below.",
+      'Your message could not be sent. Please try again, or email us directly at info@plastiban.com for our Lebanon office and uae@plastiban.com for our UAE office.',
     'contact.form.errorRateLimited':
       'That is a few messages in a short time. Please wait a little while before sending another.',
 
@@ -240,7 +240,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'contact.form.sending': 'جارٍ الإرسال…',
     'contact.form.success': 'شكراً لك — وصلتنا رسالتك وسنتواصل معك قريباً.',
     'contact.form.error':
-      'تعذّر إرسال رسالتك. يُرجى المحاولة مرة أخرى، أو مراسلتنا مباشرةً على بريد المكتب المذكور أدناه.',
+      'تعذّر إرسال رسالتك. يُرجى المحاولة مرة أخرى، أو مراسلتنا مباشرةً على info@plastiban.com لمكتب لبنان و uae@plastiban.com لمكتب الإمارات.',
     'contact.form.errorRateLimited':
       'لقد أرسلت عدة رسائل خلال وقت قصير. يُرجى الانتظار قليلاً قبل إرسال رسالة أخرى.',
 
