@@ -4,7 +4,7 @@
  * runs one Instagram account per country, so the footer links to both.
  */
 export const SITE = {
-  origin: 'https://plastiban.me',
+  origin: 'https://plastiban.com',
   instagramLb: 'https://www.instagram.com/plastiban',
   instagramAe: 'https://www.instagram.com/plastiban.ae',
   facebook: 'https://www.facebook.com/plastiban',
