@@ -58,12 +58,18 @@ Until that domain is verified, leave `CONTACT_FROM` unset. The function falls
 back to Resend's shared `onboarding@resend.dev` sender, which only delivers to
 the address that owns the Resend account — fine for testing, not for production.
 
-> **Why a verified domain is required here:** both `plastiban.com` and
-> `plastiban.me` publish a strict SPF record
-> (`v=spf1 include:spf.protection.outlook.com -all`). The `-all` tells receiving
-> servers to *reject* anything claiming to be from us that is not sent by
-> Microsoft. Mail sent as `@plastiban.com` through Resend without these records
-> would be rejected or junked.
+> **Why a verified domain is required here:** `plastiban.com` publishes a strict
+> SPF record (`v=spf1 include:spf.protection.outlook.com -all`) *and* a DMARC
+> policy of `p=reject`. Together those tell receiving servers to refuse anything
+> claiming to be from us that Microsoft did not send. Mail sent as
+> `@plastiban.com` through Resend without these records is rejected outright —
+> not junked, so there is no spam folder to find it in.
+>
+> The policy uses relaxed alignment (`adkim=r`, `aspf=r`), which is what makes
+> the subdomain approach work: `send.plastiban.com` counts as the same
+> organisational domain as `plastiban.com`, so a DKIM signature on the subdomain
+> satisfies DMARC. There is no `sp=` tag, so the subdomain inherits `p=reject` —
+> get the records exactly right and it passes; get them wrong and mail vanishes.
 
 ## 2. Cloudflare Workers (hosting)
 
@@ -141,15 +147,36 @@ when Cloudflare runs the DNS.
 
 1. In Cloudflare, **Add a site** → `plastiban.com`. It scans GoDaddy and imports
    the existing records. Pick the **Free** plan when offered.
-2. **Check the imported records before switching anything.** These must all be
-   present:
-   - `MX` → `plastiban-com.mail.protection.outlook.com`
-   - `TXT` → `v=spf1 include:spf.protection.outlook.com -all`
-   - any `autodiscover` CNAME and Microsoft DKIM (`selector1._domainkey`,
-     `selector2._domainkey`) records
+2. **Check the imported records before switching anything.** This is the step
+   that breaks company email if rushed. Every row below exists today and must
+   exist in Cloudflare *before* the nameservers change:
 
-   If any are missing, add them by hand from the GoDaddy list first. **Microsoft
-   365 mail stops the moment the nameservers change if these are absent.**
+   | Type  | Name                     | Value                                          |
+   |-------|--------------------------|------------------------------------------------|
+   | MX    | `@`                      | `plastiban-com.mail.protection.outlook.com` (priority 0) |
+   | TXT   | `@`                      | `v=spf1 include:spf.protection.outlook.com -all` |
+   | TXT   | `_dmarc`                 | `v=DMARC1; p=reject; adkim=r; aspf=r; rua=mailto:dmarc_rua@onsecureserver.net;` |
+   | CNAME | `autodiscover`           | `autodiscover.outlook.com`                     |
+   | CNAME | `enterpriseregistration` | `enterpriseregistration.windows.net`           |
+   | CNAME | `enterpriseenrollment`   | `enterpriseenrollment-s.manage.microsoft.com`  |
+   | CNAME | `lyncdiscover`           | `webdir.online.lync.com`                       |
+   | CNAME | `sip`                    | `sipdir.online.lync.com`                       |
+
+   **Set every one of those CNAMEs to DNS only (grey cloud), not Proxied
+   (orange cloud).** Proxying `autodiscover` breaks Outlook account setup, and
+   proxying `sip` / `lyncdiscover` breaks Teams. Cloudflare's importer usually
+   gets this right, but it is worth checking each row by eye.
+
+   `plastiban.me` carries the same set, with `plastiban-me.mail.protection
+   .outlook.com` as its MX, `enterpriseenrollment.manage.microsoft.com`
+   (no `-s`), and no `_dmarc` record.
+
+   > Neither domain currently has Microsoft DKIM records
+   > (`selector1`/`selector2._domainkey`), so Microsoft 365 mail is passing
+   > DMARC on SPF alignment alone. That is pre-existing and not something this
+   > migration changes — but it is worth turning on in Microsoft 365 at some
+   > point, given `p=reject`.
+
 3. Delete the GoDaddy forwarding records — the two `A` records pointing at
    `3.33.251.168` / `15.197.225.128`. Those are GoDaddy's redirect service and
    are what currently sends `.com` traffic to `.me`.
