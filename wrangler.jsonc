@@ -2,16 +2,28 @@
  * Cloudflare Workers config. `npm run build` produces the Angular bundle, then
  * `npx wrangler deploy` uploads it together with the Worker in worker/.
  *
- * Environment variables (CONTACT_FROM, CONTACT_TO_LB, CONTACT_TO_AE) and the
- * RESEND_API_KEY secret are set in the Cloudflare dashboard, not here — see
- * DEPLOYMENT.md. Keeping them out of `vars` also keeps a deploy from
- * overwriting what is set there.
+ * The `vars` below are the production settings. They live here rather than in
+ * the dashboard because a deploy clears dashboard-set plaintext variables —
+ * which already happened once, and left the Worker with no recipients at all.
+ * None of these are secret: both addresses are printed on the site's own
+ * contact cards.
+ *
+ * RESEND_API_KEY is the one real secret and is NOT here. It is set in the
+ * Cloudflare dashboard as an encrypted Secret, which does survive deploys.
+ *
+ * To send somewhere else while testing, override these in `.dev.vars`, which
+ * is gitignored and only applies to `npm run dev:worker`.
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "plastiban",
   "main": "worker/index.ts",
   "compatibility_date": "2026-09-18",
+  "vars": {
+    "CONTACT_FROM": "Plastiban Website <website@send.plastiban.com>",
+    "CONTACT_TO_LB": "info@plastiban.com",
+    "CONTACT_TO_AE": "uae@plastiban.com"
+  },
   "assets": {
     "directory": "./dist/plastiban-web/browser",
     "binding": "ASSETS",
