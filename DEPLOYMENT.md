@@ -177,15 +177,27 @@ when Cloudflare runs the DNS.
    > migration changes — but it is worth turning on in Microsoft 365 at some
    > point, given `p=reject`.
 
-3. Delete the GoDaddy forwarding records — the two `A` records pointing at
-   `3.33.251.168` / `15.197.225.128`. Those are GoDaddy's redirect service and
-   are what currently sends `.com` traffic to `.me`.
-4. Only then change the nameservers at GoDaddy to the pair Cloudflare gives you.
-   Propagation takes anywhere from minutes to a few hours.
-5. In **Workers & Pages → `plastiban` → Settings → Domains & Routes**, add
-   `plastiban.com` and `www.plastiban.com`. Cloudflare creates the records
-   itself.
-6. Add the three Resend records from step 1 to the `plastiban.com` zone.
+3. Change the nameservers at GoDaddy to the pair Cloudflare gives you.
+   Propagation takes anywhere from minutes to a few hours; Cloudflare emails you
+   when the zone goes **Active**.
+
+   Leave the two forwarding `A` records (`3.33.251.168` / `15.197.225.128`) in
+   place for this step. They are GoDaddy's redirect service, and keeping them
+   means `.com` carries on redirecting to `.me` while the nameservers settle,
+   rather than going dark.
+4. **Once the zone is Active, check mail before doing anything else.** Send a
+   message to an `@plastiban.com` address from an outside account and confirm it
+   arrives. If it does not, the records are wrong — switch the nameservers back
+   at GoDaddy while you work out which one.
+5. Now swap the redirect for the real site: delete those two forwarding `A`
+   records, then in **Workers & Pages → `plastiban` → Settings → Domains &
+   Routes** add `plastiban.com` and `www.plastiban.com`. Cloudflare creates the
+   records itself.
+6. Add the three Resend records from step 1 to the `plastiban.com` zone, then
+   hit **Verify** in Resend. Once it passes, set `CONTACT_FROM` to
+   `Plastiban Website <website@send.plastiban.com>` in the Worker's variables —
+   that is what lifts Resend's test-mode restriction and makes the U.A.E. route
+   work.
 
 ### Point `.me` at the new site
 
