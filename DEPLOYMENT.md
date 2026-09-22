@@ -228,6 +228,28 @@ The old nginx box keeps serving `plastiban.me` until its nameservers change in
 this step, so there is no gap — but **do decommission that Google Cloud VM
 afterwards**, since it is almost certainly still being billed.
 
+## Giving the U.A.E. its own inbox later
+
+Both offices currently deliver to `info@plastiban.com`. `uae@plastiban.com` was
+never created as a mailbox on the Microsoft 365 tenant and hard-bounced when the
+form first tried it, so enquiries sent there were lost rather than delayed.
+
+The routing itself is untouched: the form still sends an office id, and the
+Worker still resolves it through its own table. To split them again:
+
+1. Create `uae@plastiban.com` in Microsoft 365, either as a mailbox of its own
+   or as an alias on `info@` (an alias needs no extra licence).
+2. **Remove the address from Resend's suppression list** — Resend blocks any
+   address that has hard-bounced, and will keep blocking it after the mailbox
+   exists. Resend dashboard, under Suppressions.
+3. Point `CONTACT_TO_AE` at it in `wrangler.jsonc`.
+4. Update the address shown on the U.A.E. contact card in
+   `src/app/components/contact/contact.ts`, the U.A.E. office entry in the
+   JSON-LD block in `src/index.html`, and the fallback address named in
+   `contact.form.error` in `src/app/i18n/translations.ts` (both languages).
+5. Send one test enquiry per office and confirm both land before calling it
+   done. That is how the original problem surfaced.
+
 ## Local development
 
 ```bash

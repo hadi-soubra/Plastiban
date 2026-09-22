@@ -22,7 +22,13 @@
   "vars": {
     "CONTACT_FROM": "Plastiban Website <website@send.plastiban.com>",
     "CONTACT_TO_LB": "info@plastiban.com",
-    "CONTACT_TO_AE": "uae@plastiban.com"
+    // Both offices currently share one inbox: uae@plastiban.com was never
+    // created as a mailbox and hard-bounced, so enquiries would have been
+    // lost. The two variables and the office routing stay separate on purpose,
+    // so giving the U.A.E. its own address later is a one-line change here.
+    // The subject line already names the office, so the two are easy to tell
+    // apart in the meantime.
+    "CONTACT_TO_AE": "info@plastiban.com"
   },
   "assets": {
     "directory": "./dist/plastiban-web/browser",

@@ -94,7 +94,7 @@ export class Contact implements OnDestroy {
       labelKey: 'contact.office.ae.label',
       pickerKey: 'contact.form.office.ae',
       phones: ['+971 56 201 1416', '+971 6 678 7441'],
-      email: 'uae@plastiban.com',
+      email: 'info@plastiban.com',
       mapUrl: 'https://maps.app.goo.gl/dqy3dFuh3swR2pY17',
       lat: 25.5378941,
       lng: 55.7026024,
