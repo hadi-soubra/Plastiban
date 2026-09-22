@@ -1,9 +1,6 @@
 /**
- * Cloudflare Pages Function backing the contact form.
- *
- * Deployed automatically by Pages from this directory: the file path maps to
- * the route, so this answers POST /api/contact on the same origin as the site
- * (no CORS, no second service to run).
+ * The contact form's endpoint, mounted by the Worker at POST /api/contact —
+ * the same origin as the site, so there is no CORS and no second service.
  *
  * The site keeps no database — a submission exists only as the email this
  * sends, so the send either succeeds or the visitor is told to try again.
@@ -11,7 +8,7 @@
 
 type OfficeId = 'lb' | 'ae';
 
-interface Env {
+export interface Env {
   /** Resend API key. Set as an encrypted secret in the Pages dashboard. */
   RESEND_API_KEY: string;
   /** Verified sender, e.g. "Plastiban Website <website@send.plastiban.me>". */
@@ -21,6 +18,8 @@ interface Env {
   CONTACT_TO_AE?: string;
   /** Optional KV namespace; when bound, it rate-limits by IP across colos. */
   CONTACT_RATE_LIMIT?: KVNamespace;
+  /** The built Angular bundle, served by Cloudflare's asset server. */
+  ASSETS: Fetcher;
 }
 
 interface Submission {
@@ -61,15 +60,13 @@ const RATE_LIMIT_WINDOW_SECONDS = 600;
  */
 const recentByIp = new Map<string, number[]>();
 
-/**
- * Without this, any method other than POST falls through to the static site and
- * hands back the homepage's HTML — a confusing answer from an API path.
- * Method-specific handlers still win, so onRequestPost below keeps POST.
- */
-export const onRequest: PagesFunction<Env> = async () =>
-  json({ error: 'method_not_allowed' }, 405);
+export async function handleContact(request: Request, env: Env): Promise<Response> {
+  // Anything but POST is a mistake. Answering here rather than falling through
+  // to the static assets stops an API path from returning the homepage's HTML.
+  if (request.method !== 'POST') {
+    return json({ error: 'method_not_allowed' }, 405);
+  }
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   let body: Partial<Submission>;
   try {
     body = await request.json();
@@ -128,7 +125,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   return json({ ok: true });
-};
+}
 
 function validate(body: Partial<Submission>): Submission | { error: string } {
   const name = str(body.name);

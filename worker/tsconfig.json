@@ -1,6 +1,5 @@
-/* The Pages Functions in this directory run on Cloudflare Workers, not in the
-   browser, so they are built and typed separately from the Angular app — which
-   is why tsconfig.app.json only includes src/. */
+/* The Worker runs on Cloudflare, not in the browser, so it is typed separately
+   from the Angular app — which is why tsconfig.app.json only includes src/. */
 {
   "compilerOptions": {
     "target": "es2022",

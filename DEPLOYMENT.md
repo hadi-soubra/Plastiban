@@ -1,20 +1,29 @@
 # Deploying the site & contact form
 
-The site is a static Angular bundle plus one serverless function. Both are hosted
-on Cloudflare Pages, deployed from this repo on every push to `main`.
+The site is a static Angular bundle plus a small Worker, both deployed to
+Cloudflare Workers from this repo on every push to `main`.
+
+Cloudflare serves the bundle straight from its asset store; the Worker only runs
+for `/api/*`, which `run_worker_first` in `wrangler.jsonc` guarantees. Everything
+else is handed back to the asset server, so the site costs no Worker
+invocations.
 
 ```
 Visitor submits form
-  → POST /api/contact          (same origin, no CORS)
-  → functions/api/contact.ts   (Cloudflare Pages Function)
+  → POST /api/contact     (same origin, no CORS)
+  → worker/index.ts       → worker/contact.ts
   → Resend HTTPS API
   → info@plastiban.me  (Lebanon)  /  uae@plastiban.me  (U.A.E.)
 ```
 
+> Built for Workers rather than Pages because Cloudflare's own guidance is now
+> "start new projects with Workers" — Pages still runs but is no longer where
+> the platform is going.
+
 Nothing is stored in a database. A submission exists only as the email it sends,
 which is why a failed send leaves the visitor's text in the form to retry.
 
-The office the visitor picks is sent as an ID (`lb` / `ae`), and the function
+The office the visitor picks is sent as an ID (`lb` / `ae`), and the Worker
 maps that ID to a recipient from a table in its own source. It never accepts an
 email address from the browser — otherwise anyone could POST the endpoint and
 make our verified domain send mail anywhere.
@@ -56,20 +65,24 @@ the address that owns the Resend account — fine for testing, not for productio
 > Microsoft. Mail sent as `@plastiban.com` through Resend without these records
 > would be rejected or junked.
 
-## 2. Cloudflare Pages (hosting)
+## 2. Cloudflare Workers (hosting)
 
-1. <https://dash.cloudflare.com> → **Workers & Pages → Create → Pages → Connect
-   to Git** → pick `hadi-soubra/Plastiban`.
+1. <https://dash.cloudflare.com> → **Workers & Pages → Create → Import a
+   repository** → pick `hadi-soubra/Plastiban`. Sign in to GitHub as the account
+   that owns the repo, or it will not be listed.
 2. Build settings:
 
-   | Setting                | Value                          |
-   |------------------------|--------------------------------|
-   | Framework preset       | Angular                        |
-   | Build command          | `npm run build`                |
-   | Build output directory | `dist/plastiban-web/browser`   |
-   | Root directory         | `/`                            |
+   | Setting        | Value                 |
+   |----------------|-----------------------|
+   | Project name   | `plastiban`           |
+   | Build command  | `npm run build`       |
+   | Deploy command | `npx wrangler deploy` |
 
-3. **Settings → Environment variables**, for Production *and* Preview:
+   There is no output-directory field: `wrangler.jsonc` already points at
+   `dist/plastiban-web/browser`. The project name must match the `name` in
+   `wrangler.jsonc`, or the deploy creates a second, empty Worker.
+
+3. **Settings → Variables and Secrets**:
 
    | Name              | Value                                               | Type      |
    |-------------------|-----------------------------------------------------|-----------|
@@ -77,15 +90,18 @@ the address that owns the Resend account — fine for testing, not for productio
    | `CONTACT_FROM`    | `Plastiban Website <website@send.plastiban.com>`    | Plaintext |
    | `CONTACT_TO_LB`   | `info@plastiban.me`  *(confirm — see note)*         | Plaintext |
    | `CONTACT_TO_AE`   | `uae@plastiban.me`   *(confirm — see note)*         | Plaintext |
-   | `NODE_VERSION`    | `22`                                                | Plaintext |
 
    `RESEND_API_KEY` must be **Secret**, not plaintext — plaintext values are
    readable by anyone with dashboard access. The recipients are variables rather
    than hardcoded so a mailbox can change without a code deploy; leave them out
-   and the function falls back to the same two addresses.
+   and the Worker falls back to the same two addresses.
 
-   Set `CONTACT_TO_LB` / `CONTACT_TO_AE` to your own address on the **Preview**
-   environment, so branch deploys never mail the real offices.
+   `wrangler.jsonc` deliberately defines no `vars` block, so a deploy cannot
+   overwrite what is set here. If you ever add one, it becomes the source of
+   truth and dashboard edits get reverted on the next deploy.
+
+   If the build needs a specific Node version, add `NODE_VERSION` = `22` under
+   **Settings → Build → Variables**.
 
    > **Unconfirmed:** mailboxes exist on *both* `plastiban.com` and
    > `plastiban.me`. The `.me` addresses above are what the code shipped with;
@@ -94,8 +110,8 @@ the address that owns the Resend account — fine for testing, not for productio
    > addresses *displayed* on the contact cards are in
    > `src/app/components/contact/contact.ts` and would need a code change too.
 
-The first deploy lands on a free `*.pages.dev` URL. Test the form there before
-touching any DNS.
+The first deploy lands on a free `*.workers.dev` URL. Test the form there
+before touching any DNS.
 
 ## 3. DNS (`plastiban.com` and `plastiban.me`)
 
@@ -139,8 +155,9 @@ when Cloudflare runs the DNS.
    are what currently sends `.com` traffic to `.me`.
 4. Only then change the nameservers at GoDaddy to the pair Cloudflare gives you.
    Propagation takes anywhere from minutes to a few hours.
-5. In **Workers & Pages → your project → Custom domains**, add `plastiban.com`
-   and `www.plastiban.com`. Cloudflare creates the records itself.
+5. In **Workers & Pages → `plastiban` → Settings → Domains & Routes**, add
+   `plastiban.com` and `www.plastiban.com`. Cloudflare creates the records
+   itself.
 6. Add the three Resend records from step 1 to the `plastiban.com` zone.
 
 ### Point `.me` at the new site
@@ -167,23 +184,26 @@ afterwards**, since it is almost certainly still being billed.
 npm start                  # Angular dev server; the form will 404 on /api/contact
 ```
 
-To run the function as well:
+To run the Worker as well:
 
 ```bash
 cp .dev.vars.example .dev.vars   # then put a real Resend key in it
 npm run build
-npm run dev:functions            # serves the built site + /api/contact on :8788
+npm run dev:worker               # serves the built site + /api/contact on :8787
 ```
+
+`npm run deploy` builds and deploys by hand, should you ever need to bypass the
+Git integration.
 
 `.dev.vars` is gitignored. Never commit a real key.
 
 ## Optional: stronger rate limiting
 
-The function rate-limits by IP (5 submissions per 10 minutes). By default the
+The Worker rate-limits by IP (5 submissions per 10 minutes). By default the
 counter lives in the worker's memory, which is per-datacentre and short-lived —
 enough to blunt a naive flood, alongside the honeypot field that catches most
 bots outright.
 
 To enforce it properly, create a KV namespace (**Workers & Pages → KV → Create**)
-and bind it to the Pages project under **Settings → Bindings** with the variable
-name `CONTACT_RATE_LIMIT`. The function picks it up automatically; no code change.
+and bind it to the Worker under **Settings → Bindings** with the variable name
+`CONTACT_RATE_LIMIT`. The Worker picks it up automatically; no code change.

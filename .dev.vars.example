@@ -1,8 +1,8 @@
-# Copy to `.dev.vars` for local runs of `npm run dev:functions`.
+# Copy to `.dev.vars` for local runs of `npm run dev:worker`.
 # `.dev.vars` is gitignored — never commit a real key.
 #
-# In production these are set in the Cloudflare Pages dashboard under
-# Settings -> Environment variables. RESEND_API_KEY must be an encrypted secret.
+# In production these are set in the Cloudflare dashboard under the Worker's
+# Settings -> Variables and Secrets. RESEND_API_KEY must be a Secret.
 
 RESEND_API_KEY=re_your_key_here
 

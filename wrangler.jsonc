@@ -1,0 +1,27 @@
+/**
+ * Cloudflare Workers config. `npm run build` produces the Angular bundle, then
+ * `npx wrangler deploy` uploads it together with the Worker in worker/.
+ *
+ * Environment variables (CONTACT_FROM, CONTACT_TO_LB, CONTACT_TO_AE) and the
+ * RESEND_API_KEY secret are set in the Cloudflare dashboard, not here — see
+ * DEPLOYMENT.md. Keeping them out of `vars` also keeps a deploy from
+ * overwriting what is set there.
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "plastiban",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-18",
+  "assets": {
+    "directory": "./dist/plastiban-web/browser",
+    "binding": "ASSETS",
+    // One page, no router: anything unrecognised still gets the site.
+    "not_found_handling": "single-page-application",
+    // Without this the asset server would answer /api/* with the SPA fallback
+    // before the Worker ever ran.
+    "run_worker_first": ["/api/*"]
+  },
+  "observability": {
+    "enabled": true
+  }
+}
