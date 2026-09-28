@@ -76,8 +76,13 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'products.hint': 'Tap any product to view it larger.',
     'products.filters': 'Product categories',
 
-    'category.hard': 'Hard Box',
+    'category.hard': 'Hard Cover Boxes',
     'category.printed': 'Digital Printed',
+    'category.cardboard': 'Cardboard Boxes',
+    'category.bags': 'Cardboard Bags',
+    'category.plastic': 'Plastic Boxes',
+    'category.ribbons': 'Ribbons',
+    'category.souvenir': 'Traditional Souvenir Boxes',
 
     'lightbox.close': 'Close',
     'lightbox.prev': 'Previous product',
@@ -201,8 +206,13 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'products.hint': 'اضغط على أي منتج لعرضه بحجم أكبر.',
     'products.filters': 'فئات المنتجات',
 
-    'category.hard': 'علب صلبة',
+    'category.hard': 'علب بغلاف صلب',
     'category.printed': 'طباعة رقمية',
+    'category.cardboard': 'علب كرتون',
+    'category.bags': 'أكياس كرتون',
+    'category.plastic': 'علب بلاستيك',
+    'category.ribbons': 'شرائط',
+    'category.souvenir': 'علب تذكارية تقليدية',
 
     'lightbox.close': 'إغلاق',
     'lightbox.prev': 'المنتج السابق',

@@ -15,7 +15,7 @@ import { RevealDirective } from '../../directives/reveal.directive';
 import { TranslationService } from '../../i18n/translation.service';
 import { Lang } from '../../i18n/translations';
 
-type CategoryId = 'hard' | 'printed';
+type CategoryId = 'hard' | 'printed' | 'cardboard' | 'bags' | 'plastic' | 'ribbons' | 'souvenir';
 
 /** A string that exists in both languages, resolved at render time by `text()`. */
 type Localized = Record<Lang, string>;
@@ -49,17 +49,28 @@ interface Product {
   line: string;
 }
 
-const CATEGORIES: CategoryId[] = ['hard', 'printed'];
+/** Pill order, left to right. The two lines that have been photographed lead. */
+const CATEGORIES: CategoryId[] = ['hard', 'printed', 'cardboard', 'bags', 'plastic', 'ribbons', 'souvenir'];
 
 const CATEGORY_LABEL_KEYS: Record<CategoryId, string> = {
   hard: 'category.hard',
   printed: 'category.printed',
+  cardboard: 'category.cardboard',
+  bags: 'category.bags',
+  plastic: 'category.plastic',
+  ribbons: 'category.ribbons',
+  souvenir: 'category.souvenir',
 };
 
 /** Folder under `public/products` holding each category's shots. */
 const CATEGORY_FOLDERS: Record<CategoryId, string> = {
-  hard: 'hard_box',
+  hard: 'hard_cover_boxes',
   printed: 'digital_printed',
+  cardboard: 'cardboard_boxes',
+  bags: 'cardboard_bags',
+  plastic: 'plastic_boxes',
+  ribbons: 'ribbons',
+  souvenir: 'traditional_souvenir_boxes',
 };
 
 /**
@@ -133,6 +144,124 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
       images: ['1.jpeg'],
     },
   ],
+  cardboard: [
+    {
+      name: { en: 'Standard Boxes', ar: 'علب قياسية' },
+      description: { en: 'Stock cardboard box in the everyday sizes.', ar: 'علبة كرتون بالمقاسات القياسية المعتادة.' },
+      folder: 'standard',
+      images: [],
+    },
+    {
+      name: { en: 'Top/Base Boxes', ar: 'علب بغطاء وقاعدة' },
+      description: { en: 'Two-piece cardboard box with a lift-off lid.', ar: 'علبة كرتون من قطعتين بغطاء يُرفع عن القاعدة.' },
+      folder: 'top_base',
+      images: [],
+    },
+    {
+      name: { en: 'Magnet & Book Boxes', ar: 'علب مغناطيسية وعلب بشكل كتاب' },
+      description: { en: 'Boxes that snap shut on a magnet or open like a book.', ar: 'علب تُغلق بمغناطيس أو تُفتح كالكتاب.' },
+      folder: 'magnet_book',
+      images: [],
+    },
+    {
+      name: { en: 'Drawer/Sleeve Boxes', ar: 'علب بدرج وغلاف' },
+      description: { en: 'Sleeve and drawer that slides out to reveal the product.', ar: 'غلاف ودرج منزلق يكشف المنتج عند سحبه.' },
+      folder: 'drawer_sleeve',
+      images: [],
+    },
+    {
+      name: { en: 'Cake Boxes', ar: 'علب كيك' },
+      description: { en: 'Cardboard boxes sized for cakes and pastries.', ar: 'علب كرتون مفصّلة على قياس الكيك والحلويات.' },
+      folder: 'cake',
+      images: [],
+    },
+    {
+      name: { en: 'With Plastic Top', ar: 'بغطاء بلاستيكي' },
+      description: { en: 'Cardboard base under a clear plastic lid.', ar: 'قاعدة من الكرتون بغطاء بلاستيكي شفاف.' },
+      folder: 'with_plastic_top',
+      images: [],
+    },
+    {
+      name: { en: 'Box/Bag', ar: 'علبة/كيس' },
+      description: { en: 'Box that carries like a bag, with a handle on top.', ar: 'علبة تُحمل كالكيس بمقبض في أعلاها.' },
+      folder: 'box_bag',
+      images: [],
+    },
+  ],
+  bags: [
+    {
+      name: { en: 'Fixed Ribbon', ar: 'شريط ثابت' },
+      description: { en: 'Paper bag closed with a ribbon fixed in place.', ar: 'كيس ورقي يُغلق بشريط مثبّت في مكانه.' },
+      folder: 'fixed_ribbon',
+      images: [],
+    },
+    {
+      name: { en: 'With Ribbon', ar: 'بشريط' },
+      description: { en: 'Paper bag carried on ribbon handles.', ar: 'كيس ورقي بمقابض من الشريط.' },
+      folder: 'with_ribbon',
+      images: [],
+    },
+    {
+      name: { en: 'With Rope', ar: 'بحبل' },
+      description: { en: 'Paper bag carried on twisted rope handles.', ar: 'كيس ورقي بمقابض من الحبل المجدول.' },
+      folder: 'with_rope',
+      images: [],
+    },
+  ],
+  plastic: [
+    {
+      name: { en: 'Standard Boxes', ar: 'علب قياسية' },
+      description: { en: 'Stock plastic box in the everyday sizes.', ar: 'علبة بلاستيكية بالمقاسات القياسية المعتادة.' },
+      folder: 'standard',
+      images: [],
+    },
+    {
+      name: { en: 'Top/Base Boxes', ar: 'علب بغطاء وقاعدة' },
+      description: { en: 'Two-piece plastic box with a lift-off lid.', ar: 'علبة بلاستيكية من قطعتين بغطاء يُرفع عن القاعدة.' },
+      folder: 'top_base',
+      images: [],
+    },
+  ],
+  ribbons: [
+    {
+      name: { en: 'Satin', ar: 'ساتان' },
+      description: { en: 'Smooth satin ribbon for finishing a box or bag.', ar: 'شريط ساتان ناعم لتزيين العلبة أو الكيس.' },
+      folder: 'satin',
+      images: [],
+    },
+    {
+      name: { en: 'Grosgrain', ar: 'غروغران' },
+      description: { en: 'Ribbed ribbon that holds a firm, crisp bow.', ar: 'شريط مضلّع يحافظ على شكل العقدة.' },
+      folder: 'grosgrain',
+      images: [],
+    },
+    {
+      name: { en: 'Printed', ar: 'مطبوع' },
+      description: { en: 'Ribbon printed with your brand or message.', ar: 'شريط مطبوع بعلامتك التجارية أو رسالتك.' },
+      folder: 'printed',
+      images: [],
+    },
+  ],
+  souvenir: [
+    {
+      name: { en: 'Top/Base Cardboard', ar: 'غطاء وقاعدة كرتون' },
+      description: { en: 'Two-piece cardboard souvenir box.', ar: 'علبة تذكارية من الكرتون بقطعتين.' },
+      folder: 'top_base_cardboard',
+      images: [],
+    },
+    {
+      name: { en: 'Cardboard Base & Top Plastic', ar: 'قاعدة كرتون وغطاء بلاستيك' },
+      description: { en: 'Cardboard base under a clear plastic lid.', ar: 'قاعدة من الكرتون بغطاء بلاستيكي شفاف.' },
+      folder: 'cardboard_base_top_plastic',
+      images: [],
+    },
+    {
+      name: { en: 'Top/Base Cardboard & Middle Plastic', ar: 'غطاء وقاعدة كرتون ووسط بلاستيك' },
+      description: { en: 'Cardboard lid and base around a plastic middle.', ar: 'غطاء وقاعدة من الكرتون مع وسط بلاستيكي.' },
+      folder: 'top_base_cardboard_middle_plastic',
+      images: [],
+    },
+  ],
 };
 
 /**
@@ -166,6 +295,28 @@ const PRODUCTS: Product[] = CATEGORIES.flatMap((category) =>
  */
 const WALL: Product[] = woven(
   CATEGORIES.map((category) => rotated(deal(PRODUCTS.filter((product) => product.category === category)))),
+);
+
+/**
+ * The wall as a visitor first meets it, holding only the lines that have been
+ * photographed. Five of the seven categories are still waiting on their shots,
+ * and letting their placeholders through would leave a third of the opening view
+ * as empty grey panels. The pills still offer every category: pressing one shows
+ * that category in full, placeholders included, which reads as a line not yet
+ * photographed rather than a broken card.
+ *
+ * This is dealt separately rather than filtered out of `WALL`, because dropping
+ * cards from a dealt run closes the gaps it deliberately opened — two shots of
+ * one line either side of a placeholder would become neighbours.
+ *
+ * Nothing here needs changing as the photographs arrive: a line rejoins this
+ * view on its own as soon as its `images` are listed. It falls back to the full
+ * wall if no shot has been filed at all, so the strip is never empty.
+ */
+const SHOWCASE: Product[] = woven(
+  CATEGORIES.map((category) =>
+    rotated(deal(PRODUCTS.filter((product) => product.category === category && product.src))),
+  ),
 );
 
 /** How many cards fan out on each side of the front one. */
@@ -282,7 +433,10 @@ export class Products implements OnDestroy {
    */
   protected readonly filteredProducts = computed(() => {
     const active = this.activeCategory();
-    return active === 'all' ? WALL : WALL.filter((product) => product.category === active);
+    if (active === 'all') {
+      return SHOWCASE.length ? SHOWCASE : WALL;
+    }
+    return WALL.filter((product) => product.category === active);
   });
 
   /**

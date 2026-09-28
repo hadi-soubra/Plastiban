@@ -6,10 +6,8 @@
 export const SITE = {
   origin: 'https://plastiban.com',
   instagramLb: 'https://www.instagram.com/plastiban',
-  instagramAe: 'https://www.instagram.com/plastiban.ae',
+  instagramAe: 'https://www.instagram.com/plastiban.uae',
   facebook: 'https://www.facebook.com/plastiban',
-  /** wa.me wants the number in international form with no +, spaces or dashes. */
-  whatsapp: 'https://wa.me/9613227144',
 } as const;
 
 /**
