@@ -145,7 +145,7 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
       name: { en: 'Digital Printed Stickers', ar: 'ملصقات مطبوعة رقمياً' },
       description: { en: 'Die-cut stickers and labels in any shape.', ar: 'ملصقات وبطاقات مقصوصة بأي شكل تريده.' },
       folder: 'stickers',
-      images: ['1.jpeg', '2.png', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg'],
+      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg'],
     },
   ],
   cardboard: [

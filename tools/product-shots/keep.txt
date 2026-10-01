@@ -1,0 +1,8 @@
+# Shots that are already professional and must NOT be restaged.
+# One substring per line, matched against the path under public/products.
+# Everything not matched here gets edited.
+#
+# Ribbons was listed here, then removed: the shots are good, but they were taken
+# in a different studio - dark moody backgrounds, varied framing - so leaving
+# them alone made them the odd ones out once everything else moved to the beige
+# setup. Matching the set matters more than their individual quality.

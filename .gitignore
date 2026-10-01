@@ -46,3 +46,11 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# API keys for tools/ scripts - never commit
+.env
+tools/product-shots/.env
+tools/product-shots/out/
+tools/product-shots/review/
+tools/product-shots/replaced/
+tools/product-shots/manifest.csv

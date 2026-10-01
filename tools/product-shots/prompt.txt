@@ -1,0 +1,73 @@
+Photograph this exact product as a premium commercial product shot for a retail
+catalogue.
+
+This frame is one of roughly ninety in a single catalogue. Each is generated
+independently, with no memory of the others, so every value below is absolute.
+Follow them literally rather than interpreting them: matching these numbers is
+what makes the set look like one photoshoot. Do not vary anything for visual
+interest.
+
+STUDIO - IDENTICAL IN EVERY FRAME
+- Background: seamless warm beige #EDE6DA, with an invisible transition from
+  back wall to tabletop. No visible horizon line, corner, edge or vignette.
+- Surface: smooth matte cream tabletop, the same #EDE6DA tone, no grain, no
+  wood, no marble, no fabric, no reflections of the room.
+- Key light: one large diffused softbox, upper left, roughly 45 degrees from the
+  lens axis and slightly above the product.
+- Fill: broad soft fill from the right, about one stop under the key. No second
+  visible highlight.
+- Shadow: one soft contact shadow directly beneath the product, falling to the
+  lower right, short and diffuse, no hard edge, no cast shadow on the back wall.
+- Colour temperature: neutral daylight, roughly 5500K, no warm or cool cast.
+- No props, decorations, plants, flowers, furniture, people, hands, added text,
+  watermarks, borders or gradients.
+
+CAMERA - IDENTICAL IN EVERY FRAME
+- Square 1:1 frame.
+- Three-quarter front view, product turned slightly to the left.
+- Camera at product mid-height, raised about 15 degrees above it.
+- Moderate telephoto, equivalent to 75mm on full frame. Natural perspective, no
+  wide-angle stretch, no fisheye, no converging verticals.
+- Same camera distance in every frame, so every product sits at the same scale
+  relative to the frame regardless of its real size.
+- Product centred, occupying 70 to 75 percent of the frame height, with even
+  margin on all four sides and nothing cropped at any edge.
+- Sharp front to back across the whole product. Only the background falls off.
+- Clean even exposure, no blown highlights, no crushed shadows.
+
+PRODUCT - DO NOT CHANGE IT
+The uploaded photograph is the only reference for what this product is. Keep it
+exactly as it appears there:
+
+- exact shape, proportions and geometry
+- exact colours, including the colour of printed areas
+- exact patterns, artwork and printed graphics
+- exact text and lettering, spelled and spaced as photographed, in the same
+  language and script
+- exact logos, both their design and their position
+- exact handles, ribbons, cords, flaps, folds, seams, windows, die-cuts and
+  openings
+- exact construction and how the parts fit together
+- exact material: kraft grain, matt or gloss lamination, corrugation, ribbon
+  weave, plastic clarity
+
+Do not redesign, simplify, tidy, straighten, complete, restyle or improve the
+product. Do not make it more attractive. Do not correct or rewrite text on it.
+Do not invent any detail that is unclear in the photograph - reproduce it as it
+appears, even if imperfect. Do not add or remove any logo.
+
+CLEAN UP THE PHOTOGRAPH, NOT THE PRODUCT
+Remove only what belongs to the original room: the wall, the floor or table,
+dust and marks on the surface around the product, reflections cast by the
+original room, colour casts and harsh or uneven original lighting. Dents,
+creases and print flaws that are part of the product itself stay.
+
+RENDERING
+A real photograph taken with a real camera: realistic materials, natural
+highlights, accurate colour, true shadows. Not an illustration, not a 3D render,
+not over-stylised, no dramatic or cinematic lighting, no heavy retouching glow.
+
+LEGIBILITY
+The frame is displayed small, around 300 pixels square. The product must read
+clearly at that size: keep it large in the frame, well separated from the
+background, and keep its printed artwork crisp rather than softened.
