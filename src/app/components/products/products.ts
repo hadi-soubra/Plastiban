@@ -29,7 +29,11 @@ interface SubCategory {
   /** Short label shown as the card title. Does not affect filtering. */
   name: Localized;
   description: Localized;
-  /** Folder holding this line's shots, inside its category's folder. */
+  /**
+   * Folder holding this line's shots, inside its category's folder. Empty when
+   * the category has no sub-categories at all and its shots sit directly in the
+   * category folder — Ribbons is filed that way.
+   */
   folder: string;
   /**
    * File names in that folder, in the order they should appear. Empty until the
@@ -224,22 +228,11 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
   ],
   ribbons: [
     {
-      name: { en: 'Satin', ar: 'ساتان' },
-      description: { en: 'Smooth satin ribbon for finishing a box or bag.', ar: 'شريط ساتان ناعم لتزيين العلبة أو الكيس.' },
-      folder: 'satin',
-      images: [],
-    },
-    {
-      name: { en: 'Grosgrain', ar: 'غروغران' },
-      description: { en: 'Ribbed ribbon that holds a firm, crisp bow.', ar: 'شريط مضلّع يحافظ على شكل العقدة.' },
-      folder: 'grosgrain',
-      images: [],
-    },
-    {
-      name: { en: 'Printed', ar: 'مطبوع' },
-      description: { en: 'Ribbon printed with your brand or message.', ar: 'شريط مطبوع بعلامتك التجارية أو رسالتك.' },
-      folder: 'printed',
-      images: [],
+      name: { en: 'Ribbons', ar: 'شرائط' },
+      description: { en: 'Satin, grosgrain and printed ribbon for finishing a box or bag.', ar: 'شرائط ساتان وغروغران ومطبوعة لتزيين العلبة أو الكيس.' },
+      // No sub-folders: these shots sit directly in `public/products/ribbons`.
+      folder: '',
+      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg'],
     },
   ],
   souvenir: [
@@ -271,14 +264,20 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
  */
 const PRODUCTS: Product[] = CATEGORIES.flatMap((category) =>
   SUBCATEGORIES_BY_CATEGORY[category].flatMap((sub) => {
-    const base = `/products/${CATEGORY_FOLDERS[category]}/${sub.folder}`;
+    // `filter(Boolean)` drops the segment for a category filed without
+    // sub-folders, so its path is /products/<category>/1.jpeg rather than
+    // picking up a double slash.
+    const folder = CATEGORY_FOLDERS[category];
+    const base = ['/products', folder, sub.folder].filter(Boolean).join('/');
     const sources = sub.images.length ? sub.images.map((file) => `${base}/${file}`) : [''];
     return sources.map((src) => ({
       subCategory: sub.name,
       description: sub.description,
       src,
       category,
-      line: sub.folder,
+      // Qualified by category so two lines that share a folder name - or two
+      // categories filed without sub-folders - never count as the same line.
+      line: `${folder}/${sub.folder}`,
     }));
   }),
 );
