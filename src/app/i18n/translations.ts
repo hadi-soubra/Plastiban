@@ -185,14 +185,13 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
       'That is a few messages in a short time. Please wait a little while before sending another.',
 
     'footer.rights': 'All rights reserved.',
-    'footer.tagline': 'Premium Packaging Made to Make an Impression',
     'footer.follow': 'Follow us',
     'social.instagram.lb': 'Instagram (Lebanon)',
     'social.instagram.ae': 'Instagram (UAE)',
     'social.country.lb': 'Lebanon',
     'social.country.ae': 'UAE',
-    'social.country.both': 'Lebanon / UAE',
-    'social.facebook': 'Facebook (Lebanon & UAE)',
+    'social.facebook.lb': 'Facebook (Lebanon)',
+    'social.facebook.ae': 'Facebook (UAE)',
     'social.whatsapp': 'WhatsApp',
 
     'seo.title':
@@ -370,14 +369,13 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
       'لقد أرسلت عدة رسائل خلال وقت قصير. يُرجى الانتظار قليلاً قبل إرسال رسالة أخرى.',
 
     'footer.rights': 'جميع الحقوق محفوظة.',
-    'footer.tagline': 'تغليف فاخر يترك انطباعاً لا يُنسى',
     'footer.follow': 'تابعنا',
     'social.instagram.lb': 'إنستغرام (لبنان)',
     'social.instagram.ae': 'إنستغرام (الإمارات)',
     'social.country.lb': 'لبنان',
     'social.country.ae': 'الإمارات',
-    'social.country.both': 'لبنان / الإمارات',
-    'social.facebook': 'فيسبوك (لبنان والإمارات)',
+    'social.facebook.lb': 'فيسبوك (لبنان)',
+    'social.facebook.ae': 'فيسبوك (الإمارات)',
     'social.whatsapp': 'واتساب',
 
     'seo.title': 'بلاستيبان - تصنيع التغليف والبلاستيك الصناعي | لبنان والإمارات',

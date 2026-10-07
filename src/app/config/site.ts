@@ -1,13 +1,15 @@
 /**
  * Outward-facing links for the business. The Instagram and Facebook handles are
  * placeholders — swap them for the real accounts before going live. The business
- * runs one Instagram account per country, so the footer links to both.
+ * runs one Instagram and one Facebook account per country, so the footer links
+ * to both of each.
  */
 export const SITE = {
   origin: 'https://plastiban.com',
   instagramLb: 'https://www.instagram.com/plastiban',
   instagramAe: 'https://www.instagram.com/plastiban.uae',
-  facebook: 'https://www.facebook.com/plastiban',
+  facebookLb: 'https://www.facebook.com/plastiban',
+  facebookAe: 'https://www.facebook.com/share/19Q2PGLxmN/',
 } as const;
 
 /**
