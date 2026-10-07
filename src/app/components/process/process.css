@@ -1,6 +1,7 @@
-/* The fill grows from whichever edge the language starts at. */
+/* Duration and easing are set per change from the component: the fill creeps
+   while the track walks itself and eases when someone picks a step. */
 .process-fill {
-  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-property: width;
 }
 
 /* Each stop needs a fixed share of the row, or the widest icon pushes the

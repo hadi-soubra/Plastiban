@@ -33,8 +33,11 @@
                step 01 is on the left in both languages and the fill has to grow
                the same way the stops are ordered. -->
           <div
+            #railFill
             class="process-fill absolute left-0 top-0 h-px bg-royal-400"
-            [style.width.%]="progress()"
+            [style.width.%]="fill()"
+            [style.transitionDuration.ms]="fillMs()"
+            [style.transitionTimingFunction]="fillEase()"
           ></div>
         </div>
 
@@ -65,7 +68,7 @@
                   height="40"
                   loading="lazy"
                   decoding="async"
-                  class="h-7 w-7 transition duration-300 sm:h-10 sm:w-10"
+                  class="h-9 w-9 transition duration-300 sm:h-[3.25rem] sm:w-[3.25rem]"
                   [class.opacity-35]="!reached(i)"
                 />
               </span>
