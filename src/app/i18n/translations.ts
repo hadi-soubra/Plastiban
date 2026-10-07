@@ -50,8 +50,6 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
       'Packaging should represent the product inside, reflect the identity of the brand and create a memorable experience for the person receiving it. That is the idea the company was built on, and the one we return to on every project.',
     'about.body4':
       'Over the years, our experience has grown alongside the packaging industry. We have developed our capabilities, expanded our product offering and continued to invest in the way we design and manufacture.',
-    'about.body5':
-      'Today, Plastiban combines decades of experience with a forward-looking approach to packaging.',
     'about.timelineLabel': 'How we got here',
     'about.timeline.founded.year': '1989',
     'about.timeline.founded.title': 'Plastiban is founded',
@@ -245,8 +243,6 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
       'نؤمن بأن التغليف يجب أن يعبّر عن المنتج في داخله، ويعكس هوية العلامة التجارية، ويترك أثراً لا يُنسى لدى من يتسلّمه. هذه الفكرة التي قامت عليها الشركة، ونعود إليها في كل مشروع.',
     'about.body4':
       'مع مرور السنوات، نمت خبرتنا مع نمو صناعة التغليف. طوّرنا قدراتنا، ووسّعنا تشكيلة منتجاتنا، وواصلنا الاستثمار في طريقة تصميمنا وتصنيعنا.',
-    'about.body5':
-      'واليوم تجمع بلاستيبان عقوداً من الخبرة مع نظرة استشرافية إلى التغليف.',
     'about.timelineLabel': 'كيف وصلنا إلى هنا',
     'about.timeline.founded.year': '1989',
     'about.timeline.founded.title': 'تأسيس بلاستيبان',
