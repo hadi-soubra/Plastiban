@@ -16,6 +16,12 @@
   animation-delay: 0.2s;
 }
 
+/* The second line of the claim, a beat behind the first, so the copy reads as
+   it arrives rather than landing as one block. Still ahead of the logo strip. */
+.hero-sub + .hero-sub {
+  animation-delay: 0.3s;
+}
+
 /* Last in, after the claim it backs up has been read. */
 .hero-clients {
   animation-delay: 0.4s;

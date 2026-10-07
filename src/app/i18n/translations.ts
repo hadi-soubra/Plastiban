@@ -25,10 +25,12 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'nav.toggleMenu': 'Toggle navigation menu',
     'nav.primary': 'Primary',
 
-    'hero.title.lead': 'Packaging & industrial plastics,',
-    'hero.title.accent': 'engineered to endure.',
+    'hero.title.lead': 'Premium Packaging',
+    'hero.title.accent': 'Made to Make an Impression',
     'hero.subtitle':
-      'Nearly three decades of continuous growth, driven by a dedicated team that never stops refining how we design, manufacture and deliver, from creative packaging to precision technical plastics.',
+      'For more than three decades, Plastiban has been creating distinctive packaging solutions for brands, businesses and special occasions.',
+    'hero.subtitle2':
+      'From concept to production, we bring ideas to life through thoughtful design, quality materials and in-house manufacturing.',
     'hero.scroll': 'Scroll',
     'hero.scrollAria': 'Scroll to the About section',
 
@@ -156,10 +158,12 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'nav.toggleMenu': 'فتح قائمة التنقل',
     'nav.primary': 'الرئيسية',
 
-    'hero.title.lead': 'تغليف وبلاستيك صناعي،',
-    'hero.title.accent': 'مصنوع ليدوم.',
+    'hero.title.lead': 'تغليف فاخر',
+    'hero.title.accent': 'يترك انطباعاً لا يُنسى',
     'hero.subtitle':
-      'قرابة ثلاثة عقود من النمو المتواصل، بفضل فريق لا يتوقف عن تطوير طريقة تصميمنا وتصنيعنا وتسليمنا، من التغليف الإبداعي إلى البلاستيك التقني الدقيق.',
+      'منذ أكثر من ثلاثة عقود، تبتكر بلاستيبان حلول تغليف مميّزة للعلامات التجارية والشركات والمناسبات الخاصة.',
+    'hero.subtitle2':
+      'من الفكرة إلى الإنتاج، نحوّل الأفكار إلى واقع عبر تصميم مدروس ومواد عالية الجودة وتصنيع داخل منشآتنا.',
     'hero.scroll': 'مرّر للأسفل',
     'hero.scrollAria': 'الانتقال إلى قسم من نحن',
 
