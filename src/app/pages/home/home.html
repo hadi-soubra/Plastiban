@@ -1,0 +1,27 @@
+<app-hero />
+<!-- The work first, then how it is made: a first visit wants to know what we
+     produce before it cares how. -->
+<app-products />
+<app-process />
+
+<!-- Contact lives on its own page, so the home page ends by pointing at it.
+     A button rather than the form: it keeps the page short, which is the whole
+     reason the site is split, while leaving one obvious way to act. -->
+<section class="bg-cream-50 px-6 py-16 lg:px-10 lg:py-20" aria-labelledby="home-cta-heading">
+  <div class="mx-auto flex max-w-3xl flex-col items-center text-center">
+    <h2 id="home-cta-heading" class="font-display text-2xl font-extrabold text-navy-900 sm:text-3xl">
+      {{ i18n.t('cta.heading') }}
+    </h2>
+    <p class="mt-3 max-w-xl text-base leading-relaxed text-slate-600">{{ i18n.t('cta.body') }}</p>
+    <a
+      routerLink="/contact"
+      class="mt-7 inline-flex items-center gap-2 rounded-full bg-navy-900 px-7 py-3 text-sm font-semibold text-white transition hover:bg-royal-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-royal-600 focus-visible:ring-offset-2"
+    >
+      {{ i18n.t('cta.button') }}
+      <!-- Flipped under RTL so the arrow always points the way reading runs. -->
+      <svg viewBox="0 0 24 24" class="h-4 w-4 rtl:-scale-x-100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 12h14M13 6l6 6-6 6" />
+      </svg>
+    </a>
+  </div>
+</section>

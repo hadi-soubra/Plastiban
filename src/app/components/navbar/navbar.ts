@@ -1,48 +1,51 @@
 import { Component, NgZone, OnDestroy, afterNextRender, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { Subscription, filter } from 'rxjs';
 import { TranslationService } from '../../i18n/translation.service';
 
 interface NavLink {
   labelKey: string;
-  href: string;
-  id: string;
+  /** Route path. The site is three pages now, not one long scroll. */
+  path: string;
 }
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
 export class Navbar implements OnDestroy {
   protected readonly i18n = inject(TranslationService);
   private readonly zone = inject(NgZone);
+  private readonly router = inject(Router);
 
   protected readonly menuOpen = signal(false);
-  /** Id of the section currently filling most of the viewport. */
-  protected readonly activeSection = signal('top');
+  /** Path of the page being shown, which is what the underline follows now. */
+  protected readonly activePath = signal('/');
   /** True once the page has scrolled off the very top — drives the header shadow. */
   protected readonly scrolled = signal(false);
 
   protected readonly links: NavLink[] = [
-    { labelKey: 'nav.about', href: '#about', id: 'about' },
-    { labelKey: 'nav.products', href: '#products', id: 'products' },
-    { labelKey: 'nav.process', href: '#process', id: 'process' },
-    { labelKey: 'nav.why', href: '#why', id: 'why' },
-    { labelKey: 'nav.contact', href: '#contact', id: 'contact' },
+    { labelKey: 'nav.about', path: '/about' },
+    { labelKey: 'nav.contact', path: '/contact' },
   ];
 
-  private observer?: IntersectionObserver;
-  private readonly ratios = new Map<string, number>();
+  private routeSub?: Subscription;
 
   constructor() {
-    afterNextRender(() => {
-      this.observeSections();
-      this.watchScroll();
-    });
+    // The underline used to follow whichever section filled the viewport. With
+    // three pages there is nothing to spy on: the current page is simply the
+    // current URL.
+    this.routeSub = this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event) => this.activePath.set(event.urlAfterRedirects.split('?')[0]));
+
+    afterNextRender(() => this.watchScroll());
   }
 
   ngOnDestroy(): void {
-    this.observer?.disconnect();
+    this.routeSub?.unsubscribe();
     window.removeEventListener('scroll', this.onScroll);
   }
 
@@ -58,58 +61,8 @@ export class Navbar implements OnDestroy {
     this.i18n.toggle();
   }
 
-  navigateTo(event: Event, href: string): void {
-    event.preventDefault();
-    this.closeMenu();
-    const target = document.getElementById(href.replace('#', ''));
-    // Phones jump straight to the section. A smooth scroll there means a long
-    // travel through several full-height sections on a small screen, which
-    // reads as a delay rather than as motion. `instant` is required over
-    // `auto` — `auto` defers to the `scroll-behavior: smooth` set on <html>.
-    const behavior: ScrollBehavior = this.prefersInstantJump() ? 'instant' : 'smooth';
-    target?.scrollIntoView({ behavior, block: 'start' });
-  }
-
-  /** Mirrors the desktop-only breakpoint that gates section snapping. */
-  private prefersInstantJump(): boolean {
-    return typeof window !== 'undefined' && !window.matchMedia('(min-width: 1024px)').matches;
-  }
-
-  protected isActive(id: string): boolean {
-    return this.activeSection() === id;
-  }
-
-  private observeSections(): void {
-    if (typeof IntersectionObserver === 'undefined') {
-      return;
-    }
-    this.zone.runOutsideAngular(() => {
-      this.observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            this.ratios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
-          }
-          // Sections are full-height, so at most two overlap at once; whichever
-          // covers more of the viewport is the one the visitor is reading.
-          let best = 'top';
-          let bestRatio = 0;
-          for (const [id, ratio] of this.ratios) {
-            if (ratio > bestRatio) {
-              best = id;
-              bestRatio = ratio;
-            }
-          }
-          this.zone.run(() => this.activeSection.set(best));
-        },
-        { threshold: [0, 0.25, 0.5, 0.75, 1] },
-      );
-      for (const id of ['top', ...this.links.map((link) => link.id)]) {
-        const el = document.getElementById(id);
-        if (el) {
-          this.observer!.observe(el);
-        }
-      }
-    });
+  protected isActive(path: string): boolean {
+    return this.activePath() === path;
   }
 
   private watchScroll(): void {

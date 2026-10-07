@@ -2,17 +2,26 @@
   class="relative bg-navy-500 transition-shadow duration-300"
   [class]="scrolled() ? 'shadow-xl shadow-navy-950/40' : 'shadow-lg shadow-navy-900/20'"
 >
-  <nav class="mx-auto flex h-20 max-w-7xl items-center gap-4 px-6 lg:px-10" [attr.aria-label]="i18n.t('nav.primary')">
+  <nav
+    class="mx-auto flex max-w-7xl items-center gap-4 px-6 transition-[height] duration-300 lg:h-20 lg:px-10"
+    [class.h-20]="!scrolled()"
+    [class.h-14]="scrolled()"
+    [attr.aria-label]="i18n.t('nav.primary')"
+  >
     <div class="flex min-w-0 flex-1 items-center">
-      <a href="#top" class="flex min-w-0 items-center gap-3" (click)="navigateTo($event, '#top')">
+      <a routerLink="/" class="flex min-w-0 items-center gap-3" (click)="closeMenu()">
         <img
           src="logo.png"
           [alt]="i18n.t('brand.name')"
           width="44"
           height="44"
-          class="h-11 w-11 shrink-0 object-contain"
+          class="shrink-0 object-contain transition-all duration-300 lg:h-11 lg:w-11"
+          [class]="scrolled() ? 'h-8 w-8' : 'h-11 w-11'"
         />
-        <span class="min-w-0 truncate font-display text-xl font-extrabold leading-none tracking-tight text-white">
+        <span
+          class="min-w-0 truncate font-display font-extrabold leading-none tracking-tight text-white transition-all duration-300 lg:text-xl"
+          [class]="scrolled() ? 'text-base' : 'text-xl'"
+        >
           {{ i18n.t('brand.name') }}
         </span>
       </a>
@@ -20,12 +29,12 @@
 
     <div class="hidden flex-1 items-center justify-center gap-8 lg:flex">
       <a
-        href="#top"
-        (click)="navigateTo($event, '#top')"
+        routerLink="/"
+        (click)="closeMenu()"
         [attr.aria-label]="i18n.t('nav.home')"
-        [attr.aria-current]="isActive('top') ? 'true' : null"
+        [attr.aria-current]="isActive('/') ? 'true' : null"
         class="relative flex items-center py-1 transition-colors"
-        [class]="isActive('top') ? 'text-white' : 'text-white/70 hover:text-white'"
+        [class]="isActive('/') ? 'text-white' : 'text-white/70 hover:text-white'"
       >
         <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M3 10.5 12 3l9 7.5" />
@@ -33,25 +42,25 @@
         </svg>
         <span
           class="absolute inset-x-0 -bottom-1 h-0.5 origin-center rounded-full bg-royal-400 transition-transform duration-300"
-          [class]="isActive('top') ? 'scale-x-100' : 'scale-x-0'"
+          [class]="isActive('/') ? 'scale-x-100' : 'scale-x-0'"
           aria-hidden="true"
         ></span>
       </a>
 
       <!-- nowrap on the label: a two-word item like "Why Us" otherwise breaks
            across two lines and pushes the whole header taller. -->
-      @for (link of links; track link.href) {
+      @for (link of links; track link.path) {
         <a
-          [href]="link.href"
-          (click)="navigateTo($event, link.href)"
-          [attr.aria-current]="isActive(link.id) ? 'true' : null"
+          [routerLink]="link.path"
+          (click)="closeMenu()"
+          [attr.aria-current]="isActive(link.path) ? 'page' : null"
           class="relative whitespace-nowrap py-1 text-sm font-medium transition-colors"
-          [class]="isActive(link.id) ? 'text-white' : 'text-white/70 hover:text-white'"
+          [class]="isActive(link.path) ? 'text-white' : 'text-white/70 hover:text-white'"
         >
           {{ i18n.t(link.labelKey) }}
           <span
             class="absolute inset-x-0 -bottom-1 h-0.5 origin-center rounded-full bg-royal-400 transition-transform duration-300"
-            [class]="isActive(link.id) ? 'scale-x-100' : 'scale-x-0'"
+            [class]="isActive(link.path) ? 'scale-x-100' : 'scale-x-0'"
             aria-hidden="true"
           ></span>
         </a>
@@ -73,13 +82,6 @@
         {{ i18n.t('lang.other') }}
       </button>
 
-      <a
-        href="#contact"
-        (click)="navigateTo($event, '#contact')"
-        class="hidden items-center rounded-full bg-royal-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-royal-600/90 lg:inline-flex"
-      >
-        {{ i18n.t('nav.quote') }}
-      </a>
 
       <button
         type="button"
@@ -105,11 +107,11 @@
     <div class="absolute inset-x-0 top-full border-t border-white/10 bg-navy-500 px-6 py-4 shadow-lg shadow-navy-900/20 lg:hidden">
       <div class="flex flex-col gap-4">
         <a
-          href="#top"
+          routerLink="/"
           class="flex items-center gap-2 text-sm font-medium transition-colors"
-          [class]="isActive('top') ? 'text-royal-400' : 'text-white/90'"
-          [attr.aria-current]="isActive('top') ? 'true' : null"
-          (click)="navigateTo($event, '#top')"
+          [class]="isActive('/') ? 'text-royal-400' : 'text-white/90'"
+          [attr.aria-current]="isActive('/') ? 'true' : null"
+          (click)="closeMenu()"
         >
           <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M3 10.5 12 3l9 7.5" />
@@ -117,24 +119,17 @@
           </svg>
           {{ i18n.t('nav.home') }}
         </a>
-        @for (link of links; track link.href) {
+        @for (link of links; track link.path) {
           <a
-            [href]="link.href"
+            [routerLink]="link.path"
             class="text-sm font-medium transition-colors"
-            [class]="isActive(link.id) ? 'text-royal-400' : 'text-white/90'"
-            [attr.aria-current]="isActive(link.id) ? 'true' : null"
-            (click)="navigateTo($event, link.href)"
+            [class]="isActive(link.path) ? 'text-royal-400' : 'text-white/90'"
+            [attr.aria-current]="isActive(link.path) ? 'page' : null"
+            (click)="closeMenu()"
           >
             {{ i18n.t(link.labelKey) }}
           </a>
         }
-        <a
-          href="#contact"
-          class="inline-flex items-center justify-center rounded-full bg-royal-600 px-6 py-2.5 text-sm font-semibold text-white"
-          (click)="navigateTo($event, '#contact')"
-        >
-          {{ i18n.t('nav.quote') }}
-        </a>
       </div>
     </div>
   }
