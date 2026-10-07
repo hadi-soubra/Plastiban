@@ -106,6 +106,7 @@ export class Contact implements OnDestroy {
   private resizeObserver?: ResizeObserver;
   private markers: Array<{ marker: L.Marker; office: OfficeLocation }> = [];
   private resetButton?: HTMLButtonElement;
+  private fitView?: () => void;
 
   constructor() {
     afterNextRender(() => this.initMap());
@@ -123,6 +124,8 @@ export class Contact implements OnDestroy {
         this.resetButton.title = label;
         this.resetButton.setAttribute('aria-label', label);
       }
+      // Label widths differ per language, so the default view is refitted too.
+      this.fitView?.();
     });
   }
 
@@ -141,6 +144,9 @@ export class Contact implements OnDestroy {
       scrollWheelZoom: true,
       zoomControl: false,
       attributionControl: false,
+      // Fractional zoom lets the default view hug both offices and their labels
+      // instead of snapping out a whole level.
+      zoomSnap: 0.25,
     });
     this.map = map;
 
@@ -190,9 +196,22 @@ export class Contact implements OnDestroy {
     this.markers = markers.map((marker, index) => ({ marker, office: this.offices[index] }));
 
     // Show both offices at once — a wide regional view of Lebanon and the U.A.E.
+    // Labels hang off the right of each pin, so pad that side by the widest
+    // label (measured live, since it changes with the language) to keep every
+    // pin and label fully on screen.
     const bounds = L.featureGroup(markers).getBounds();
-    const fit = (): L.Map => map.fitBounds(bounds, { padding: [40, 40] });
+    const fit = (): L.Map => {
+      const labelWidth = Math.max(
+        0,
+        ...markers.map((m) => m.getTooltip()?.getElement()?.offsetWidth ?? 0),
+      );
+      return map.fitBounds(bounds, {
+        paddingTopLeft: [32, 40],
+        paddingBottomRight: [labelWidth + 40, 56],
+      });
+    };
     fit();
+    this.fitView = fit;
 
     const label = this.i18n.t('contact.map.reset');
     const ResetViewControl = L.Control.extend({
