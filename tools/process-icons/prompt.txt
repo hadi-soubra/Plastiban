@@ -1,0 +1,21 @@
+A square icon illustration for a packaging manufacturer's website, one of a set
+of six that must look like a single series.
+
+STYLE
+- Flat vector illustration. Clean, even geometric line work.
+- No gradients, no 3D rendering, no photorealism, no drop shadows, no texture.
+- Background: solid #12194a, filling the whole square edge to edge.
+- Line work and primary shapes: #7f9bf0.
+- At most one small accent element in #f7f5ef.
+- Even medium stroke weight throughout.
+- Subject centred, occupying about 60 percent of the frame, with generous and
+  equal margin on all four sides.
+- Simple enough to stay legible at 80 pixels wide.
+
+ABSOLUTE RULES
+- No text, no numbers, no letters, no labels, no watermarks, in any language.
+- No people, no faces, no hands.
+- No background pattern, grid, vignette or border.
+- A single subject. No collage, no multiple scenes, no panels.
+
+SUBJECT

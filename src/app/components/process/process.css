@@ -1,0 +1,47 @@
+/* The fill grows from whichever edge the language starts at. */
+.process-fill {
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Each stop needs a fixed share of the row, or the widest icon pushes the
+   others off their position on the line as the active one scales up. */
+.process-stop {
+  flex: 1 1 0;
+}
+
+.process-panel {
+  animation: process-panel-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes process-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-fill,
+  .process-panel {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* The rail spans centre-to-centre of the end stops rather than the whole row.
+   Six equal stops put the first centre at 1/12 and the last at 11/12, so an
+   inset of 100/12 on each side lands the line exactly on them, and the fill
+   percentage then maps onto the real distance travelled. */
+.process-rail {
+  inset-inline: calc(100% / 12);
+}
+
+/* The stops paint over the rail, so the row needs its own stacking context or
+   the rail's negative z-index escapes to whatever is behind the section. */
+.process-track {
+  isolation: isolate;
+}

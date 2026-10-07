@@ -65,10 +65,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'process.eyebrow': 'How we work',
     'process.heading': 'From an idea to the finished package.',
     'process.lead': 'If you can imagine it, we can work towards making it.',
-    'process.intro':
-      'Every project starts with a purpose. Whether you arrive with a defined design or only an idea, our team works with you to develop packaging that fits your product, brand and occasion.',
-    'process.intro2':
-      'Every project has different requirements. That is why we do not believe in forcing every product into the same packaging format.',
+    'process.steps': 'Our process, step by step',
     'process.understand.title': 'Understand',
     'process.understand.description':
       'We start with your product, brand, quantities, dimensions, budget and intended use.',
@@ -256,10 +253,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'process.eyebrow': 'كيف نعمل',
     'process.heading': 'من الفكرة إلى العلبة الجاهزة.',
     'process.lead': 'إذا كنت تتخيّله، فنحن نعمل على تحقيقه.',
-    'process.intro':
-      'كل مشروع يبدأ بهدف. سواء وصلت بتصميم واضح أو بفكرة فقط، يعمل فريقنا معك لتطوير تغليف يناسب منتجك وعلامتك ومناسبتك.',
-    'process.intro2':
-      'لكل مشروع متطلباته الخاصة. لذلك لا نؤمن بحشر كل منتج في قالب تغليف واحد.',
+    'process.steps': 'مراحل العمل، خطوة بخطوة',
     'process.understand.title': 'الفهم',
     'process.understand.description': 'نبدأ من منتجك وعلامتك والكميات والأبعاد والميزانية والاستخدام المقصود.',
     'process.develop.title': 'التطوير',

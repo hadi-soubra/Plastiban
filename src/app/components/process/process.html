@@ -3,51 +3,105 @@
   class="flex scroll-mt-[var(--header-h)] flex-col justify-center bg-navy-900 px-6 py-16 lg:px-10 lg:py-24"
   aria-labelledby="process-heading"
 >
-  <div class="mx-auto w-full max-w-7xl">
-    <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-      <div appReveal>
-        <p class="text-xs font-bold uppercase tracking-widest text-royal-400">{{ i18n.t('process.eyebrow') }}</p>
-        <h2
-          id="process-heading"
-          class="mt-3 font-display text-3xl font-extrabold leading-tight text-white sm:text-4xl"
-        >
-          {{ i18n.t('process.heading') }}
-        </h2>
-        <p class="mt-4 font-display text-lg font-bold text-royal-400">{{ i18n.t('process.lead') }}</p>
-      </div>
-      <div [appReveal]="120" class="max-w-sm space-y-3 text-sm leading-relaxed text-slate-400">
-        <p>{{ i18n.t('process.intro') }}</p>
-        <p>{{ i18n.t('process.intro2') }}</p>
-      </div>
+  <div class="mx-auto w-full max-w-5xl">
+    <div appReveal>
+      <p class="text-xs font-bold uppercase tracking-widest text-royal-400">{{ i18n.t('process.eyebrow') }}</p>
+      <h2
+        id="process-heading"
+        class="mt-3 font-display text-3xl font-extrabold leading-tight text-white sm:text-4xl"
+      >
+        {{ i18n.t('process.heading') }}
+      </h2>
+      <p class="mt-4 font-display text-lg font-bold text-royal-400">{{ i18n.t('process.lead') }}</p>
     </div>
 
-    <!-- A phone gets a ruled list, not cards. Two columns left about 80px for
-         the title and clipped words like "Understand"; six full-width cards fix
-         that but turn a short sequence into a long scroll of padded boxes. A
-         process is a list, so on the narrowest screens it is drawn as one, and
-         the cards come back from tablet width up. -->
-    <div
-      class="mt-10 grid grid-cols-1 divide-y divide-white/10 border-y border-white/10 sm:mt-14 sm:grid-cols-2 sm:gap-6 sm:divide-y-0 sm:border-0 lg:grid-cols-3"
-    >
-      @for (step of steps; track step.index; let i = $index) {
-        <!-- The number keeps its own column, so a long title wraps beside it
-             rather than against it. Baseline alignment sits the digits with the
-             words instead of floating above them. -->
-        <div
-          [appReveal]="180 + i * 110"
-          class="flex items-baseline gap-4 py-5 sm:rounded-2xl sm:border sm:border-white/10 sm:p-7"
-        >
-          <!-- Forced LTR: "01" is a number, and bidi otherwise reorders it
-               against the Arabic title beside it. -->
-          <span dir="ltr" class="shrink-0 font-display text-2xl font-extrabold text-royal-400">
-            {{ step.index }}
-          </span>
-          <div class="min-w-0">
-            <h3 class="font-display text-lg font-bold text-white">{{ i18n.t(step.titleKey) }}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-slate-400">{{ i18n.t(step.descriptionKey) }}</p>
-          </div>
+    <!-- The track. Six stops on one line, so the sequence is visible as a
+         sequence; only the chosen step speaks, which is what keeps five
+         paragraphs off the page. Always LTR: it is a timeline, not a sentence,
+         and under RTL the fill is anchored to the right instead. -->
+    <div [appReveal]="140" class="mt-12 lg:mt-14">
+      <div class="process-track relative" dir="ltr">
+        <!-- Behind the stops, which paint over it: the rail is only meant to
+             join them, not to run through them. That needs the stop's own
+             background to be opaque, which is why the reached state uses the
+             flat blend of royal-600/20 over navy-900 rather than the
+             translucent tint it looks like. -->
+        <div class="process-rail absolute top-[22px] -z-10 sm:top-8" aria-hidden="true">
+          <div class="h-px w-full bg-white/10"></div>
+          <!-- Always anchored left, never flipped for Arabic: the track itself
+               is forced LTR above because it is a timeline, not a sentence, so
+               step 01 is on the left in both languages and the fill has to grow
+               the same way the stops are ordered. -->
+          <div
+            class="process-fill absolute left-0 top-0 h-px bg-royal-400"
+            [style.width.%]="progress()"
+          ></div>
         </div>
-      }
+
+        <div class="relative flex justify-between" role="tablist" [attr.aria-label]="i18n.t('process.steps')">
+          @for (step of steps; track step.index; let i = $index) {
+            <button
+              type="button"
+              role="tab"
+              [id]="'process-tab-' + i"
+              [attr.aria-selected]="active() === i"
+              [attr.aria-controls]="'process-panel'"
+              [attr.tabindex]="active() === i ? 0 : -1"
+              [attr.aria-label]="i18n.t(step.titleKey)"
+              (click)="select(i)"
+              class="process-stop group flex cursor-pointer flex-col items-center gap-2 rounded-lg px-1 outline-none focus-visible:ring-2 focus-visible:ring-royal-400"
+            >
+              <span
+                class="flex h-11 w-11 items-center justify-center rounded-full border transition duration-300 sm:h-16 sm:w-16"
+                [class]="reached(i)
+                  ? 'border-royal-400 bg-[#182563]'
+                  : 'border-white/10 bg-navy-900 group-hover:border-white/30'"
+              >
+                <img
+                  [src]="step.icon"
+                  alt=""
+                  aria-hidden="true"
+                  width="40"
+                  height="40"
+                  loading="lazy"
+                  decoding="async"
+                  class="h-7 w-7 transition duration-300 sm:h-10 sm:w-10"
+                  [class.opacity-35]="!reached(i)"
+                />
+              </span>
+              <span
+                class="font-display text-xs font-extrabold tracking-widest transition-colors"
+                [class]="reached(i) ? 'text-royal-400' : 'text-slate-500'"
+              >
+                {{ step.index }}
+              </span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- One panel, not six. The step that is chosen is the only one talking. -->
+      <div
+        id="process-panel"
+        role="tabpanel"
+        [attr.aria-labelledby]="'process-tab-' + active()"
+        class="mt-10 min-h-[8rem] text-center sm:min-h-[7rem]"
+      >
+        @if (activeStep(); as step) {
+          <!-- Keyed on the index so Angular rebuilds the panel on every change,
+               which is what lets the entry animation run again each time. -->
+          @if (active() >= 0) {
+            <div class="process-panel" [attr.key]="step.index">
+              <h3 class="font-display text-xl font-extrabold text-white sm:text-2xl">
+                {{ i18n.t(step.titleKey) }}
+              </h3>
+              <p class="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-base">
+                {{ i18n.t(step.descriptionKey) }}
+              </p>
+            </div>
+          }
+        }
+      </div>
     </div>
   </div>
 </section>
