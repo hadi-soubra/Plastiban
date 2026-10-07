@@ -8,8 +8,10 @@ interface SocialLink {
   icon: SocialIcon;
   labelKey: string;
   href: string;
-  /** Set only where one platform has several accounts: rendered beside the icon
-   *  so a visitor can tell the two Instagram accounts apart at a glance. */
+  /** Which country or countries the account covers, rendered beside the icon.
+   *  Set on every account that is not self-evident: the two Instagram accounts
+   *  need telling apart, and the single Facebook page needs saying that it
+   *  serves both branches rather than only the one its neighbour names. */
   countryKey?: string;
 }
 
@@ -36,6 +38,11 @@ export class Footer {
       countryKey: 'social.country.ae',
       href: SITE.instagramAe,
     },
-    { icon: 'facebook', labelKey: 'social.facebook', href: SITE.facebook },
+    {
+      icon: 'facebook',
+      labelKey: 'social.facebook',
+      countryKey: 'social.country.both',
+      href: SITE.facebook,
+    },
   ];
 }

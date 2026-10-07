@@ -38,12 +38,14 @@
         ></span>
       </a>
 
+      <!-- nowrap on the label: a two-word item like "Why Us" otherwise breaks
+           across two lines and pushes the whole header taller. -->
       @for (link of links; track link.href) {
         <a
           [href]="link.href"
           (click)="navigateTo($event, link.href)"
           [attr.aria-current]="isActive(link.id) ? 'true' : null"
-          class="relative py-1 text-sm font-medium transition-colors"
+          class="relative whitespace-nowrap py-1 text-sm font-medium transition-colors"
           [class]="isActive(link.id) ? 'text-white' : 'text-white/70 hover:text-white'"
         >
           {{ i18n.t(link.labelKey) }}

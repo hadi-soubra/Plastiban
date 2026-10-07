@@ -1,0 +1,36 @@
+<!-- A band rather than a full-height section: three short statements do not fill
+     a screen, and it gives the eye a dark break between the white Why section
+     and the cream products wall. Headings sit a step smaller than elsewhere so
+     three of them side by side do not shout over the sections around them. -->
+<section
+  id="vision"
+  class="scroll-mt-[var(--header-h)] bg-navy-900 px-6 py-20 lg:px-10 lg:py-24"
+  aria-labelledby="vision-heading"
+>
+  <div class="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-3 lg:gap-14">
+    <div appReveal>
+      <p class="text-xs font-bold uppercase tracking-widest text-royal-400">{{ i18n.t('vision.eyebrow') }}</p>
+      <h2 id="vision-heading" class="mt-3 font-display text-xl font-extrabold leading-tight text-white sm:text-2xl">
+        {{ i18n.t('vision.heading') }}
+      </h2>
+      <p class="mt-4 text-sm leading-relaxed text-slate-400">{{ i18n.t('vision.body') }}</p>
+    </div>
+
+    <!-- Logical border side, so the rules move to the right edge under RTL. -->
+    <div [appReveal]="120" class="border-t border-white/10 pt-8 lg:border-s lg:border-t-0 lg:ps-14 lg:pt-0">
+      <p class="text-xs font-bold uppercase tracking-widest text-royal-400">{{ i18n.t('vision.missionLabel') }}</p>
+      <h3 class="mt-3 font-display text-xl font-extrabold leading-tight text-white sm:text-2xl">
+        {{ i18n.t('vision.missionHeading') }}
+      </h3>
+      <p class="mt-4 text-sm leading-relaxed text-slate-400">{{ i18n.t('vision.missionBody') }}</p>
+    </div>
+
+    <div [appReveal]="200" class="border-t border-white/10 pt-8 lg:border-s lg:border-t-0 lg:ps-14 lg:pt-0">
+      <p class="text-xs font-bold uppercase tracking-widest text-royal-400">{{ i18n.t('vision.sustainabilityLabel') }}</p>
+      <h3 class="mt-3 font-display text-xl font-extrabold leading-tight text-white sm:text-2xl">
+        {{ i18n.t('vision.sustainabilityHeading') }}
+      </h3>
+      <p class="mt-4 text-sm leading-relaxed text-slate-400">{{ i18n.t('vision.sustainabilityBody') }}</p>
+    </div>
+  </div>
+</section>

@@ -2,12 +2,8 @@ import { Component, inject } from '@angular/core';
 import { RevealDirective } from '../../directives/reveal.directive';
 import { TranslationService } from '../../i18n/translation.service';
 
-interface SideStat {
-  value: string;
-  labelKey: string;
-}
-
-interface Feature {
+interface Milestone {
+  yearKey: string;
   titleKey: string;
   descriptionKey: string;
 }
@@ -21,23 +17,26 @@ interface Feature {
 export class About {
   protected readonly i18n = inject(TranslationService);
 
-  protected readonly sideStats: SideStat[] = [
-    { value: '1989', labelKey: 'about.stat.founded' },
-    { value: '35+', labelKey: 'about.stat.years' },
-    { value: '2', labelKey: 'about.stat.countries' },
-    { value: '∞', labelKey: 'about.stat.refinements' },
-  ];
-
-  protected readonly features: Feature[] = [
-    { titleKey: 'about.feature.team.title', descriptionKey: 'about.feature.team.description' },
+  /**
+   * The company's history, which used to be a standing 1989 and a row of
+   * counters. Those said the same thing twice over - founded 1989, 35+ years,
+   * 2 countries - and the dates carry it better on their own.
+   */
+  protected readonly milestones: Milestone[] = [
     {
-      titleKey: 'about.feature.innovation.title',
-      descriptionKey: 'about.feature.innovation.description',
+      yearKey: 'about.timeline.founded.year',
+      titleKey: 'about.timeline.founded.title',
+      descriptionKey: 'about.timeline.founded.description',
     },
     {
-      titleKey: 'about.feature.endToEnd.title',
-      descriptionKey: 'about.feature.endToEnd.description',
+      yearKey: 'about.timeline.expansion.year',
+      titleKey: 'about.timeline.expansion.title',
+      descriptionKey: 'about.timeline.expansion.description',
     },
-    { titleKey: 'about.feature.reach.title', descriptionKey: 'about.feature.reach.description' },
+    {
+      yearKey: 'about.timeline.today.year',
+      titleKey: 'about.timeline.today.title',
+      descriptionKey: 'about.timeline.today.description',
+    },
   ];
 }

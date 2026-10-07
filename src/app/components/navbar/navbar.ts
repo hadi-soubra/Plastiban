@@ -25,7 +25,8 @@ export class Navbar implements OnDestroy {
 
   protected readonly links: NavLink[] = [
     { labelKey: 'nav.about', href: '#about', id: 'about' },
-    { labelKey: 'nav.services', href: '#services', id: 'services' },
+    { labelKey: 'nav.process', href: '#process', id: 'process' },
+    { labelKey: 'nav.why', href: '#why', id: 'why' },
     { labelKey: 'nav.products', href: '#products', id: 'products' },
     { labelKey: 'nav.contact', href: '#contact', id: 'contact' },
   ];

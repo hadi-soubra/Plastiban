@@ -10,7 +10,10 @@
         height="36"
         class="h-9 w-9 shrink-0 object-contain"
       />
-      <span class="font-display text-sm font-extrabold tracking-tight text-white">{{ i18n.t('brand.name') }}</span>
+      <div class="text-center sm:text-start">
+        <span class="block font-display text-sm font-extrabold tracking-tight text-white">{{ i18n.t('brand.name') }}</span>
+        <span class="block text-xs leading-snug text-slate-400">{{ i18n.t('footer.tagline') }}</span>
+      </div>
     </div>
 
     <nav class="flex items-center justify-center gap-3 sm:flex-1" [attr.aria-label]="i18n.t('footer.follow')">
