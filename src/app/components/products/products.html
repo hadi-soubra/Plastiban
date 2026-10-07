@@ -63,6 +63,37 @@
     </div>
   </div>
 
+  <!-- The sub-category row, only once a category narrows the field. It wraps
+       rather than scrolls: seven short labels fit on one line on a desktop and
+       on two or three on a phone, which beats hiding half of them off-screen
+       behind a scroll the first row's chevrons would not be describing. -->
+  @if (subCategories(); as lines) {
+    @if (lines.length) {
+      <div class="mx-auto mt-3 w-full max-w-5xl px-6">
+        <div class="flex flex-wrap justify-center gap-2" role="group" [attr.aria-label]="i18n.t('products.subFilters')">
+          <button
+            type="button"
+            (click)="setLine('all')"
+            [class]="linePillClasses('all')"
+            [attr.aria-pressed]="activeLine() === 'all'"
+          >
+            {{ i18n.t('products.allTypes') }}
+          </button>
+          @for (sub of lines; track sub.line) {
+            <button
+              type="button"
+              (click)="setLine(sub.line)"
+              [class]="linePillClasses(sub.line)"
+              [attr.aria-pressed]="activeLine() === sub.line"
+            >
+              {{ text(sub.name) }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+  }
+
   <div class="relative mt-2 w-full lg:mt-6">
     <!-- The marquee drives scrollLeft directly, whose sign flips under RTL, so
          the strip itself always stays LTR; card contents follow the page dir. -->
@@ -86,7 +117,7 @@
             <!-- The slot is square while the shots are portrait 3:4, so each one
                  is centre-cropped to fill it. Deliberate: a square keeps the strip
                  the height it was designed around. -->
-            <div class="relative flex aspect-square shrink-0 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-200 via-blue-100 to-indigo-100">
+            <div class="relative flex aspect-square shrink-0 items-center justify-center overflow-hidden bg-slate-100">
               @if (product.src && !brokenImages().has(product.src)) {
                 <img
                   [src]="product.src"
@@ -161,7 +192,7 @@
             class="deck-card absolute flex h-[358px] w-[min(66vw,232px)] flex-col overflow-hidden rounded-2xl bg-white text-start shadow-2xl shadow-navy-950/60 sm:h-[388px] sm:w-[252px] lg:h-[404px] lg:w-[268px]"
           >
             <!-- Square slot, centre-cropping the portrait source, as on the strip. -->
-            <div class="relative flex aspect-square shrink-0 items-center justify-center overflow-hidden bg-gradient-to-br from-slate-200 via-blue-100 to-indigo-100">
+            <div class="relative flex aspect-square shrink-0 items-center justify-center overflow-hidden bg-slate-100">
               @if (card.product.src && !brokenImages().has(card.product.src)) {
                 <img
                   [src]="card.product.src"

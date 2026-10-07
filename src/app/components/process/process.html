@@ -25,9 +25,9 @@
       @for (step of steps; track step.index; let i = $index) {
         <div
           [appReveal]="180 + i * 110"
-          class="group rounded-2xl border border-white/10 p-5 transition duration-300 hover:-translate-y-1 hover:border-royal-400/40 hover:bg-white/[0.03] sm:p-7"
+          class="rounded-2xl border border-white/10 p-5 sm:p-7"
         >
-          <p class="inline-block font-display text-2xl font-extrabold text-royal-400 transition-transform duration-300 group-hover:scale-110">
+          <p class="font-display text-2xl font-extrabold text-royal-400">
             {{ step.index }}
           </p>
           <p class="mt-4 font-display text-lg font-bold text-white sm:mt-6">{{ i18n.t(step.titleKey) }}</p>

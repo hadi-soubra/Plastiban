@@ -1,6 +1,6 @@
 <section
   id="why"
-  class="flex min-h-[var(--section-h)] scroll-mt-[var(--header-h)] flex-col justify-center bg-white px-6 py-16 lg:px-10"
+  class="flex min-h-[var(--section-h)] scroll-mt-[var(--header-h)] flex-col justify-center bg-cream-50 px-6 py-16 lg:px-10"
   aria-labelledby="why-heading"
 >
   <div class="mx-auto w-full max-w-7xl">
@@ -14,16 +14,12 @@
       <p [appReveal]="120" class="max-w-sm text-sm leading-relaxed text-slate-500">{{ i18n.t('why.intro') }}</p>
     </div>
 
-    <div class="mt-12 grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <!-- Ruled entries rather than cards: six equal boxes read as a template, and
+         the strengths are a list to scan, not objects to pick up. -->
+    <div class="mt-12 grid gap-x-10 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
       @for (strength of strengths; track strength.titleKey; let i = $index) {
-        <div
-          [appReveal]="180 + i * 80"
-          class="rounded-2xl bg-cream-50 p-6 transition duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-navy-900/10 sm:p-7"
-        >
-          <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-royal-600/15">
-            <span class="h-2.5 w-2.5 rotate-45 bg-royal-600"></span>
-          </span>
-          <p class="mt-5 font-display text-lg font-bold text-navy-900">{{ i18n.t(strength.titleKey) }}</p>
+        <div [appReveal]="180 + i * 80" class="border-t border-navy-900/10 pt-6">
+          <p class="font-display text-lg font-bold text-navy-900">{{ i18n.t(strength.titleKey) }}</p>
           <p class="mt-2 text-sm leading-relaxed text-slate-500">{{ i18n.t(strength.descriptionKey) }}</p>
         </div>
       }

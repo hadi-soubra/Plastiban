@@ -133,6 +133,8 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'products.all': 'All',
     'products.hint': 'Tap any product to view it larger.',
     'products.filters': 'Product categories',
+    'products.subFilters': 'Product types',
+    'products.allTypes': 'All types',
 
     'category.hard': 'Hard Cover Boxes',
     'category.printed': 'Digital Printed',
@@ -318,6 +320,8 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'products.all': 'الكل',
     'products.hint': 'اضغط على أي منتج لعرضه بحجم أكبر.',
     'products.filters': 'فئات المنتجات',
+    'products.subFilters': 'أنواع المنتجات',
+    'products.allTypes': 'كل الأنواع',
 
     'category.hard': 'علب بغلاف صلب',
     'category.printed': 'طباعة رقمية',

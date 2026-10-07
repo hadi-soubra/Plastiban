@@ -423,7 +423,31 @@ export class Products implements OnDestroy {
 
   protected readonly categories = CATEGORIES;
   protected readonly activeCategory = signal<CategoryId | 'all'>('all');
+  /**
+   * Which line within the chosen category, keyed by `Product.line`. Only ever
+   * meaningful while a category is chosen: "All" shows the whole wall, and the
+   * sub-category row is not offered there, because listing every line of every
+   * category would be a second row longer than the first.
+   */
+  protected readonly activeLine = signal<string | 'all'>('all');
   protected readonly brokenImages = signal<ReadonlySet<string>>(new Set());
+
+  /**
+   * The sub-categories of the chosen category, in catalogue order. Empty while
+   * "All" is active, which is what hides the second row. A category filed
+   * without sub-folders, as Ribbons is, has a single line whose folder is
+   * empty: one pill beside "All" would say nothing, so it offers none.
+   */
+  protected readonly subCategories = computed(() => {
+    const active = this.activeCategory();
+    if (active === 'all') {
+      return [];
+    }
+    const subs = SUBCATEGORIES_BY_CATEGORY[active];
+    return subs.length > 1
+      ? subs.map((sub) => ({ line: `${CATEGORY_FOLDERS[active]}/${sub.folder}`, name: sub.name }))
+      : [];
+  });
 
   /**
    * Filtering the dealt wall rather than the catalogue keeps a category's own
@@ -435,7 +459,9 @@ export class Products implements OnDestroy {
     if (active === 'all') {
       return SHOWCASE.length ? SHOWCASE : WALL;
     }
-    return WALL.filter((product) => product.category === active);
+    const inCategory = WALL.filter((product) => product.category === active);
+    const line = this.activeLine();
+    return line === 'all' ? inCategory : inCategory.filter((product) => product.line === line);
   });
 
   /**
@@ -678,6 +704,12 @@ export class Products implements OnDestroy {
 
   setCategory(category: CategoryId | 'all'): void {
     this.activeCategory.set(category);
+    // A line belongs to one category, so it cannot survive a change of category.
+    this.activeLine.set('all');
+  }
+
+  setLine(line: string | 'all'): void {
+    this.activeLine.set(line);
   }
 
   pillClasses(category: CategoryId | 'all'): string {
@@ -685,6 +717,14 @@ export class Products implements OnDestroy {
     return this.activeCategory() === category
       ? `${base} bg-navy-900 text-white`
       : `${base} bg-navy-900/5 text-slate-600 hover:bg-navy-900/10`;
+  }
+
+  /** Lighter and smaller than the category pills, so the rows read as a hierarchy. */
+  linePillClasses(line: string | 'all'): string {
+    const base = 'shrink-0 rounded-full px-4 py-1.5 text-xs font-semibold transition';
+    return this.activeLine() === line
+      ? `${base} bg-royal-600 text-white`
+      : `${base} bg-navy-900/5 text-slate-500 hover:bg-navy-900/10`;
   }
 
   onImageError(src: string): void {
