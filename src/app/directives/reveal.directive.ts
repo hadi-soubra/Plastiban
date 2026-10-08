@@ -46,7 +46,7 @@ export class RevealDirective implements OnInit, OnDestroy {
               continue;
             }
             this.observer?.disconnect();
-            const delay = this.delay();
+            const delay = this.scaledDelay();
             if (delay > 0) {
               this.timer = setTimeout(() => this.el.classList.add('reveal-in'), delay);
             } else {
@@ -54,12 +54,34 @@ export class RevealDirective implements OnInit, OnDestroy {
             }
           }
         },
-        // Trigger a little before the element is fully on screen so the motion
-        // reads as "already happening" rather than starting late.
-        { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
+        // Fire on the first pixel: no margin, no threshold. The element starts
+        // moving exactly as its top edge crosses the bottom of the screen, so
+        // the motion is seen rather than inferred.
+        //
+        // Both ways of missing that are easy. The previous value, -12% on the
+        // bottom, shrank the root: the element had to be an eighth of a screen
+        // past the edge before it counted, which on a phone - where a section
+        // is taller than the viewport - landed after the reader had scrolled
+        // by. A positive margin overshoots the other way and plays the reveal
+        // off screen, so it is over before it is visible.
+        { rootMargin: '0px', threshold: 0 },
       );
       this.observer.observe(this.el);
     });
+  }
+
+  /**
+   * The stagger exists to let a row of cards arrive one after another, which
+   * works on a wide screen where the whole row is visible at once. On a phone
+   * the same elements are stacked, so the later delays simply postpone things
+   * the reader is already looking at. They are halved and capped there.
+   */
+  private scaledDelay(): number {
+    const delay = this.delay();
+    if (delay <= 0 || typeof matchMedia === 'undefined') {
+      return delay;
+    }
+    return matchMedia('(min-width: 640px)').matches ? delay : Math.min(delay / 2, 180);
   }
 
   ngOnDestroy(): void {

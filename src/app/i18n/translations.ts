@@ -125,7 +125,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'products.intro2':
       'What they have in common is the journey from concept to finished packaging.',
     'products.all': 'All',
-    'products.hint': 'Tap any product to view it larger.',
+    'products.hint': 'Tap any card for a better view.',
     'products.filters': 'Product categories',
     'products.subFilters': 'Product types',
     'products.allTypes': 'All types',
@@ -316,7 +316,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'products.intro2':
       'وما يجمعها جميعاً هو الرحلة من الفكرة إلى التغليف الجاهز.',
     'products.all': 'الكل',
-    'products.hint': 'اضغط على أي منتج لعرضه بحجم أكبر.',
+    'products.hint': 'اضغط على أي بطاقة لعرض أوضح.',
     'products.filters': 'فئات المنتجات',
     'products.subFilters': 'أنواع المنتجات',
     'products.allTypes': 'كل الأنواع',

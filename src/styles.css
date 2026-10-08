@@ -88,8 +88,23 @@ html.lang-ar [class*="tracking-"] {
   opacity: 1;
   transform: none;
   transition:
-    opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Shorter and a smaller lift on phones. A 750ms rise reads as deliberate on a
+   desktop where the element is already in view; on a thumb-driven scroll it
+   reads as the page struggling to keep up. */
+@media (max-width: 639px) {
+  .reveal {
+    transform: translateY(16px);
+  }
+
+  .reveal-in {
+    transition:
+      opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
