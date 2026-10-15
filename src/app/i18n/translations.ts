@@ -18,9 +18,11 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'nav.home': 'Home',
     'nav.about': 'About Us',
-    'nav.process': 'Process',
-    'nav.why': 'Why Us',
     'nav.products': 'Products',
+    'nav.whoWeAre': 'Who we are',
+    'nav.vision': 'Vision & mission',
+    'nav.portfolio': 'Portfolio',
+    'nav.howWeWork': 'How we work',
     'nav.contact': 'Contact',
     'nav.toggleMenu': 'Toggle navigation menu',
     'nav.primary': 'Primary',
@@ -177,21 +179,10 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'social.facebook.ae': 'Facebook (UAE)',
     'social.whatsapp': 'WhatsApp',
 
-    'cta.heading': 'Have a packaging project in mind?',
-    'cta.body':
-      'Tell us what you are looking forward to creating and our team will get back to you.',
-    'cta.button': 'Start your project',
-
     'seo.title':
       'Plastiban - Packaging & Industrial Plastics Manufacturer | Lebanon & U.A.E.',
     'seo.description':
-      'Plastiban Technical Industry S.A.R.L has manufactured packaging and technical plastics since 1989. Cardboard, plastic, rigid and souvenir boxes plus digital printing, made in Lebanon and the U.A.E.',
-    'seo.about.title': 'About Plastiban - Packaging Manufacturing Since 1989 | Lebanon & U.A.E.',
-    'seo.about.description':
-      'Plastiban has been creating packaging since 1989, with in-house manufacturing in Lebanon and the U.A.E. Our story, how we work and what we build every project around.',
-    'seo.contact.title': 'Contact Plastiban - Packaging Enquiries | Lebanon & U.A.E.',
-    'seo.contact.description':
-      'Talk to Plastiban about your packaging project. Offices in Beirut, Lebanon and Umm Al Quwain, United Arab Emirates.',
+      'Plastiban Technical Industry S.A.R.L has manufactured packaging since 1989: cardboard, plastic, rigid and souvenir boxes plus digital printing, with offices in Beirut, Lebanon and Umm Al Quwain, U.A.E.',
   },
 
   ar: {
@@ -204,9 +195,11 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'nav.home': 'الرئيسية',
     'nav.about': 'من نحن',
-    'nav.process': 'مراحل العمل',
-    'nav.why': 'لماذا نحن',
     'nav.products': 'منتجاتنا',
+    'nav.whoWeAre': 'قصتنا',
+    'nav.vision': 'رؤيتنا ورسالتنا',
+    'nav.portfolio': 'أعمالنا',
+    'nav.howWeWork': 'كيف نعمل',
     'nav.contact': 'اتصل بنا',
     'nav.toggleMenu': 'فتح قائمة التنقل',
     'nav.primary': 'الرئيسية',
@@ -355,18 +348,8 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'social.facebook.ae': 'فيسبوك (الإمارات)',
     'social.whatsapp': 'واتساب',
 
-    'cta.heading': 'لديك مشروع تغليف في ذهنك؟',
-    'cta.body': 'أخبرنا بما تتطلّع إلى صنعه، وسيعود إليك فريقنا.',
-    'cta.button': 'ابدأ مشروعك',
-
     'seo.title': 'بلاستيبان - تصنيع التغليف والبلاستيك الصناعي | لبنان والإمارات',
     'seo.description':
-      'تصنّع بلاستيبان للصناعات التقنية ش.م.م مواد التغليف والبلاستيك التقني منذ عام ١٩٨٩: علب كرتون وبلاستيك وعلب صلبة وتذكارية وطباعة رقمية، صناعة لبنانية وإماراتية.',
-    'seo.about.title': 'من نحن - بلاستيبان لتصنيع التغليف منذ ١٩٨٩ | لبنان والإمارات',
-    'seo.about.description':
-      'تصنع بلاستيبان التغليف منذ عام ١٩٨٩، بإنتاج داخلي في لبنان والإمارات. قصتنا وطريقة عملنا وما نبني عليه كل مشروع.',
-    'seo.contact.title': 'اتصل ببلاستيبان - استفسارات التغليف | لبنان والإمارات',
-    'seo.contact.description':
-      'تحدّث إلى بلاستيبان عن مشروع التغليف الخاص بك. مكاتبنا في بيروت، لبنان وأم القيوين، الإمارات العربية المتحدة.',
+      'تصنّع بلاستيبان للصناعات التقنية ش.م.م مواد التغليف منذ عام ١٩٨٩: علب كرتون وبلاستيك وعلب صلبة وتذكارية وطباعة رقمية، مع مكاتب في بيروت، لبنان وأم القيوين، الإمارات.',
   },
 };

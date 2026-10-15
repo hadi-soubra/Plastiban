@@ -1,0 +1,8 @@
+# The site used to be three pages. It is one now, so the old paths 301 to the
+# matching section: search engines move whatever the old URLs had earned onto
+# "/" (they drop the "#section"), and anyone following an old link lands where
+# they expected.
+/about    /#about    301
+/about/   /#about    301
+/contact  /#contact  301
+/contact/ /#contact  301

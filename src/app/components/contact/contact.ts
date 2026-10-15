@@ -10,7 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import * as L from 'leaflet';
+import type * as Leaflet from 'leaflet';
 import { RevealDirective } from '../../directives/reveal.directive';
 import { TranslationService } from '../../i18n/translation.service';
 import { ContactService, SubmitFailure } from './contact.service';
@@ -102,9 +102,10 @@ export class Contact implements OnDestroy {
   ];
 
   private readonly mapContainer = viewChild<ElementRef<HTMLDivElement>>('map');
-  private map?: L.Map;
+  private map?: Leaflet.Map;
+  private destroyed = false;
   private resizeObserver?: ResizeObserver;
-  private markers: Array<{ marker: L.Marker; office: OfficeLocation }> = [];
+  private markers: Array<{ marker: Leaflet.Marker; office: OfficeLocation }> = [];
   private resetButton?: HTMLButtonElement;
   private fitView?: () => void;
 
@@ -130,13 +131,25 @@ export class Contact implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.destroyed = true;
     this.resizeObserver?.disconnect();
     this.map?.remove();
   }
 
-  private initMap(): void {
+  /**
+   * Leaflet is fetched here rather than imported up front: the map sits at the
+   * very end of the page, and leaving it out of the initial bundle gets the hero
+   * on screen sooner. The library is CommonJS, so the namespace arrives as the
+   * module's default export.
+   */
+  private async initMap(): Promise<void> {
     const el = this.mapContainer()?.nativeElement;
     if (!el) {
+      return;
+    }
+    const module = await import('leaflet');
+    const L = (module as { default?: typeof Leaflet }).default ?? module;
+    if (this.destroyed) {
       return;
     }
 
@@ -200,7 +213,7 @@ export class Contact implements OnDestroy {
     // label (measured live, since it changes with the language) to keep every
     // pin and label fully on screen.
     const bounds = L.featureGroup(markers).getBounds();
-    const fit = (): L.Map => {
+    const fit = (): Leaflet.Map => {
       const labelWidth = Math.max(
         0,
         ...markers.map((m) => m.getTooltip()?.getElement()?.offsetWidth ?? 0),
