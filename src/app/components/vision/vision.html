@@ -1,36 +1,73 @@
-<!-- A band rather than a full-height section: three short statements do not fill
-     a screen, and it gives the eye a dark break between the white Why section
-     and the cream products wall. Headings sit a step smaller than elsewhere so
-     three of them side by side do not shout over the sections around them. -->
+<!-- A band rather than a full-height section: four short statements do not fill
+     a screen, and it gives the eye a dark break between the cream about section
+     and what follows. Headings sit a step smaller than elsewhere so four of them
+     side by side do not shout over the sections around them. -->
 <section
   id="vision"
   class="scroll-mt-[var(--header-h)] bg-navy-900 px-6 py-20 lg:px-10 lg:py-24"
   aria-labelledby="vision-heading"
 >
-  <div class="mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-3 lg:gap-14">
-    <div appReveal>
-      <p class="text-xs font-bold uppercase tracking-widest text-royal-400">{{ i18n.t('vision.eyebrow') }}</p>
-      <h2 id="vision-heading" class="mt-3 font-display text-xl font-extrabold leading-tight text-white sm:text-2xl">
-        {{ i18n.t('vision.heading') }}
-      </h2>
-      <p class="mt-4 text-sm leading-relaxed text-slate-400">{{ i18n.t('vision.body') }}</p>
-    </div>
+  <div class="mx-auto grid w-full max-w-7xl gap-8 lg:grid-cols-4 lg:gap-10">
+    @for (statement of statements; track statement.id; let i = $index) {
+      <!-- Logical border side, so the rules move to the right edge under RTL. -->
+      <div
+        [appReveal]="i * 80"
+        [class]="i > 0 ? 'border-t border-white/10 pt-8 lg:border-s lg:border-t-0 lg:ps-10 lg:pt-0' : ''"
+      >
+        <p class="text-xs font-bold uppercase tracking-widest text-royal-400">{{ i18n.t(statement.labelKey) }}</p>
 
-    <!-- Logical border side, so the rules move to the right edge under RTL. -->
-    <div [appReveal]="120" class="border-t border-white/10 pt-8 lg:border-s lg:border-t-0 lg:ps-14 lg:pt-0">
-      <p class="text-xs font-bold uppercase tracking-widest text-royal-400">{{ i18n.t('vision.missionLabel') }}</p>
-      <h3 class="mt-3 font-display text-xl font-extrabold leading-tight text-white sm:text-2xl">
-        {{ i18n.t('vision.missionHeading') }}
-      </h3>
-      <p class="mt-4 text-sm leading-relaxed text-slate-400">{{ i18n.t('vision.missionBody') }}</p>
-    </div>
+        <!-- The heading is the toggle for its body, so the band is four
+             headlines to scan rather than a wall of text. -->
+        <div role="heading" [attr.aria-level]="i === 0 ? 2 : 3" class="mt-3">
+          <button
+            type="button"
+            [id]="i === 0 ? 'vision-heading' : null"
+            class="flex w-full items-start justify-between gap-4 text-start font-display text-xl font-extrabold leading-tight text-white sm:text-2xl lg:text-xl"
+            [attr.aria-expanded]="open().has(statement.id)"
+            [attr.aria-controls]="'vision-body-' + statement.id"
+            (click)="toggle(statement.id)"
+          >
+            <span>{{ i18n.t(statement.headingKey) }}</span>
+            <svg
+              viewBox="0 0 24 24"
+              class="mt-1 h-5 w-5 shrink-0 text-royal-400 transition-transform duration-300"
+              [class.rotate-180]="open().has(statement.id)"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+        </div>
 
-    <div [appReveal]="200" class="border-t border-white/10 pt-8 lg:border-s lg:border-t-0 lg:ps-14 lg:pt-0">
-      <p class="text-xs font-bold uppercase tracking-widest text-royal-400">{{ i18n.t('vision.sustainabilityLabel') }}</p>
-      <h3 class="mt-3 font-display text-xl font-extrabold leading-tight text-white sm:text-2xl">
-        {{ i18n.t('vision.sustainabilityHeading') }}
-      </h3>
-      <p class="mt-4 text-sm leading-relaxed text-slate-400">{{ i18n.t('vision.sustainabilityBody') }}</p>
-    </div>
+        <!-- Animating grid rows from 0fr to 1fr collapses to the content's real
+             height without measuring it. -->
+        <div
+          [id]="'vision-body-' + statement.id"
+          class="grid transition-[grid-template-rows] duration-300 ease-out"
+          [class]="open().has(statement.id) ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
+        >
+          <div class="overflow-hidden">
+            @if (statement.bodyKey) {
+              <p class="mt-4 text-sm leading-relaxed text-slate-400">{{ i18n.t(statement.bodyKey) }}</p>
+            }
+            @if (statement.values) {
+              <ul class="mt-4 space-y-4">
+                @for (value of statement.values; track value.titleKey) {
+                  <li>
+                    <p class="text-sm font-semibold text-white">{{ i18n.t(value.titleKey) }}</p>
+                    <p class="mt-1 text-sm leading-relaxed text-slate-400">{{ i18n.t(value.descriptionKey) }}</p>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        </div>
+      </div>
+    }
   </div>
 </section>

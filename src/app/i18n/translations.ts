@@ -80,26 +80,6 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'process.deliver.description':
       'The finished packaging is prepared to the agreed requirements and ready for your product.',
 
-    'why.eyebrow': 'Why Plastiban',
-    'why.heading': 'Experience you can build on.',
-    'why.intro': 'We work alongside our clients, not simply as a supplier.',
-    'why.since.title': 'Since 1989',
-    'why.since.description': 'More than three decades of knowledge and manufacturing experience.',
-    'why.inHouse.title': 'In-house production',
-    'why.inHouse.description':
-      'Keeping the process in our own facilities, from development through production, means closer control over quality and execution, better communication and greater flexibility.',
-    'why.measure.title': 'Made to measure',
-    'why.measure.description':
-      'Packaging is rarely one size fits all. Every project is developed around your product, brand and requirements.',
-    'why.reach.title': 'Lebanon & U.A.E.',
-    'why.reach.description': 'A presence in both markets, serving clients across the region.',
-    'why.consistency.title': 'Consistency',
-    'why.consistency.description':
-      'The same quality, precision and finish across an entire production run.',
-    'why.detail.title': 'Attention to detail',
-    'why.detail.description':
-      'Materials, dimensions, structure and finishing all shape how the result looks, feels and performs.',
-
     'vision.eyebrow': 'Looking ahead',
     'vision.heading': 'To create packaging that people remember.',
     'vision.body':
@@ -113,6 +93,17 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'vision.sustainabilityHeading': 'Better packaging starts with better decisions.',
     'vision.sustainabilityBody':
       'We continuously look for ways to improve the materials, processes and practices behind our products. As packaging requirements evolve, we believe responsible manufacturing means continually evaluating how we design, produce and deliver.',
+    'vision.valuesLabel': 'Our values',
+    'vision.valuesHeading': 'What every project is held to.',
+    'vision.values.measure.title': 'Made to measure',
+    'vision.values.measure.description':
+      'Packaging is rarely one size fits all. Every project is developed around your product, brand and requirements.',
+    'vision.values.consistency.title': 'Consistency',
+    'vision.values.consistency.description':
+      'The same quality, precision and finish across an entire production run.',
+    'vision.values.detail.title': 'Attention to detail',
+    'vision.values.detail.description':
+      'Materials, dimensions, structure and finishing all shape how the result looks, feels and performs.',
 
     'products.eyebrow': 'Portfolio',
     'products.heading': "Ideas we've brought to life.",
@@ -270,25 +261,6 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'process.deliver.title': 'التسليم',
     'process.deliver.description': 'يُجهَّز التغليف النهائي وفق المتطلبات المتفق عليها وجاهزاً لمنتجك.',
 
-    'why.eyebrow': 'لماذا بلاستيبان',
-    'why.heading': 'خبرة يمكنك البناء عليها.',
-    'why.intro': 'نعمل إلى جانب عملائنا، لا كمورّد فحسب.',
-    'why.since.title': 'منذ 1989',
-    'why.since.description': 'أكثر من ثلاثة عقود من المعرفة وخبرة التصنيع.',
-    'why.inHouse.title': 'إنتاج داخلي',
-    'why.inHouse.description':
-      'إبقاء العملية داخل منشآتنا، من التطوير حتى الإنتاج، يعني رقابة أدق على الجودة والتنفيذ، وتواصلاً أفضل ومرونة أكبر.',
-    'why.measure.title': 'مفصّل على القياس',
-    'why.measure.description':
-      'نادراً ما يناسب تغليف واحد كل المنتجات. كل مشروع يُطوَّر حول منتجك وعلامتك ومتطلباتك.',
-    'why.reach.title': 'لبنان والإمارات',
-    'why.reach.description': 'حضور في السوقين، وخدمة لعملاء في أنحاء المنطقة.',
-    'why.consistency.title': 'ثبات الجودة',
-    'why.consistency.description': 'الجودة والدقة والتشطيب ذاتها عبر خط الإنتاج بالكامل.',
-    'why.detail.title': 'اهتمام بالتفاصيل',
-    'why.detail.description':
-      'المواد والأبعاد والهيكل والتشطيب، كلها تصنع شكل النتيجة وملمسها وأداءها.',
-
     'vision.eyebrow': 'نظرتنا إلى الأمام',
     'vision.heading': 'أن نصنع تغليفاً يبقى في الذاكرة.',
     'vision.body':
@@ -301,6 +273,16 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'vision.sustainabilityHeading': 'التغليف الأفضل يبدأ بقرارات أفضل.',
     'vision.sustainabilityBody':
       'نبحث باستمرار عن طرق لتحسين المواد والعمليات والممارسات التي تقف خلف منتجاتنا. ومع تطوّر متطلبات التغليف، نرى أن التصنيع المسؤول يعني المراجعة الدائمة لطريقة تصميمنا وإنتاجنا وتسليمنا.',
+    'vision.valuesLabel': 'قيمنا',
+    'vision.valuesHeading': 'ما نلتزم به في كل مشروع.',
+    'vision.values.measure.title': 'مفصّل على القياس',
+    'vision.values.measure.description':
+      'نادراً ما يناسب تغليف واحد كل المنتجات. كل مشروع يُطوَّر حول منتجك وعلامتك ومتطلباتك.',
+    'vision.values.consistency.title': 'ثبات الجودة',
+    'vision.values.consistency.description': 'الجودة والدقة والتشطيب ذاتها عبر خط الإنتاج بالكامل.',
+    'vision.values.detail.title': 'اهتمام بالتفاصيل',
+    'vision.values.detail.description':
+      'المواد والأبعاد والهيكل والتشطيب، كلها تصنع شكل النتيجة وملمسها وأداءها.',
     'products.eyebrow': 'أعمالنا',
     'products.heading': 'أفكار حوّلناها إلى واقع.',
     'products.intro':
