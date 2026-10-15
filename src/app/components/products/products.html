@@ -1,3 +1,29 @@
+<!-- Edge hints for a scrolling pill row. Each appears only when there is
+     actually more to reach that way, so it reads as information rather than
+     permanent decoration. -->
+<ng-template #edgeHints let-start="start" let-end="end">
+  @if (start) {
+    <div
+      [class]="i18n.isRtl() ? 'pill-fade start-0 pill-fade-to-left' : 'pill-fade start-0 pill-fade-to-right'"
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 24 24" [class]="i18n.isRtl() ? 'h-4 w-4 rotate-180 text-royal-600' : 'h-4 w-4 text-royal-600'" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 5l-7 7 7 7" />
+      </svg>
+    </div>
+  }
+  @if (end) {
+    <div
+      [class]="i18n.isRtl() ? 'pill-fade pill-fade-end end-0 pill-fade-to-right' : 'pill-fade pill-fade-end end-0 pill-fade-to-left'"
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 24 24" [class]="i18n.isRtl() ? 'h-4 w-4 rotate-180 text-royal-600' : 'h-4 w-4 text-royal-600'" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 5l7 7-7 7" />
+      </svg>
+    </div>
+  }
+</ng-template>
+
 <section
   id="products"
   class="flex min-h-[var(--section-h)] scroll-mt-[var(--header-h)] flex-col justify-center overflow-hidden bg-cream-50 px-6 py-16 lg:px-10"
@@ -16,29 +42,7 @@
   </div>
 
   <div class="relative mt-10 w-full">
-    <!-- Each edge hint appears only when there is actually more to reach that
-         way, so it reads as information rather than permanent decoration. -->
-    @if (pillsCanScrollStart()) {
-      <div
-        [class]="i18n.isRtl() ? 'pill-fade start-0 pill-fade-to-left' : 'pill-fade start-0 pill-fade-to-right'"
-        aria-hidden="true"
-      >
-        <svg viewBox="0 0 24 24" [class]="i18n.isRtl() ? 'h-4 w-4 rotate-180 text-royal-600' : 'h-4 w-4 text-royal-600'" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M15 5l-7 7 7 7" />
-        </svg>
-      </div>
-    }
-    @if (pillsCanScrollEnd()) {
-      <div
-        [class]="i18n.isRtl() ? 'pill-fade pill-fade-end end-0 pill-fade-to-right' : 'pill-fade pill-fade-end end-0 pill-fade-to-left'"
-        aria-hidden="true"
-      >
-        <svg viewBox="0 0 24 24" [class]="i18n.isRtl() ? 'h-4 w-4 rotate-180 text-royal-600' : 'h-4 w-4 text-royal-600'" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 5l7 7-7 7" />
-        </svg>
-      </div>
-    }
-
+    <ng-container *ngTemplateOutlet="edgeHints; context: { start: pillsCanScrollStart(), end: pillsCanScrollEnd() }" />
     <div #pills class="w-full overflow-x-auto no-scrollbar" (scroll)="updatePillOverflow()">
       <div class="mx-auto flex w-max flex-nowrap gap-3 px-6" role="group" [attr.aria-label]="i18n.t('products.filters')">
       <button
@@ -63,32 +67,35 @@
     </div>
   </div>
 
-  <!-- The sub-category row, only once a category narrows the field. It wraps
-       rather than scrolls: seven short labels fit on one line on a desktop and
-       on two or three on a phone, which beats hiding half of them off-screen
-       behind a scroll the first row's chevrons would not be describing. -->
+  <!-- The sub-category row, only once a category narrows the field. It scrolls
+       on one line like the category row above it rather than wrapping, so the
+       two rows read as a pair and the strip below never jumps down a line. -->
   @if (subCategories(); as lines) {
     @if (lines.length) {
-      <div class="mx-auto mt-3 w-full max-w-5xl px-6">
-        <div class="flex flex-wrap justify-center gap-2" role="group" [attr.aria-label]="i18n.t('products.subFilters')">
-          <button
-            type="button"
-            (click)="setLine('all')"
-            [class]="linePillClasses('all')"
-            [attr.aria-pressed]="activeLine() === 'all'"
-          >
-            {{ i18n.t('products.allTypes') }}
-          </button>
-          @for (sub of lines; track sub.line) {
+      <div class="relative mt-3 w-full">
+        <ng-container *ngTemplateOutlet="edgeHints; context: { start: linesCanScrollStart(), end: linesCanScrollEnd() }" />
+
+        <div #linePills class="w-full overflow-x-auto no-scrollbar" (scroll)="updatePillOverflow()">
+          <div class="mx-auto flex w-max flex-nowrap gap-2 px-6" role="group" [attr.aria-label]="i18n.t('products.subFilters')">
             <button
               type="button"
-              (click)="setLine(sub.line)"
-              [class]="linePillClasses(sub.line)"
-              [attr.aria-pressed]="activeLine() === sub.line"
+              (click)="setLine('all')"
+              [class]="linePillClasses('all')"
+              [attr.aria-pressed]="activeLine() === 'all'"
             >
-              {{ text(sub.name) }}
+              {{ i18n.t('products.allTypes') }}
             </button>
-          }
+            @for (sub of lines; track sub.line) {
+              <button
+                type="button"
+                (click)="setLine(sub.line)"
+                [class]="linePillClasses(sub.line)"
+                [attr.aria-pressed]="activeLine() === sub.line"
+              >
+                {{ text(sub.name) }}
+              </button>
+            }
+          </div>
         </div>
       </div>
     }

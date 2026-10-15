@@ -1,6 +1,7 @@
 import {
   Component,
   ElementRef,
+  Injector,
   NgZone,
   OnDestroy,
   afterNextRender,
@@ -9,7 +10,9 @@ import {
   inject,
   signal,
   viewChild,
+  WritableSignal,
 } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { TiltDirective } from '../../directives/tilt.directive';
 import { RevealDirective } from '../../directives/reveal.directive';
 import { TranslationService } from '../../i18n/translation.service';
@@ -32,7 +35,8 @@ interface SubCategory {
   /**
    * Folder holding this line's shots, inside its category's folder. Empty when
    * the category has no sub-categories at all and its shots sit directly in the
-   * category folder — Ribbons is filed that way.
+   * category folder — Ribbons, Cardboard Bags and Traditional Souvenir Boxes
+   * are filed that way.
    */
   folder: string;
   /**
@@ -112,37 +116,37 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
   ],
   printed: [
     {
-      name: { en: 'Digital Printed Boxes', ar: 'علب مطبوعة رقمياً' },
+      name: { en: 'Boxes', ar: 'علب' },
       description: { en: 'Full-colour boxes printed straight from your artwork.', ar: 'علب مطبوعة بألوان كاملة مباشرة من تصميمك.' },
       folder: 'boxes',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg'],
     },
     {
-      name: { en: 'Digital Printed Bags', ar: 'أكياس مطبوعة رقمياً' },
+      name: { en: 'Bags', ar: 'أكياس' },
       description: { en: 'Paper bags carrying your brand, printed to order.', ar: 'أكياس ورقية تحمل علامتك التجارية وتُطبع حسب الطلب.' },
       folder: 'bags',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg'],
     },
     {
-      name: { en: 'Digital Printed Cards', ar: 'بطاقات مطبوعة رقمياً' },
+      name: { en: 'Cards', ar: 'بطاقات' },
       description: { en: 'Thank-you and greeting cards for every occasion.', ar: 'بطاقات شكر وتهنئة لكل المناسبات.' },
       folder: 'cards',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg'],
     },
     {
-      name: { en: 'Digital Printed Wrapping Papers', ar: 'أوراق تغليف مطبوعة رقمياً' },
+      name: { en: 'Wrapping Papers', ar: 'أوراق تغليف' },
       description: { en: 'Wrapping paper in your own pattern or logo.', ar: 'ورق تغليف بنقشتك أو شعارك الخاص.' },
       folder: 'wrapping_papers',
       images: ['1.jpeg'],
     },
     {
-      name: { en: 'Digital Printed Table Numbers', ar: 'أرقام طاولات مطبوعة رقمياً' },
+      name: { en: 'Table Numbers', ar: 'أرقام طاولات' },
       description: { en: 'Table numbers for weddings and events.', ar: 'أرقام طاولات للأعراس والمناسبات.' },
       folder: 'table_numbers',
       images: ['1.jpeg', '2.jpeg'],
     },
     {
-      name: { en: 'Digital Printed Stickers', ar: 'ملصقات مطبوعة رقمياً' },
+      name: { en: 'Stickers', ar: 'ملصقات' },
       description: { en: 'Die-cut stickers and labels in any shape.', ar: 'ملصقات وبطاقات مقصوصة بأي شكل تريده.' },
       folder: 'stickers',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg'],
@@ -194,22 +198,11 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
   ],
   bags: [
     {
-      name: { en: 'Fixed Ribbon', ar: 'شريط ثابت' },
-      description: { en: 'Paper bag closed with a ribbon fixed in place.', ar: 'كيس ورقي يُغلق بشريط مثبّت في مكانه.' },
-      folder: 'fixed_ribbon',
-      images: ['1.jpeg'],
-    },
-    {
-      name: { en: 'With Ribbon', ar: 'بشريط' },
-      description: { en: 'Paper bag carried on ribbon handles.', ar: 'كيس ورقي بمقابض من الشريط.' },
-      folder: 'with_ribbon',
-      images: ['1.jpeg'],
-    },
-    {
-      name: { en: 'With Rope', ar: 'بحبل' },
-      description: { en: 'Paper bag carried on twisted rope handles.', ar: 'كيس ورقي بمقابض من الحبل المجدول.' },
-      folder: 'with_rope',
-      images: ['1.jpeg', '2.jpeg'],
+      name: { en: 'Cardboard Bags', ar: 'أكياس كرتون' },
+      description: { en: 'Paper bags finished with ribbon or rope handles.', ar: 'أكياس ورقية بمقابض من الشريط أو الحبل.' },
+      // No sub-folders: these shots sit directly in `public/products/cardboard_bags`.
+      folder: '',
+      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg'],
     },
   ],
   plastic: [
@@ -237,22 +230,11 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
   ],
   souvenir: [
     {
-      name: { en: 'Top/Base Cardboard', ar: 'غطاء وقاعدة كرتون' },
-      description: { en: 'Two-piece cardboard souvenir box.', ar: 'علبة تذكارية من الكرتون بقطعتين.' },
-      folder: 'top_base_cardboard',
-      images: ['1.jpeg', '2.jpeg'],
-    },
-    {
-      name: { en: 'Cardboard Base & Top Plastic', ar: 'قاعدة كرتون وغطاء بلاستيك' },
-      description: { en: 'Cardboard base under a clear plastic lid.', ar: 'قاعدة من الكرتون بغطاء بلاستيكي شفاف.' },
-      folder: 'cardboard_base_top_plastic',
-      images: ['1.jpeg', '2.jpeg', '3.jpeg'],
-    },
-    {
-      name: { en: 'Top/Base Cardboard & Middle Plastic', ar: 'غطاء وقاعدة كرتون ووسط بلاستيك' },
-      description: { en: 'Cardboard lid and base around a plastic middle.', ar: 'غطاء وقاعدة من الكرتون مع وسط بلاستيكي.' },
-      folder: 'top_base_cardboard_middle_plastic',
-      images: ['1.jpeg', '2.jpeg'],
+      name: { en: 'Traditional Souvenir Boxes', ar: 'علب تذكارية تقليدية' },
+      description: { en: 'Cardboard souvenir boxes, on their own or paired with plastic.', ar: 'علب تذكارية من الكرتون، وحدها أو مع البلاستيك.' },
+      // No sub-folders: these shots sit directly in `public/products/traditional_souvenir_boxes`.
+      folder: '',
+      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg'],
     },
   ],
 };
@@ -318,11 +300,18 @@ const SHOWCASE: Product[] = woven(
   ),
 );
 
-/** How many cards fan out on each side of the front one. */
+/**
+ * How many cards fan out on each side of the front one. Always the full width,
+ * even for a line with only a few shots: slots wrap around the list, so a short
+ * line repeats its pictures round the fan rather than leaving one lonely card.
+ */
 const DECK_REACH = 4;
 
-/** How many times the catalogue is repeated across the marquee track. */
-const TRACK_COPIES = 3;
+/**
+ * The fewest times the list is repeated across the marquee track. A short list
+ * gets more copies than this - see `trackCopies`.
+ */
+const MIN_TRACK_COPIES = 3;
 
 /** Folds an unbounded slot number back onto a valid list index. */
 function wrap(value: number, count: number): number {
@@ -411,7 +400,7 @@ function woven(runs: Product[][]): Product[] {
 
 @Component({
   selector: 'app-products',
-  imports: [TiltDirective, RevealDirective],
+  imports: [NgTemplateOutlet, TiltDirective, RevealDirective],
   templateUrl: './products.html',
   styleUrl: './products.css',
   host: {
@@ -465,14 +454,18 @@ export class Products implements OnDestroy {
   });
 
   /**
-   * The list repeated three times. Two copies would be enough for the marquee's
-   * one-way drift, but the user can drag either way: parking the viewport on the
-   * middle copy leaves a whole set of runway behind *and* ahead, so a backwards
-   * drag has real content to reveal instead of dead-ending on scrollLeft = 0.
+   * How many times the list is repeated. The viewport is parked within one set
+   * of the start, so a backwards drag has real content to reveal instead of
+   * dead-ending on scrollLeft = 0, and there has to be a screen's width plus a
+   * set of runway beyond it. Three copies cover that for a long list, but a
+   * line of one or two shots is narrower than the screen, so `measure()` raises
+   * this until the copies fill it.
    */
+  private readonly trackCopies = signal(MIN_TRACK_COPIES);
+
   protected readonly trackProducts = computed(() => {
     const list = this.filteredProducts();
-    return [...list, ...list, ...list];
+    return Array.from({ length: this.trackCopies() }, () => list).flat();
   });
 
   /**
@@ -502,11 +495,6 @@ export class Products implements OnDestroy {
   /** Drives the fan's spacing; cards re-place themselves as the window resizes. */
   private readonly viewportWidth = signal(typeof window === 'undefined' ? 1440 : window.innerWidth);
 
-  /** How far the fan spreads either side — never so far a product repeats. */
-  protected readonly deckReach = computed(() => {
-    const count = this.filteredProducts().length;
-    return Math.max(1, Math.min(DECK_REACH, Math.floor((count - 1) / 2)));
-  });
 
   /**
    * Where the fan currently sits, as a fractional slot. At rest it equals the
@@ -528,7 +516,7 @@ export class Products implements OnDestroy {
     if (this.lightboxAnchor() === null || count === 0) {
       return [];
     }
-    const reach = this.deckReach();
+    const reach = DECK_REACH;
     const centre = Math.round(this.deckPosition());
     const cards = [];
     for (let offset = -reach; offset <= reach; offset++) {
@@ -541,11 +529,15 @@ export class Products implements OnDestroy {
   private readonly viewport = viewChild<ElementRef<HTMLDivElement>>('viewport');
   private readonly track = viewChild<ElementRef<HTMLDivElement>>('track');
   private readonly pills = viewChild<ElementRef<HTMLDivElement>>('pills');
+  private readonly linePills = viewChild<ElementRef<HTMLDivElement>>('linePills');
 
   protected readonly pillsCanScrollStart = signal(false);
   protected readonly pillsCanScrollEnd = signal(false);
+  protected readonly linesCanScrollStart = signal(false);
+  protected readonly linesCanScrollEnd = signal(false);
 
   private readonly zone = inject(NgZone);
+  private readonly injector = inject(Injector);
 
   private rafId = 0;
   private singleSetWidth = 0;
@@ -579,16 +571,22 @@ export class Products implements OnDestroy {
       this.rafId = requestAnimationFrame(this.step);
     });
 
-    // Translated category names are a different length, so the row may start or
-    // stop overflowing when the language changes.
+    // Translated names are a different length, so a row may start or stop
+    // overflowing when the language changes; the sub-category row is rebuilt,
+    // with a different set of pills, whenever the category does.
     effect(() => {
       this.i18n.lang();
-      queueMicrotask(() => this.updatePillOverflow());
+      this.subCategories();
+      afterNextRender(() => this.updatePillOverflow(), { injector: this.injector });
     });
 
+    // Re-park whenever the track is rebuilt or the screen it has to fill
+    // changes size. Waits for the render, since the copies are measured.
     effect(() => {
       this.filteredProducts();
-      queueMicrotask(() => this.recentre());
+      this.trackCopies();
+      this.viewportWidth();
+      afterNextRender(() => this.recentre(), { injector: this.injector });
     });
 
     // Lock the page behind the lightbox so a scroll gesture can't drift the
@@ -630,20 +628,31 @@ export class Products implements OnDestroy {
     return this.i18n.t(CATEGORY_LABEL_KEYS[category]);
   }
 
-  /**
-   * Whether the category row has more pills hidden past either edge. Chrome
-   * reports scrollLeft as a negative offset under RTL, so distance travelled is
-   * taken as an absolute value and both directions share one calculation.
-   */
+  /** Refreshes the edge hints on both pill rows. */
   updatePillOverflow(): void {
-    const el = this.pills()?.nativeElement;
+    this.updateRowOverflow(this.pills()?.nativeElement, this.pillsCanScrollStart, this.pillsCanScrollEnd);
+    this.updateRowOverflow(this.linePills()?.nativeElement, this.linesCanScrollStart, this.linesCanScrollEnd);
+  }
+
+  /**
+   * Whether a pill row has more pills hidden past either edge. Chrome reports
+   * scrollLeft as a negative offset under RTL, so distance travelled is taken
+   * as an absolute value and both directions share one calculation.
+   */
+  private updateRowOverflow(
+    el: HTMLElement | undefined,
+    canScrollStart: WritableSignal<boolean>,
+    canScrollEnd: WritableSignal<boolean>,
+  ): void {
     if (!el) {
+      canScrollStart.set(false);
+      canScrollEnd.set(false);
       return;
     }
     const travelled = Math.abs(el.scrollLeft);
     const maximum = el.scrollWidth - el.clientWidth;
-    this.pillsCanScrollStart.set(travelled > 1);
-    this.pillsCanScrollEnd.set(travelled < maximum - 1);
+    canScrollStart.set(travelled > 1);
+    canScrollEnd.set(travelled < maximum - 1);
   }
 
   private readonly step = (ts: number): void => {
@@ -664,15 +673,44 @@ export class Products implements OnDestroy {
     this.rafId = requestAnimationFrame(this.step);
   };
 
-  private measure(): void {
-    const trackEl = this.track()?.nativeElement;
-    this.singleSetWidth = trackEl ? trackEl.scrollWidth / TRACK_COPIES : 0;
+  /**
+   * Measures one set as the distance from the first card to its repeat in the
+   * next copy, which counts the gap between copies but not the track's padding.
+   * Returns false when the track needs a different number of copies, in which
+   * case it re-renders and is measured again.
+   */
+  private measure(): boolean {
+    const el = this.viewport()?.nativeElement;
+    const cards = this.track()?.nativeElement.children;
+    const count = this.filteredProducts().length;
+    if (!el || !cards || count === 0 || cards.length <= count) {
+      this.singleSetWidth = 0;
+      return true;
+    }
+    const first = cards[0] as HTMLElement;
+    const repeat = cards[count] as HTMLElement;
+    this.singleSetWidth = repeat.offsetLeft - first.offsetLeft;
+    if (this.singleSetWidth <= 0) {
+      return true;
+    }
+    // Folding keeps the viewport within [0.5, 1.5) sets of the start, so the
+    // track has to reach a screen's width past 1.5 sets, plus half a set of
+    // slack for a fling to run into before it is folded back.
+    const needed = Math.max(MIN_TRACK_COPIES, Math.ceil(el.clientWidth / this.singleSetWidth) + 2);
+    if (needed !== this.trackCopies()) {
+      this.singleSetWidth = 0;
+      this.trackCopies.set(needed);
+      return false;
+    }
+    return true;
   }
 
-  /** Parks the strip on the middle copy, so both directions have runway. */
+  /** Parks the strip one set in, so both directions have runway. */
   private recentre(): void {
     const el = this.viewport()?.nativeElement;
-    this.measure();
+    if (!this.measure()) {
+      return;
+    }
     this.scrollPos = this.singleSetWidth;
     if (el) {
       el.scrollLeft = this.scrollPos;
@@ -890,7 +928,7 @@ export class Products implements OnDestroy {
    */
   protected cardOpacity(slot: number): number {
     const distance = Math.abs(slot - this.deckPosition());
-    return Math.max(0, Math.min(1, (this.deckReach() - distance) / 1.1));
+    return Math.max(0, Math.min(1, (DECK_REACH - distance) / 1.1));
   }
 
   protected cardZIndex(slot: number): number {

@@ -118,7 +118,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'products.allTypes': 'All types',
 
     'category.hard': 'Hard Cover Boxes',
-    'category.printed': 'Digital Printed',
+    'category.printed': 'Digital Printing',
     'category.cardboard': 'Cardboard Boxes',
     'category.bags': 'Cardboard Bags',
     'category.plastic': 'Plastic Boxes',
