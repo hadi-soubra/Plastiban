@@ -29,6 +29,16 @@ export class About {
       descriptionKey: 'about.timeline.founded.description',
     },
     {
+      yearKey: 'about.timeline.milestone1.year',
+      titleKey: 'about.timeline.milestone1.title',
+      descriptionKey: 'about.timeline.milestone1.description',
+    },
+    {
+      yearKey: 'about.timeline.milestone2.year',
+      titleKey: 'about.timeline.milestone2.title',
+      descriptionKey: 'about.timeline.milestone2.description',
+    },
+    {
       yearKey: 'about.timeline.expansion.year',
       titleKey: 'about.timeline.expansion.title',
       descriptionKey: 'about.timeline.expansion.description',

@@ -39,20 +39,16 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'about.eyebrow': 'Who we are',
     'about.heading': 'More than packaging. A complete manufacturing partner.',
-    'about.lead':
-      'For over 35 years, Plastiban has been creating packaging solutions that combine functionality, presentation and craftsmanship.',
-    'about.body1':
-      'Since 1989, Plastiban has combined experience, craftsmanship and manufacturing expertise to create packaging that does more than protect a product. It becomes part of the experience.',
-    'about.body2':
-      'Today, with operations in Lebanon and the U.A.E., we work with businesses and brands to develop packaging solutions tailored to their identity, products and requirements.',
-    'about.body3':
-      'Packaging should represent the product inside, reflect the identity of the brand and create a memorable experience for the person receiving it. That is the idea the company was built on, and the one we return to on every project.',
-    'about.body4':
-      'Over the years, our experience has grown alongside the packaging industry. We have developed our capabilities, expanded our product offering and continued to invest in the way we design and manufacture.',
     'about.timelineLabel': 'How we got here',
     'about.timeline.founded.year': '1989',
     'about.timeline.founded.title': 'Plastiban is founded',
     'about.timeline.founded.description': 'The beginning of our packaging journey.',
+    'about.timeline.milestone1.year': '2000',
+    'about.timeline.milestone1.title': 'Placeholder milestone',
+    'about.timeline.milestone1.description': 'Placeholder description for this milestone.',
+    'about.timeline.milestone2.year': '2010',
+    'about.timeline.milestone2.title': 'Placeholder milestone',
+    'about.timeline.milestone2.description': 'Placeholder description for this milestone.',
     'about.timeline.expansion.year': '2022',
     'about.timeline.expansion.title': 'U.A.E. expansion',
     'about.timeline.expansion.description': 'A second branch opens, widening our reach across the region.',
@@ -238,20 +234,16 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'about.eyebrow': 'من نحن',
     'about.heading': 'أكثر من تغليف. شريك تصنيع متكامل.',
-    'about.lead':
-      'منذ أكثر من 35 عاماً، تصنع بلاستيبان حلول تغليف تجمع بين الوظيفة والمظهر والحرفية.',
-    'about.body1':
-      'منذ عام 1989، تجمع بلاستيبان بين الخبرة والحرفية وقدرات التصنيع لصناعة تغليف لا يحمي المنتج فحسب، بل يصبح جزءاً من التجربة.',
-    'about.body2':
-      'اليوم، ومع عملياتنا في لبنان والإمارات، نعمل مع الشركات والعلامات التجارية لتطوير حلول تغليف مفصّلة على هويتها ومنتجاتها ومتطلباتها.',
-    'about.body3':
-      'نؤمن بأن التغليف يجب أن يعبّر عن المنتج في داخله، ويعكس هوية العلامة التجارية، ويترك أثراً لا يُنسى لدى من يتسلّمه. هذه الفكرة التي قامت عليها الشركة، ونعود إليها في كل مشروع.',
-    'about.body4':
-      'مع مرور السنوات، نمت خبرتنا مع نمو صناعة التغليف. طوّرنا قدراتنا، ووسّعنا تشكيلة منتجاتنا، وواصلنا الاستثمار في طريقة تصميمنا وتصنيعنا.',
     'about.timelineLabel': 'كيف وصلنا إلى هنا',
     'about.timeline.founded.year': '1989',
     'about.timeline.founded.title': 'تأسيس بلاستيبان',
     'about.timeline.founded.description': 'بداية رحلتنا في عالم التغليف.',
+    'about.timeline.milestone1.year': '2000',
+    'about.timeline.milestone1.title': 'محطة مؤقتة',
+    'about.timeline.milestone1.description': 'وصف مؤقت لهذه المحطة.',
+    'about.timeline.milestone2.year': '2010',
+    'about.timeline.milestone2.title': 'محطة مؤقتة',
+    'about.timeline.milestone2.description': 'وصف مؤقت لهذه المحطة.',
     'about.timeline.expansion.year': '2022',
     'about.timeline.expansion.title': 'التوسّع إلى الإمارات',
     'about.timeline.expansion.description': 'افتتاح فرع ثانٍ يوسّع حضورنا في المنطقة.',

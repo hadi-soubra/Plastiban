@@ -13,20 +13,9 @@
       >
         {{ i18n.t('about.heading') }}
       </h2>
-
-      <p [appReveal]="130" class="mt-5 max-w-2xl text-lg leading-relaxed text-navy-900/80">
-        {{ i18n.t('about.lead') }}
-      </p>
-
-      <div class="mt-6 max-w-2xl space-y-4 text-base leading-relaxed text-slate-600">
-        <p [appReveal]="160">{{ i18n.t('about.body1') }}</p>
-        <p [appReveal]="200">{{ i18n.t('about.body2') }}</p>
-        <p [appReveal]="240">{{ i18n.t('about.body3') }}</p>
-        <p [appReveal]="280">{{ i18n.t('about.body4') }}</p>
-      </div>
     </div>
 
-    <!-- The history as dates rather than counters: three entries say more than
+    <!-- The history as dates rather than counters: a handful of entries say more than
          "35+ years" ever did, and they carry the U.A.E. branch with them. -->
     <div [appReveal]="200">
       <p class="text-xs font-bold uppercase tracking-widest text-royal-600">{{ i18n.t('about.timelineLabel') }}</p>
