@@ -1,0 +1,19 @@
+/* The Google Maps button rises in as the map finishes flying to the office.
+   The rise is on `translate`, so it does not fight the `-translate-x-1/2` that
+   centres the button, which lives on `transform`. */
+.map-open-button {
+  animation: map-open-rise 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+}
+
+@keyframes map-open-rise {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-open-button {
+    animation: none;
+  }
+}

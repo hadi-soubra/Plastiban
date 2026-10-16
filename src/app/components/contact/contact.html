@@ -10,29 +10,39 @@
          placement. DOM order IS the mobile order, which also gives the form the
          tab order it deserves on a phone. -->
     <div class="grid gap-12 lg:grid-cols-2 lg:gap-x-16 lg:gap-y-8">
-      <div class="lg:col-start-1 lg:row-start-1">
-        <p appReveal class="text-xs font-bold uppercase tracking-widest text-royal-400">{{ i18n.t('contact.eyebrow') }}</p>
+      <!-- On a phone the intro joins the full-bleed form below it as one light
+           panel: the negative margins reach out over the section's padding and
+           the colours flip to navy on white. The page then alternates navy,
+           light, navy from the process section down through the offices, with
+           no extra band. From sm up the form is a card on navy and the intro
+           goes back to white text on the section. -->
+      <div class="-mx-6 -mt-16 bg-white px-6 pt-16 sm:m-0 sm:bg-transparent sm:p-0 lg:col-start-1 lg:row-start-1">
+        <p appReveal class="text-xs font-bold uppercase tracking-widest text-royal-600 sm:text-royal-400">{{ i18n.t('contact.eyebrow') }}</p>
         <h2
           id="contact-heading"
           [appReveal]="80"
-          class="mt-3 font-display text-3xl font-extrabold leading-tight text-white sm:text-4xl"
+          class="mt-3 font-display text-3xl font-extrabold leading-tight text-navy-900 sm:text-4xl sm:text-white"
         >
           {{ i18n.t('contact.heading') }}
         </h2>
-        <p [appReveal]="150" class="mt-4 max-w-md text-base leading-relaxed text-slate-400">
+        <p [appReveal]="150" class="mt-4 max-w-md text-base leading-relaxed text-slate-600 sm:text-slate-400">
           {{ i18n.t('contact.intro') }}
         </p>
-        <p class="mt-3 max-w-md text-sm leading-relaxed text-slate-400">{{ i18n.t('contact.intro2') }}</p>
+        <p [appReveal]="190" class="mt-4 max-w-md text-base leading-relaxed text-slate-600 sm:text-slate-400">
+          {{ i18n.t('contact.intro2') }}
+        </p>
       </div>
 
       <!-- Full bleed on a phone. As a card it carried the section's px-6 and
            its own p-8 on every side, so a 390px screen left 278px for the
            fields: two gutters doing one gutter's job. The negative margin
            cancels the section padding, and the rounding and the card look come
-           back from sm up where there is width to spare for them. -->
+           back from sm up where there is width to spare for them. On a phone
+           -mt-12 also closes the grid gap, so it continues the intro's panel
+           instead of leaving a navy stripe between them. -->
       <div
         [appReveal]="120"
-        class="-mx-6 flex h-full flex-col bg-white px-6 py-10 sm:mx-0 sm:rounded-2xl sm:p-8 lg:col-start-2 lg:row-start-1 lg:row-span-3"
+        class="-mx-6 -mt-12 flex h-full flex-col bg-white px-6 py-10 sm:mx-0 sm:mt-0 sm:rounded-2xl sm:p-8 lg:col-start-2 lg:row-start-1 lg:row-span-3"
       >
         <h3 class="font-display text-xl font-bold text-navy-900">{{ i18n.t('contact.form.title') }}</h3>
 
@@ -45,9 +55,13 @@
             <legend class="mb-1.5 text-sm font-semibold text-navy-900">
               {{ i18n.t('contact.form.office') }}
             </legend>
-            <div class="grid grid-cols-2 gap-3">
+            <!-- Each option is sized by its own name and shares out the space
+                 left over, rather than taking an equal half: "United Arab
+                 Emirates" is three times "Lebanon", and halves made it wrap on
+                 most phones. -->
+            <div class="flex gap-3">
               @for (office of offices; track office.id) {
-                <label class="cursor-pointer">
+                <label class="flex-auto cursor-pointer">
                   <!-- Visually hidden, not removed: it stays a real radio, so the
                        group keeps arrow-key navigation and its native semantics.
                        The focus ring is carried by the label instead. -->
@@ -62,9 +76,12 @@
                        same cream as every other field, so the picker reads as part
                        of the form rather than as a pair of buttons. Focus uses
                        `outline`, not another ring, so the two indicators can't
-                       overwrite each other on a focused-and-checked option. -->
+                       overwrite each other on a focused-and-checked option.
+                       Slightly smaller type and padding on a phone; on the very
+                       narrowest screens the name still wraps, centred, and
+                       h-full keeps the two options the same height. -->
                   <span
-                    class="flex items-center justify-center rounded-lg bg-cream-100 px-4 py-3 text-sm font-semibold text-slate-600 ring-1 ring-navy-900/10 transition peer-hover:bg-navy-900/5 peer-checked:ring-2 peer-checked:ring-navy-900 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-navy-900"
+                    class="flex h-full items-center justify-center text-balance rounded-lg bg-cream-100 px-2.5 py-3 text-center text-[13px] font-semibold sm:px-4 sm:text-sm text-slate-600 ring-1 ring-navy-900/10 transition peer-hover:bg-navy-900/5 peer-checked:ring-2 peer-checked:ring-navy-900 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-navy-900"
                   >
                     {{ i18n.t(office.pickerKey) }}
                   </span>
@@ -209,6 +226,24 @@
           <!-- Leaflet positions tooltips and controls with LTR arithmetic, so
                the canvas stays LTR; only the label text follows the locale. -->
           <div #map dir="ltr" class="h-72 w-full"></div>
+
+          <!-- Appears once a pin has zoomed the map in. Above Leaflet's own
+               controls (z-index 1000), and centred along the bottom edge so it
+               clears the reset button in the corner. -->
+          @if (focusedOffice(); as office) {
+            <a
+              [href]="office.mapUrl"
+              target="_blank"
+              rel="noopener"
+              class="map-open-button absolute bottom-4 left-1/2 z-[1001] inline-flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full bg-navy-900 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-navy-950/40 ring-1 ring-white/15 transition-colors hover:bg-royal-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" />
+                <circle cx="12" cy="9.5" r="2.5" />
+              </svg>
+              {{ i18n.t('contact.map.open') }}
+            </a>
+          }
         </div>
         <p class="mt-3 shrink-0 text-xs text-slate-500">{{ i18n.t('contact.map.hint') }}</p>
       </div>

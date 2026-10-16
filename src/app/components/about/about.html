@@ -13,6 +13,10 @@
       >
         {{ i18n.t('about.heading') }}
       </h2>
+
+      <p [appReveal]="130" class="mt-5 max-w-2xl text-lg leading-relaxed text-navy-900/80">
+        {{ i18n.t('about.body') }}
+      </p>
     </div>
 
     <!-- The history as dates rather than counters: a handful of entries say more than
@@ -22,15 +26,51 @@
 
       <ol class="mt-6 border-t border-navy-900/10">
         @for (milestone of milestones; track milestone.yearKey; let i = $index) {
-          <li [appReveal]="260 + i * 90" class="flex gap-5 border-b border-navy-900/10 py-5">
-            <!-- Forced LTR: a year is a number, and bidi otherwise reorders
-                 "1989" against the Arabic text beside it. -->
-            <span dir="ltr" class="w-16 shrink-0 font-display text-lg font-extrabold text-royal-600">
-              {{ i18n.t(milestone.yearKey) }}
-            </span>
-            <div>
-              <p class="font-semibold text-navy-900">{{ i18n.t(milestone.titleKey) }}</p>
-              <p class="mt-1 text-sm leading-relaxed text-slate-600">{{ i18n.t(milestone.descriptionKey) }}</p>
+          <li [appReveal]="260 + i * 90" class="border-b border-navy-900/10">
+            <!-- The year and title are the toggle, so the timeline reads as a
+                 column of dates and each story opens on demand, the same way
+                 the vision band below it works. -->
+            <button
+              type="button"
+              class="flex w-full items-start gap-5 py-5 text-start"
+              [attr.aria-expanded]="open().has(milestone.yearKey)"
+              [attr.aria-controls]="'milestone-' + i"
+              (click)="toggle(milestone.yearKey)"
+            >
+              <!-- Forced LTR: a year is a number, and bidi otherwise reorders
+                   "1989" against the Arabic text beside it. -->
+              <span dir="ltr" class="w-16 shrink-0 font-display text-lg font-extrabold text-royal-600">
+                {{ i18n.t(milestone.yearKey) }}
+              </span>
+              <span class="flex-1 pt-0.5 font-semibold text-navy-900">{{ i18n.t(milestone.titleKey) }}</span>
+              <svg
+                viewBox="0 0 24 24"
+                class="mt-1 h-5 w-5 shrink-0 text-royal-600 transition-transform duration-300"
+                [class.rotate-180]="open().has(milestone.yearKey)"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+
+            <!-- Grid rows from 0fr to 1fr collapse to the text's real height
+                 without measuring it. Indented past the year column so the
+                 description sits under its title. -->
+            <div
+              [id]="'milestone-' + i"
+              class="grid transition-[grid-template-rows] duration-300 ease-out"
+              [class]="open().has(milestone.yearKey) ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
+            >
+              <div class="overflow-hidden">
+                <p class="ps-[5.25rem] pb-5 pe-10 text-sm leading-relaxed text-slate-600">
+                  {{ i18n.t(milestone.descriptionKey) }}
+                </p>
+              </div>
             </div>
           </li>
         }

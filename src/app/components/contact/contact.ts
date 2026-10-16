@@ -48,6 +48,9 @@ interface OfficeLocation {
   lng: number;
 }
 
+/** Street level: close enough to pick out the building and the roads to it. */
+const FOCUS_ZOOM = 16;
+
 @Component({
   selector: 'app-contact',
   imports: [FormsModule, RevealDirective],
@@ -109,6 +112,9 @@ export class Contact implements OnDestroy {
   private resetButton?: HTMLButtonElement;
   private fitView?: () => void;
 
+  /** The office the map has zoomed in on, if any; it shows the Google Maps button. */
+  protected readonly focusedOffice = signal<OfficeLocation | null>(null);
+
   constructor() {
     afterNextRender(() => this.initMap());
 
@@ -125,8 +131,11 @@ export class Contact implements OnDestroy {
         this.resetButton.title = label;
         this.resetButton.setAttribute('aria-label', label);
       }
-      // Label widths differ per language, so the default view is refitted too.
-      this.fitView?.();
+      // Label widths differ per language, so the default view is refitted too -
+      // unless an office is zoomed in on, which the labels do not affect.
+      if (!this.focusedOffice()) {
+        this.fitView?.();
+      }
     });
   }
 
@@ -190,17 +199,17 @@ export class Contact implements OnDestroy {
         interactive: true,
       });
 
-      // Clicking the pin or its label both open that exact location in Google Maps.
-      const openInMaps = (): void => {
-        window.open(office.mapUrl, '_blank', 'noopener');
-      };
-      marker.on('click', openInMaps);
+      // The pin and its label both zoom in on the office. Opening Google Maps
+      // is then a deliberate second step, through the button that appears,
+      // rather than a tap that throws the visitor out of the site.
+      const focus = (): void => this.focusOffice(office);
+      marker.on('click', focus);
 
       const tooltipEl = marker.getTooltip()?.getElement();
       if (tooltipEl) {
         tooltipEl.style.cursor = 'pointer';
         L.DomEvent.disableClickPropagation(tooltipEl);
-        L.DomEvent.on(tooltipEl, 'click', openInMaps);
+        L.DomEvent.on(tooltipEl, 'click', focus);
       }
 
       return marker;
@@ -226,6 +235,17 @@ export class Contact implements OnDestroy {
     fit();
     this.fitView = fit;
 
+    // A tap on open map is a way back out to the overview. The labels are
+    // interactive tooltips, and Leaflet passes their clicks on to the map as
+    // well, so those are told apart by where they landed - otherwise tapping a
+    // label would zoom in and straight back out again.
+    map.on('click', (event: Leaflet.LeafletMouseEvent) => {
+      const target = event.originalEvent.target as Element | null;
+      if (this.focusedOffice() && !target?.closest('.leaflet-tooltip, .leaflet-marker-icon')) {
+        this.resetMapView();
+      }
+    });
+
     const label = this.i18n.t('contact.map.reset');
     const ResetViewControl = L.Control.extend({
       onAdd: (): HTMLElement => {
@@ -239,7 +259,7 @@ export class Contact implements OnDestroy {
           '<path d="M9 3H3v6M15 3h6v6M21 15v6h-6M3 15v6h6" />' +
           '</svg>';
         L.DomEvent.disableClickPropagation(container);
-        L.DomEvent.on(button, 'click', () => fit());
+        L.DomEvent.on(button, 'click', () => this.resetMapView());
         this.resetButton = button;
         return container;
       },
@@ -250,9 +270,29 @@ export class Contact implements OnDestroy {
     // desktop; keep Leaflet's canvas sized correctly as that height changes.
     this.resizeObserver = new ResizeObserver(() => {
       map.invalidateSize({ animate: false });
-      fit();
+      const office = this.focusedOffice();
+      if (office) {
+        map.setView([office.lat, office.lng], FOCUS_ZOOM, { animate: false });
+      } else {
+        fit();
+      }
     });
     this.resizeObserver.observe(el);
+  }
+
+  /** Flies the map in on one office and offers the Google Maps link for it. */
+  private focusOffice(office: OfficeLocation): void {
+    this.focusedOffice.set(office);
+    this.map?.flyTo([office.lat, office.lng], FOCUS_ZOOM, { duration: 1.2 });
+  }
+
+  /**
+   * Back to the overview of both offices, from wherever the map is - zoomed in
+   * on an office or panned and zoomed by hand.
+   */
+  private resetMapView(): void {
+    this.focusedOffice.set(null);
+    this.fitView?.();
   }
 
   /** Phone numbers are displayed spaced but must dial unspaced. */

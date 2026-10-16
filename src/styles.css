@@ -96,7 +96,10 @@ html.lang-ar [class*="tracking-"] {
    desktop where the element is already in view; on a thumb-driven scroll it
    reads as the page struggling to keep up. */
 @media (max-width: 639px) {
-  .reveal {
+  /* `:not(.reveal-in)`, or this rule - later in the file and just as
+     specific - would beat `.reveal-in` and leave every element on a phone
+     parked 16px below where it belongs, long after it had faded in. */
+  .reveal:not(.reveal-in) {
     transform: translateY(16px);
   }
 

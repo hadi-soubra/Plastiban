@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RevealDirective } from '../../directives/reveal.directive';
 import { TranslationService } from '../../i18n/translation.service';
 
@@ -29,14 +29,9 @@ export class About {
       descriptionKey: 'about.timeline.founded.description',
     },
     {
-      yearKey: 'about.timeline.milestone1.year',
-      titleKey: 'about.timeline.milestone1.title',
-      descriptionKey: 'about.timeline.milestone1.description',
-    },
-    {
-      yearKey: 'about.timeline.milestone2.year',
-      titleKey: 'about.timeline.milestone2.title',
-      descriptionKey: 'about.timeline.milestone2.description',
+      yearKey: 'about.timeline.production.year',
+      titleKey: 'about.timeline.production.title',
+      descriptionKey: 'about.timeline.production.description',
     },
     {
       yearKey: 'about.timeline.expansion.year',
@@ -44,9 +39,25 @@ export class About {
       descriptionKey: 'about.timeline.expansion.description',
     },
     {
+      yearKey: 'about.timeline.luxury.year',
+      titleKey: 'about.timeline.luxury.title',
+      descriptionKey: 'about.timeline.luxury.description',
+    },
+    {
       yearKey: 'about.timeline.today.year',
       titleKey: 'about.timeline.today.title',
       descriptionKey: 'about.timeline.today.description',
     },
   ];
+
+  /** Which milestones have their description open, by year key. */
+  protected readonly open = signal<ReadonlySet<string>>(new Set());
+
+  protected toggle(yearKey: string): void {
+    this.open.update((current) => {
+      const next = new Set(current);
+      if (!next.delete(yearKey)) next.add(yearKey);
+      return next;
+    });
+  }
 }
