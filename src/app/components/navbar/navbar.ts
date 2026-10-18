@@ -103,7 +103,7 @@ export class Navbar implements OnDestroy {
     }
     event.preventDefault();
     this.closeMenu();
-    history.replaceState(null, '', id === HOME_ID ? '/' : `#${id}`);
+    history.replaceState(null, '', this.href(id));
     // Phones jump straight to the section. A smooth scroll there means a long
     // travel through several full-height sections on a small screen, which
     // reads as a delay rather than as motion. `instant` is required over
@@ -112,8 +112,13 @@ export class Navbar implements OnDestroy {
     document.getElementById(id)?.scrollIntoView({ behavior, block: 'start' });
   }
 
+  /**
+   * Spelled out in full: a bare "#id" resolves against <base href="/">, which
+   * would send a visitor on /ar/ to the English page.
+   */
   protected href(id: string): string {
-    return id === HOME_ID ? '/' : `#${id}`;
+    const home = this.i18n.path();
+    return id === HOME_ID ? home : `${home}#${id}`;
   }
 
   /** Mirrors the desktop-only breakpoint that gates section snapping. */

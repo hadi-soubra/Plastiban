@@ -9,6 +9,7 @@ import { Capabilities } from './components/capabilities/capabilities';
 import { Contact } from './components/contact/contact';
 import { Footer } from './components/footer/footer';
 import { SeoService } from './seo/seo.service';
+import { TranslationService } from './i18n/translation.service';
 
 /**
  * The paths the site answered on while it was three pages. The server 301s them
@@ -30,13 +31,17 @@ export class App {
   // Instantiating the service starts the effect that keeps the title and the
   // meta tags in step with the language.
   private readonly seo = inject(SeoService);
+  private readonly i18n = inject(TranslationService);
 
   constructor() {
-    afterNextRender(() => this.openLinkedSection());
+    afterNextRender(() => {
+      this.i18n.restoreSavedLang();
+      this.openLinkedSection();
+    });
   }
 
   /**
-   * One page, so any path other than "/" is folded back onto it, landing on
+   * One page per language, so any other path is folded back onto it, landing on
    * the section an old page path or a shared "#section" link pointed at. The
    * browser's own jump to the hash fires before the sections exist, so it is
    * done here once they have rendered.
@@ -44,8 +49,9 @@ export class App {
   private openLinkedSection(): void {
     const path = location.pathname.replace(/\/+$/, '') || '/';
     const id = LEGACY_PATHS[path] ?? location.hash.slice(1);
-    if (path !== '/') {
-      history.replaceState(null, '', id ? `/#${id}` : '/');
+    const home = this.i18n.path();
+    if (location.pathname !== home) {
+      history.replaceState(null, '', id ? `${home}#${id}` : home);
     }
     const target = id ? document.getElementById(id) : null;
     if (!target) {

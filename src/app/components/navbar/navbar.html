@@ -9,7 +9,7 @@
     [attr.aria-label]="i18n.t('nav.primary')"
   >
     <div class="flex min-w-0 flex-1 items-center">
-      <a href="/" class="flex min-w-0 items-center gap-3" (click)="navigateTo($event, homeId)">
+      <a [href]="href(homeId)" class="flex min-w-0 items-center gap-3" (click)="navigateTo($event, homeId)">
         <img
           src="logo.png"
           [alt]="i18n.t('brand.name')"
@@ -29,7 +29,7 @@
 
     <div class="hidden flex-1 items-center justify-center gap-8 lg:flex">
       <a
-        href="/"
+        [href]="href(homeId)"
         (click)="navigateTo($event, homeId)"
         [attr.aria-label]="i18n.t('nav.home')"
         [attr.aria-current]="activeLink() === homeId ? 'location' : null"
@@ -107,7 +107,7 @@
     <div class="absolute inset-x-0 top-full border-t border-white/10 bg-navy-500 px-6 py-4 shadow-lg shadow-navy-900/20 lg:hidden">
       <div class="flex flex-col gap-4">
         <a
-          href="/"
+          [href]="href(homeId)"
           class="flex items-center gap-2 text-sm font-medium transition-colors"
           [class]="activeLink() === homeId ? 'text-royal-400' : 'text-white/90'"
           [attr.aria-current]="activeLink() === homeId ? 'location' : null"
