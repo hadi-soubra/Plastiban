@@ -20,7 +20,7 @@ ANCHOR = '01.png'
 # Order matches the steps in process.ts.
 SUBJECTS = [
     ('01', 'a magnifying glass held over a simple closed box'),
-    ('02', 'a flat unfolded box dieline, showing fold lines and glue tabs'),
+    ('02', 'a flat unfolded box template in a cross shape, with short angled flaps on the ends of the side panels and one small cream-coloured tab, so it clearly reads as packaging; drawn only as bold outlines with the same thick stroke as the reference, no dashed lines, no thin lines'),
     ('03', 'a single half-assembled box with one flap standing open'),
     ('04', 'a neat stack of three identical finished closed boxes'),
     ('05', 'a closed box with a ribbon tied in a bow across its lid'),

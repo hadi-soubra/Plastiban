@@ -5,6 +5,7 @@ import { About } from './components/about/about';
 import { Vision } from './components/vision/vision';
 import { Products } from './components/products/products';
 import { Process } from './components/process/process';
+import { Capabilities } from './components/capabilities/capabilities';
 import { Contact } from './components/contact/contact';
 import { Footer } from './components/footer/footer';
 import { SeoService } from './seo/seo.service';
@@ -21,7 +22,7 @@ const LEGACY_PATHS: Record<string, string> = {
 
 @Component({
   selector: 'app-root',
-  imports: [Navbar, Hero, About, Vision, Products, Process, Contact, Footer],
+  imports: [Navbar, Hero, About, Vision, Products, Capabilities, Process, Contact, Footer],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

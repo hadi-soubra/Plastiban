@@ -22,6 +22,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'nav.whoWeAre': 'Who we are',
     'nav.vision': 'Vision & mission',
     'nav.portfolio': 'Portfolio',
+    'nav.capabilities': 'Manufacturing & printing',
     'nav.howWeWork': 'How we work',
     'nav.contact': 'Contact',
     'nav.toggleMenu': 'Toggle navigation menu',
@@ -63,6 +64,28 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'about.timeline.today.title': 'Two markets, one standard',
     'about.timeline.today.description':
       'We continue to deliver quality, customization and attention to detail across Lebanon and the U.A.E.',
+
+    'capabilities.eyebrow': 'What we do',
+    'capabilities.heading': 'Manufacturing & Printing',
+    'capabilities.intro':
+      'Printing, cutting and finishing all happen in our own facilities in Lebanon and the United Arab Emirates, so every stage of your packaging is made under one roof.',
+    'capabilities.offset.title': 'Offset Printing',
+    'capabilities.offset.description':
+      'High-quality printing for sharp details, consistent colors and professional packaging results.',
+    'capabilities.digital.title': 'Digital Printing',
+    'capabilities.digital.description': 'Flexible printing for customized designs and short production runs.',
+    'capabilities.dieCutting.title': 'Die-Cutting',
+    'capabilities.dieCutting.description':
+      'Precision cutting and creasing to create custom packaging shapes and structures.',
+    'capabilities.router.title': 'Router Cutting',
+    'capabilities.router.description':
+      'Accurate routing for intricate cuts, custom shapes and specialized packaging components.',
+    'capabilities.lamination.title': 'Lamination',
+    'capabilities.lamination.description':
+      'Protective and decorative finishes that enhance packaging durability and appearance.',
+    'capabilities.finishing.title': 'Premium Finishing',
+    'capabilities.finishing.description':
+      'Hot foil stamping, embossing, debossing and spot UV to add texture, shine, contrast and distinctive detail.',
 
     'process.eyebrow': 'How we work',
     'process.heading': 'From an idea to the finished package.',
@@ -205,6 +228,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'nav.whoWeAre': 'قصتنا',
     'nav.vision': 'رؤيتنا ورسالتنا',
     'nav.portfolio': 'أعمالنا',
+    'nav.capabilities': 'التصنيع والطباعة',
     'nav.howWeWork': 'كيف نعمل',
     'nav.contact': 'اتصل بنا',
     'nav.toggleMenu': 'فتح قائمة التنقل',
@@ -246,6 +270,24 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'about.timeline.today.title': 'سوقان، معيار واحد',
     'about.timeline.today.description':
       'نواصل تقديم الجودة والتخصيص والاهتمام بالتفاصيل في لبنان والإمارات.',
+
+    'capabilities.eyebrow': 'ما نقوم به',
+    'capabilities.heading': 'التصنيع والطباعة',
+    'capabilities.intro':
+      'تتمّ الطباعة والقص والتشطيب كلها داخل منشآتنا في لبنان والإمارات العربية المتحدة، فتُصنع كل مرحلة من تغليفك تحت سقف واحد.',
+    'capabilities.offset.title': 'طباعة الأوفست',
+    'capabilities.offset.description': 'طباعة عالية الجودة بتفاصيل حادّة وألوان ثابتة ونتائج تغليف احترافية.',
+    'capabilities.digital.title': 'الطباعة الرقمية',
+    'capabilities.digital.description': 'طباعة مرنة للتصاميم المخصّصة وكميات الإنتاج الصغيرة.',
+    'capabilities.dieCutting.title': 'القص والتكسير بالقوالب',
+    'capabilities.dieCutting.description': 'قصّ وتكسير دقيقان لصنع أشكال وهياكل تغليف مخصّصة.',
+    'capabilities.router.title': 'القص بالراوتر',
+    'capabilities.router.description': 'قصّ دقيق للتفاصيل المعقّدة والأشكال المخصّصة ومكوّنات التغليف الخاصة.',
+    'capabilities.lamination.title': 'التغليف الحراري (لامينيشن)',
+    'capabilities.lamination.description': 'تشطيبات واقية وزخرفية تعزّز متانة التغليف ومظهره.',
+    'capabilities.finishing.title': 'التشطيبات الفاخرة',
+    'capabilities.finishing.description':
+      'الطباعة بالرقائق الساخنة والنقش البارز والغائر وطبقة الـUV الموضعية، لإضافة الملمس واللمعان والتباين وتفاصيل مميّزة.',
 
     'process.eyebrow': 'كيف نعمل',
     'process.heading': 'من الفكرة إلى العلبة الجاهزة.',

@@ -1,0 +1,15 @@
+:host {
+  display: block;
+}
+
+/* No fade-in on a phone: the row moves on its own, and items fading up as they
+   slide in read as the page stuttering. The reveal classes still land, they are
+   just held at their finished state. Scoped by the component, so this outranks
+   the global .reveal rule without touching any other section. */
+@media (max-width: 639px) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

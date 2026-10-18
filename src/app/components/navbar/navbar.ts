@@ -50,6 +50,7 @@ export class Navbar implements OnDestroy {
       id: 'products',
       sections: [
         { labelKey: 'nav.portfolio', id: 'products' },
+        { labelKey: 'nav.capabilities', id: 'capabilities' },
         { labelKey: 'nav.howWeWork', id: 'process' },
       ],
     },
