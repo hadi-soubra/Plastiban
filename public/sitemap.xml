@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- lastmod: the date the page content last changed meaningfully (new
+     section, products, wording). Update it by hand then; leave it alone for
+     code-only deploys, or search engines learn to ignore it. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
@@ -6,6 +9,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://plastiban.com/"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://plastiban.com/ar/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://plastiban.com/"/>
+    <lastmod>2026-10-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -14,6 +18,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://plastiban.com/"/>
     <xhtml:link rel="alternate" hreflang="ar" href="https://plastiban.com/ar/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://plastiban.com/"/>
+    <lastmod>2026-10-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
