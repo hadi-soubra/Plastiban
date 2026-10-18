@@ -68,7 +68,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'capabilities.eyebrow': 'What we do',
     'capabilities.heading': 'Manufacturing & Printing',
     'capabilities.intro':
-      'Printing, cutting and finishing all happen in our own facilities in Lebanon and the United Arab Emirates, so every stage of your packaging is made under one roof.',
+      'Printing, cutting, and finishing are all handled in-house at our facilities in Lebanon and the United Arab Emirates, ensuring complete control and consistent quality at every stage of production.',
     'capabilities.offset.title': 'Offset Printing',
     'capabilities.offset.description':
       'High-quality printing for sharp details, consistent colors and professional packaging results.',
@@ -274,7 +274,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'capabilities.eyebrow': 'ما نقوم به',
     'capabilities.heading': 'التصنيع والطباعة',
     'capabilities.intro':
-      'تتمّ الطباعة والقص والتشطيب كلها داخل منشآتنا في لبنان والإمارات العربية المتحدة، فتُصنع كل مرحلة من تغليفك تحت سقف واحد.',
+      'تتمّ الطباعة والقص والتشطيب بالكامل داخل منشآتنا في لبنان والإمارات العربية المتحدة، ما يضمن تحكّماً كاملاً وجودة ثابتة في كل مرحلة من مراحل الإنتاج.',
     'capabilities.offset.title': 'طباعة الأوفست',
     'capabilities.offset.description': 'طباعة عالية الجودة بتفاصيل حادّة وألوان ثابتة ونتائج تغليف احترافية.',
     'capabilities.digital.title': 'الطباعة الرقمية',

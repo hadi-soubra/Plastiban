@@ -71,6 +71,10 @@ export class Navbar implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Also runs when the page is prerendered at build time, where there is no window.
+    if (typeof window === 'undefined') {
+      return;
+    }
     window.removeEventListener('scroll', this.onScroll);
     window.removeEventListener('resize', this.onScroll);
   }

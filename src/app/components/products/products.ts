@@ -607,7 +607,9 @@ export class Products implements OnDestroy {
     if (typeof document !== 'undefined') {
       document.body.style.overflow = '';
     }
-    window.removeEventListener('resize', this.onResize);
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.onResize);
+    }
     const el = this.viewport()?.nativeElement;
     if (el) {
       el.removeEventListener('pointerdown', this.onPointerDown);
