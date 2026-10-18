@@ -600,16 +600,17 @@ export class Products implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Also runs when the page is prerendered at build time, where there is no
+    // window and nothing below was ever started.
+    if (typeof window === 'undefined') {
+      return;
+    }
     cancelAnimationFrame(this.rafId);
     if (this.resumeTimer) {
       clearTimeout(this.resumeTimer);
     }
-    if (typeof document !== 'undefined') {
-      document.body.style.overflow = '';
-    }
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('resize', this.onResize);
-    }
+    document.body.style.overflow = '';
+    window.removeEventListener('resize', this.onResize);
     const el = this.viewport()?.nativeElement;
     if (el) {
       el.removeEventListener('pointerdown', this.onPointerDown);

@@ -141,6 +141,11 @@ export class Process implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Also runs when the page is prerendered at build time, where there is no
+    // window to measure the fill in and nothing was ever started.
+    if (typeof window === 'undefined') {
+      return;
+    }
     this.pauseWalking();
     clearTimeout(this.resumeTimer);
     this.observer?.disconnect();
