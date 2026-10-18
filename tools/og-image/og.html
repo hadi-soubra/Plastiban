@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Plus+Jakarta+Sans:wght@700;800&display=block" rel="stylesheet">
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; background: #12194a; }
+  .wrap { display: flex; width: 1200px; height: 630px; }
+  .text {
+    width: 600px; padding: 64px 56px 56px 64px; display: flex; flex-direction: column;
+    background: radial-gradient(120% 90% at 0% 0%, #1b2251 0%, #12194a 55%, #0d1238 100%); color: #fff;
+  }
+  .brand { display: flex; align-items: center; gap: 18px; }
+  .brand img { width: 64px; height: 64px; }
+  .brand span { font: 800 34px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.02em; }
+  h1 { margin-top: auto; font: 800 52px/1.08 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+  h1 em { font-style: normal; color: #7f9bf0; }
+  .meta { margin-top: 28px; font: 500 22px/1.4 Inter, sans-serif; color: #c7cde6; }
+  .meta b { color: #fff; font-weight: 600; }
+  .photos { width: 600px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 6px; background: #12194a; padding: 0 0 0 6px; }
+  .photos img { width: 100%; height: 100%; object-fit: cover; display: block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="text">
+    <div class="brand"><img src="../../public/logo.png" alt=""><span>PLASTIBAN</span></div>
+    <h1>Premium Packaging<br><em>Made to Make an Impression</em></h1>
+    <p class="meta"><b>Lebanon · U.A.E.</b> &nbsp;·&nbsp; Since 1989</p>
+  </div>
+  <div class="photos">
+    <img src="../../public/products/hard_cover_boxes/magnet/1.jpeg" alt="">
+    <img src="../../public/products/hard_cover_boxes/top_base/1.jpeg" alt="">
+    <img src="../../public/products/ribbons/1.jpeg" alt="">
+    <img src="../../public/products/digital_printed/boxes/1.jpeg" alt="">
+  </div>
+</div>
+</body>
+</html>
