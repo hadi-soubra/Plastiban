@@ -10,6 +10,7 @@ import { Contact } from './components/contact/contact';
 import { Footer } from './components/footer/footer';
 import { SeoService } from './seo/seo.service';
 import { TranslationService } from './i18n/translation.service';
+import { scrollToSection } from './scroll-to-section';
 
 /**
  * The paths the site answered on while it was three pages. The server 301s them
@@ -57,7 +58,7 @@ export class App {
     if (!target) {
       return;
     }
-    const jump = () => target.scrollIntoView({ behavior: 'instant', block: 'start' });
+    const jump = () => scrollToSection(target, 'instant');
     jump();
     // The web fonts land after this first jump and reflow everything above the
     // target, which leaves it tucked under the header. Jump again once they

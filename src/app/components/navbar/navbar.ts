@@ -1,5 +1,6 @@
 import { Component, NgZone, OnDestroy, afterNextRender, computed, inject, signal } from '@angular/core';
 import { TranslationService } from '../../i18n/translation.service';
+import { scrollToSection } from '../../scroll-to-section';
 
 interface NavSection {
   labelKey: string;
@@ -109,7 +110,10 @@ export class Navbar implements OnDestroy {
     // reads as a delay rather than as motion. `instant` is required over
     // `auto` — `auto` defers to the `scroll-behavior: smooth` set on <html>.
     const behavior: ScrollBehavior = this.prefersInstantJump() ? 'instant' : 'smooth';
-    document.getElementById(id)?.scrollIntoView({ behavior, block: 'start' });
+    const target = document.getElementById(id);
+    if (target) {
+      scrollToSection(target, behavior);
+    }
   }
 
   /**

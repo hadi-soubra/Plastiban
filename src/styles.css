@@ -37,11 +37,18 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Section snapping — desktop only. `proximity` only engages once a section edge
-   is already near its resting place, so free scrolling through a long section —
-   or down to the footer — is never hijacked. The alignment point comes from each
-   section's own `scroll-mt-[var(--header-h)]`, which is why no
-   `scroll-padding-top` is set here: the two would stack and overshoot.
+/* Section snapping — desktop only. `proximity` only engages once a section is
+   already near its resting place, so free scrolling through a long section —
+   or down to the footer — is never hijacked.
+   Sections snap by their centre, not their top: several are well short of a
+   screen, and pinning one of those to the header just leaves an empty band
+   below it. Each section's own `scroll-mt-[var(--header-h)]` grows its snap
+   area upward by the header's height, so the centre that lines up with the
+   screen's centre is the centre of the space under the header, not of the
+   whole window. A full-height section therefore still lands flush under the
+   header. No `scroll-padding-top` is set here, as the two would stack and
+   overshoot. A section taller than the screen can't be centred, and browsers
+   let it scroll freely between its own top and bottom edges instead.
    Touch scrolling has its own momentum that snapping fights, and phone
    viewports are short enough that sections overflow, so it stays off there. */
 @media (min-width: 1024px) and (min-height: 640px) and (pointer: fine) {
@@ -55,7 +62,7 @@ html {
      the document falls inside contact's snap zone, so proximity would keep
      dragging the reader back up and off the footer. */
   main > * > section[id]:not(#contact) {
-    scroll-snap-align: start;
+    scroll-snap-align: center;
   }
 }
 

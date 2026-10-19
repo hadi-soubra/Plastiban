@@ -41,7 +41,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'clients.label': 'Companies we have worked with',
 
     'about.eyebrow': 'Who we are',
-    'about.heading': 'More than packaging. A complete manufacturing partner.',
+    'about.heading': 'More than packaging. A complete manufacturing partner',
     'about.body':
       'Since 1989, Plastiban has combined experience, craftsmanship and manufacturing expertise to create packaging that does more than protect a product. It becomes part of the experience.',
     'about.timelineLabel': 'How we got here',
@@ -88,8 +88,8 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
       'Hot foil stamping, embossing, debossing and spot UV to add texture, shine, contrast and distinctive detail.',
 
     'process.eyebrow': 'How we work',
-    'process.heading': 'From an idea to the finished package.',
-    'process.lead': 'If you can imagine it, we can work towards making it.',
+    'process.heading': 'From an idea to the finished package',
+    'process.lead': 'If you can imagine it, we can work towards making it',
     'process.steps': 'Our process, step by step',
     'process.understand.title': 'Understand',
     'process.understand.description':
@@ -111,20 +111,20 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
       'The finished packaging is prepared to the agreed requirements and ready for your product.',
 
     'vision.eyebrow': 'Looking ahead',
-    'vision.heading': 'To create packaging that people remember.',
+    'vision.heading': 'To create packaging that people remember',
     'vision.body':
       'We believe great packaging can turn an ordinary idea into an experience. Our vision is to continue developing innovative, high-quality packaging solutions while growing our presence across the region.',
     'vision.missionLabel': 'Our mission',
     'vision.missionHeading':
-      'To make exceptional packaging accessible to every brand and every occasion.',
+      'To make exceptional packaging accessible to every brand and every occasion',
     'vision.missionBody':
       'We combine experience, creativity and manufacturing expertise to deliver packaging solutions that are practical, distinctive and made to the highest standards.',
     'vision.sustainabilityLabel': 'Sustainability',
-    'vision.sustainabilityHeading': 'Better packaging starts with better decisions.',
+    'vision.sustainabilityHeading': 'Better packaging starts with better decisions',
     'vision.sustainabilityBody':
       'We continuously look for ways to improve the materials, processes and practices behind our products. As packaging requirements evolve, we believe responsible manufacturing means continually evaluating how we design, produce and deliver.',
     'vision.valuesLabel': 'Our values',
-    'vision.valuesHeading': 'What every project is held to.',
+    'vision.valuesHeading': 'What every project is held to',
     'vision.values.measure.title': 'Made to measure',
     'vision.values.measure.description':
       'Packaging is rarely one size fits all. Every project is developed around your product, brand and requirements.',
@@ -136,7 +136,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
       'Materials, dimensions, structure and finishing all shape how the result looks, feels and performs.',
 
     'products.eyebrow': 'Portfolio',
-    'products.heading': "Ideas we've brought to life.",
+    'products.heading': "Ideas we've brought to life",
     'products.intro':
       'Every project begins differently. Some start with a sketch, others with a product, a brand guideline or simply an idea.',
     'products.intro2':
@@ -162,7 +162,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'lightbox.dragHint': 'Drag to browse',
 
     'contact.eyebrow': 'Get in touch',
-    'contact.heading': "Let's talk packaging.",
+    'contact.heading': "Let's talk packaging",
     'contact.intro':
       'Whether you already have a complete packaging concept or you are starting with an idea, we would love to hear about your project.',
     'contact.intro2':
@@ -247,7 +247,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'clients.label': 'شركات عملنا معها',
 
     'about.eyebrow': 'من نحن',
-    'about.heading': 'أكثر من تغليف. شريك تصنيع متكامل.',
+    'about.heading': 'أكثر من تغليف. شريك تصنيع متكامل',
     'about.body':
       'منذ عام 1989، تجمع بلاستيبان بين الخبرة والحرفية وقدرات التصنيع لصناعة تغليف لا يحمي المنتج فحسب، بل يصبح جزءاً من التجربة.',
     'about.timelineLabel': 'كيف وصلنا إلى هنا',
@@ -290,8 +290,8 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
       'الطباعة بالرقائق الساخنة والنقش البارز والغائر وطبقة الـUV الموضعية، لإضافة الملمس واللمعان والتباين وتفاصيل مميّزة.',
 
     'process.eyebrow': 'كيف نعمل',
-    'process.heading': 'من الفكرة إلى العلبة الجاهزة.',
-    'process.lead': 'إذا كنت تتخيّله، فنحن نعمل على تحقيقه.',
+    'process.heading': 'من الفكرة إلى العلبة الجاهزة',
+    'process.lead': 'إذا كنت تتخيّله، فنحن نعمل على تحقيقه',
     'process.steps': 'مراحل العمل، خطوة بخطوة',
     'process.understand.title': 'الفهم',
     'process.understand.description': 'نبدأ من منتجك وعلامتك والكميات والأبعاد والميزانية والاستخدام المقصود.',
@@ -309,19 +309,19 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'process.deliver.description': 'يُجهَّز التغليف النهائي وفق المتطلبات المتفق عليها وجاهزاً لمنتجك.',
 
     'vision.eyebrow': 'نظرتنا إلى الأمام',
-    'vision.heading': 'أن نصنع تغليفاً يبقى في الذاكرة.',
+    'vision.heading': 'أن نصنع تغليفاً يبقى في الذاكرة',
     'vision.body':
       'نؤمن بأن التغليف الجيّد قادر على تحويل فكرة عادية إلى تجربة. رؤيتنا أن نواصل تطوير حلول تغليف مبتكرة وعالية الجودة، مع توسيع حضورنا في المنطقة.',
     'vision.missionLabel': 'مهمتنا',
-    'vision.missionHeading': 'أن يكون التغليف الاستثنائي في متناول كل علامة تجارية وكل مناسبة.',
+    'vision.missionHeading': 'أن يكون التغليف الاستثنائي في متناول كل علامة تجارية وكل مناسبة',
     'vision.missionBody':
       'نجمع بين الخبرة والإبداع وقدرات التصنيع لتقديم حلول تغليف عملية ومميّزة ومصنوعة بأعلى المعايير.',
     'vision.sustainabilityLabel': 'الاستدامة',
-    'vision.sustainabilityHeading': 'التغليف الأفضل يبدأ بقرارات أفضل.',
+    'vision.sustainabilityHeading': 'التغليف الأفضل يبدأ بقرارات أفضل',
     'vision.sustainabilityBody':
       'نبحث باستمرار عن طرق لتحسين المواد والعمليات والممارسات التي تقف خلف منتجاتنا. ومع تطوّر متطلبات التغليف، نرى أن التصنيع المسؤول يعني المراجعة الدائمة لطريقة تصميمنا وإنتاجنا وتسليمنا.',
     'vision.valuesLabel': 'قيمنا',
-    'vision.valuesHeading': 'ما نلتزم به في كل مشروع.',
+    'vision.valuesHeading': 'ما نلتزم به في كل مشروع',
     'vision.values.measure.title': 'مفصّل على القياس',
     'vision.values.measure.description':
       'نادراً ما يناسب تغليف واحد كل المنتجات. كل مشروع يُطوَّر حول منتجك وعلامتك ومتطلباتك.',
@@ -331,7 +331,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'vision.values.detail.description':
       'المواد والأبعاد والهيكل والتشطيب، كلها تصنع شكل النتيجة وملمسها وأداءها.',
     'products.eyebrow': 'أعمالنا',
-    'products.heading': 'أفكار حوّلناها إلى واقع.',
+    'products.heading': 'أفكار حوّلناها إلى واقع',
     'products.intro':
       'كل مشروع يبدأ بشكل مختلف. بعضها يبدأ برسم أوّلي، وبعضها بمنتج أو دليل هوية أو مجرّد فكرة.',
     'products.intro2':
@@ -357,7 +357,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'lightbox.dragHint': 'اسحب للتصفّح',
 
     'contact.eyebrow': 'تواصل معنا',
-    'contact.heading': 'لنتحدّث عن التغليف.',
+    'contact.heading': 'لنتحدّث عن التغليف',
     'contact.intro':
       'سواء كان لديك تصوّر متكامل للتغليف أو كنت تبدأ من فكرة، يسعدنا أن نسمع عن مشروعك.',
     'contact.intro2':
