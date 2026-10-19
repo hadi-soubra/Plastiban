@@ -6,3 +6,12 @@
 # in a different studio - dark moody backgrounds, varied framing - so leaving
 # them alone made them the odd ones out once everything else moved to the beige
 # setup. Matching the set matters more than their individual quality.
+#
+# Already restaged, but under sub-folders that were later flattened, so out/ no
+# longer has a file at their current path and they would otherwise be sent
+# through a second time.
+traditional_souvenir_boxes/
+cardboard_bags/1.jpeg
+cardboard_bags/2.jpeg
+cardboard_bags/3.jpeg
+cardboard_bags/4.jpeg
