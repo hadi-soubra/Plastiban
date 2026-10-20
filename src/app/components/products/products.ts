@@ -90,26 +90,26 @@ const CATEGORY_FOLDERS: Record<CategoryId, string> = {
 const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
   hard: [
     {
-      name: { en: 'Top/Base Hard Box', ar: 'علبة صلبة كعب وغطاء' },
-      description: { en: 'Classic two-piece rigid box with a lift-off lid.', ar: 'علبة صلبة من قطعتين بغطاء يُرفع عن الكعب.' },
+      name: { en: 'Top/Base Hard Box', ar: 'علبة صلبة (هارد كوفر) كعب وغطاء' },
+      description: { en: 'Classic two-piece rigid box with a lift-off lid.', ar: 'علبة صلبة (هارد كوفر) من قطعتين بغطاء يُرفع عن الكعب.' },
       folder: 'top_base',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg'],
     },
     {
-      name: { en: 'Magnet Hard Box', ar: 'علبة صلبة مغناطيسية' },
-      description: { en: 'Rigid box that snaps shut on a hidden magnet.', ar: 'علبة صلبة تُغلق بمغناطيس مخفي.' },
+      name: { en: 'Magnet Hard Box', ar: 'علبة صلبة (هارد كوفر) مغناطيسية' },
+      description: { en: 'Rigid box that snaps shut on a hidden magnet.', ar: 'علبة صلبة (هارد كوفر) تُغلق بمغناطيس مخفي.' },
       folder: 'magnet',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg'],
     },
     {
-      name: { en: 'Hard Box with Ribbon Closing', ar: 'علبة صلبة بإغلاق بشريط' },
-      description: { en: 'Rigid box tied shut with a ribbon in your colours.', ar: 'علبة صلبة تُربط بشريط بألوان علامتك التجارية.' },
+      name: { en: 'Hard Box with Ribbon Closing', ar: 'علبة صلبة (هارد كوفر) بإغلاق بشريط' },
+      description: { en: 'Rigid box tied shut with a ribbon in your colours.', ar: 'علبة صلبة (هارد كوفر) تُربط بشريط بألوان علامتك التجارية.' },
       folder: 'ribbon_closing',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg'],
     },
     {
-      name: { en: 'Drawer Hard Box', ar: 'علبة صلبة بدرج' },
-      description: { en: 'Rigid sleeve and drawer that slides out to reveal the product.', ar: 'علبة صلبة بدرج منزلق يكشف المنتج عند سحبه.' },
+      name: { en: 'Drawer Hard Box', ar: 'علبة صلبة (هارد كوفر) بدرج' },
+      description: { en: 'Rigid sleeve and drawer that slides out to reveal the product.', ar: 'علبة صلبة (هارد كوفر) بدرج منزلق يكشف المنتج عند سحبه.' },
       folder: 'drawer',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg'],
     },

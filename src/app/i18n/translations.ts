@@ -265,7 +265,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'about.timeline.luxury.year': '2024',
     'about.timeline.luxury.title': 'إطلاق التغليف الفاخر (هارد كوفر) والطباعة الديجيتال',
     'about.timeline.luxury.description':
-      'أطلقنا العلب الصلبة الفاخرة والطباعة الرقمية التي أتاحت لنا تنفيذ تصاميم عالية الجودة بحد أدنى منخفض للطّلب، مما جعل منتجاتنا متاحة للشركات بمختلف أحجامها.',
+      'أطلقنا العلب الصلبة الفاخرة (هارد كوفر) والطباعة الديجيتال التي أتاحت لنا تنفيذ تصاميم عالية الجودة بحد أدنى منخفض للطّلب، مما جعل منتجاتنا متاحة للشركات بمختلف أحجامها.',
     'about.timeline.today.year': 'اليوم',
     'about.timeline.today.title': 'موقعان، معيار واحد',
     'about.timeline.today.description':
@@ -342,7 +342,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'products.subFilters': 'أنواع المنتجات',
     'products.allTypes': 'كل الأنواع',
 
-    'category.hard': 'علب بغلاف صلب',
+    'category.hard': 'علب بغلاف صلب (هارد كوفر)',
     'category.printed': 'الطباعة الديجيتال',
     'category.cardboard': 'علب كرتون',
     'category.bags': 'أكياس كرتون',
@@ -405,6 +405,6 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
 
     'seo.title': 'بلاستيبان - تصنيع التغليف والبلاستيك الصناعي | لبنان والإمارات',
     'seo.description':
-      'تصنّع بلاستيبان للصناعات التقنية ش.م.م مواد التغليف منذ عام ١٩٨٩: علب كرتون وبلاستيك وعلب صلبة وتذكارية وطباعة رقمية، مع مكاتب في بيروت، لبنان وأم القيوين، الإمارات.',
+      'تصنّع بلاستيبان للصناعات التقنية ش.م.م مواد التغليف منذ عام ١٩٨٩: علب كرتون وبلاستيك وعلب صلبة (هارد كوفر) وتذكارية وطباعة ديجيتال، مع مكاتب في بيروت، لبنان وأم القيوين، الإمارات.',
   },
 };
