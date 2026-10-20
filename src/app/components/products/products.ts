@@ -90,8 +90,8 @@ const CATEGORY_FOLDERS: Record<CategoryId, string> = {
 const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
   hard: [
     {
-      name: { en: 'Top/Base Hard Box', ar: 'علبة صلبة بغطاء وقاعدة' },
-      description: { en: 'Classic two-piece rigid box with a lift-off lid.', ar: 'علبة صلبة من قطعتين بغطاء يُرفع عن القاعدة.' },
+      name: { en: 'Top/Base Hard Box', ar: 'علبة صلبة كعب وغطاء' },
+      description: { en: 'Classic two-piece rigid box with a lift-off lid.', ar: 'علبة صلبة من قطعتين بغطاء يُرفع عن الكعب.' },
       folder: 'top_base',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg'],
     },
@@ -160,8 +160,8 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg'],
     },
     {
-      name: { en: 'Top/Base Boxes', ar: 'علب بغطاء وقاعدة' },
-      description: { en: 'Two-piece cardboard box with a lift-off lid.', ar: 'علبة كرتون من قطعتين بغطاء يُرفع عن القاعدة.' },
+      name: { en: 'Top/Base Boxes', ar: 'علب كعب وغطاء' },
+      description: { en: 'Two-piece cardboard box with a lift-off lid.', ar: 'علبة كرتون من قطعتين بغطاء يُرفع عن الكعب.' },
       folder: 'top_base',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg'],
     },
@@ -185,7 +185,7 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
     },
     {
       name: { en: 'With Plastic Top', ar: 'بغطاء بلاستيكي' },
-      description: { en: 'Cardboard base under a clear plastic lid.', ar: 'قاعدة من الكرتون بغطاء بلاستيكي شفاف.' },
+      description: { en: 'Cardboard base under a clear plastic lid.', ar: 'كعب من الكرتون وغطاء بلاستيكي شفاف.' },
       folder: 'with_plastic_top',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg'],
     },
@@ -213,8 +213,8 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg'],
     },
     {
-      name: { en: 'Top/Base Boxes', ar: 'علب بغطاء وقاعدة' },
-      description: { en: 'Two-piece plastic box with a lift-off lid.', ar: 'علبة بلاستيكية من قطعتين بغطاء يُرفع عن القاعدة.' },
+      name: { en: 'Top/Base Boxes', ar: 'علب كعب وغطاء' },
+      description: { en: 'Two-piece plastic box with a lift-off lid.', ar: 'علبة بلاستيكية من قطعتين بغطاء يُرفع عن الكعب.' },
       folder: 'top_base',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg'],
     },

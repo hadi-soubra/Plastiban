@@ -247,9 +247,9 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'clients.label': 'شركات عملنا معها',
 
     'about.eyebrow': 'من نحن',
-    'about.heading': 'أكثر من تغليف. شريك تصنيع متكامل',
+    'about.heading': 'أكثر من تغليف! شريك في التّصنيع!',
     'about.body':
-      'منذ عام 1989، تجمع بلاستيبان بين الخبرة والحرفية وقدرات التصنيع لصناعة تغليف لا يحمي المنتج فحسب، بل يصبح جزءاً من التجربة.',
+      'منذ عام 1989، تجمع بلاستيبان بين الخبرة والحرفية ودقّة التّصنيع لتقديم حلول تغليف لا تقتصر على حماية المنتج، بل تضيف قيمة إلى تجربة استخدامه.',
     'about.timelineLabel': 'كيف وصلنا إلى هنا',
     'about.timeline.founded.year': '1989',
     'about.timeline.founded.title': 'تأسيس بلاستيبان',
@@ -257,17 +257,17 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'about.timeline.production.year': '2006',
     'about.timeline.production.title': 'توسيع قدراتنا الإنتاجية',
     'about.timeline.production.description':
-      'استثمرنا في آلات وخطوط إنتاج جديدة لتطوير منتجات أكثر ابتكاراً وتقديم جودة أفضل.',
+      'استثمرنا في آلات وخطوط إنتاج جديدة لتطوير منتجات أكثر ابتكارًا وجودة.',
     'about.timeline.expansion.year': '2022',
     'about.timeline.expansion.title': 'التوسّع إلى الإمارات',
     'about.timeline.expansion.description':
       'افتتحنا فرعنا الثاني في الإمارات العربية المتحدة، لنوسّع حضورنا في المنطقة.',
     'about.timeline.luxury.year': '2024',
-    'about.timeline.luxury.title': 'إطلاق التغليف الفاخر والطباعة الرقمية',
+    'about.timeline.luxury.title': 'إطلاق التغليف الفاخر (هارد كوفر) والطباعة الديجيتال',
     'about.timeline.luxury.description':
-      'أطلقنا العلب الصلبة الفاخرة والطباعة الرقمية، ما يتيح تخصيصاً عالي الجودة بحدّ أدنى منخفض للطلب، ويجعل منتجاتنا في متناول الشركات بمختلف أحجامها.',
+      'أطلقنا العلب الصلبة الفاخرة والطباعة الرقمية التي أتاحت لنا تنفيذ تصاميم عالية الجودة بحد أدنى منخفض للطّلب، مما جعل منتجاتنا متاحة للشركات بمختلف أحجامها.',
     'about.timeline.today.year': 'اليوم',
-    'about.timeline.today.title': 'سوقان، معيار واحد',
+    'about.timeline.today.title': 'موقعان، معيار واحد',
     'about.timeline.today.description':
       'نواصل تقديم الجودة والتخصيص والاهتمام بالتفاصيل في لبنان والإمارات.',
 
@@ -277,36 +277,36 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
       'تتمّ الطباعة والقص والتشطيب بالكامل داخل منشآتنا في لبنان والإمارات العربية المتحدة، ما يضمن تحكّماً كاملاً وجودة ثابتة في كل مرحلة من مراحل الإنتاج.',
     'capabilities.offset.title': 'طباعة الأوفست',
     'capabilities.offset.description': 'طباعة عالية الجودة بتفاصيل حادّة وألوان ثابتة ونتائج تغليف احترافية.',
-    'capabilities.digital.title': 'الطباعة الرقمية',
+    'capabilities.digital.title': 'الطباعة الديجيتال',
     'capabilities.digital.description': 'طباعة مرنة للتصاميم المخصّصة وكميات الإنتاج الصغيرة.',
     'capabilities.dieCutting.title': 'القص والتكسير بالقوالب',
     'capabilities.dieCutting.description': 'قصّ وتكسير دقيقان لصنع أشكال وهياكل تغليف مخصّصة.',
     'capabilities.router.title': 'القص بالراوتر',
-    'capabilities.router.description': 'قصّ دقيق للتفاصيل المعقّدة والأشكال المخصّصة ومكوّنات التغليف الخاصة.',
+    'capabilities.router.description': 'قصّ دقيق للتفاصيل والأشكال المخصّصة ومكوّنات التغليف الخاصة.',
     'capabilities.lamination.title': 'التغليف الحراري (لامينيشن)',
     'capabilities.lamination.description': 'تشطيبات واقية وزخرفية تعزّز متانة التغليف ومظهره.',
     'capabilities.finishing.title': 'التشطيبات الفاخرة',
     'capabilities.finishing.description':
-      'الطباعة بالرقائق الساخنة والنقش البارز والغائر وطبقة الـUV الموضعية، لإضافة الملمس واللمعان والتباين وتفاصيل مميّزة.',
+      'الطباعة بالرّقائق الحرارية والنقش البارز والغائر وطبقة الـUV الموضعية، لإضافة الملمس واللمعان والتباين وتفاصيل مميّزة.',
 
     'process.eyebrow': 'كيف نعمل',
     'process.heading': 'من الفكرة إلى العلبة الجاهزة',
     'process.lead': 'إذا كنت تتخيّله، فنحن نعمل على تحقيقه',
     'process.steps': 'مراحل العمل، خطوة بخطوة',
     'process.understand.title': 'الفهم',
-    'process.understand.description': 'نبدأ من منتجك وعلامتك والكميات والأبعاد والميزانية والاستخدام المقصود.',
+    'process.understand.description': 'نبدأ بتحديد احتياجات منتجك وهويتك التّجارية والكميات والمقاسات والميزانية والغرض من الاستخدام.',
     'process.develop.title': 'التطوير',
-    'process.develop.description': 'يعمل فريقنا على الهيكل والمواد والتفاصيل التي تجمع الفكرة معاً.',
+    'process.develop.description': 'يعمل فريقنا على تطوير الهيكل واختيار المواد وتحديد التّفاصيل التي تجسّد التّصميم.',
     'process.prototype.title': 'النموذج',
-    'process.prototype.description': 'عيّنة ملموسة تتيح لك رؤية التغليف وتجربته وتقييمه قبل بدء الإنتاج.',
+    'process.prototype.description': 'تتيحُ لكَ العيّنة الملموسة رؤية التّغليف وتقييمه قبل بدء الإنتاج.',
     'process.manufacture.title': 'التصنيع',
     'process.manufacture.description':
-      'بعد الموافقة، ينتقل التغليف إلى الإنتاج في منشآتنا، مع عناية دقيقة بالثبات والجودة.',
+      'بعد الموافقة على التّصميم، ينتقل التّغليف إلى مرحلة الإنتاج، مع ضمان الجودة، الثّبات والتّناسق.',
     'process.finishing.title': 'التشطيب والتفاصيل',
     'process.finishing.description':
-      'نجمع كل التفاصيل معاً بحرفية دقيقة ولمسات تشطيب مدروسة.',
+      'تُجمَعُ كلُّ التّفاصيل بحرفية متقنة ولمسات نهائية مدروسة.',
     'process.deliver.title': 'التسليم',
-    'process.deliver.description': 'يُجهَّز التغليف النهائي وفق المتطلبات المتفق عليها وجاهزاً لمنتجك.',
+    'process.deliver.description': 'يُسَلَّم التّغليف النّهائي وفق المتطلبات المتّفق عليها ليكون جاهزًا لمنتجك.',
 
     'vision.eyebrow': 'نظرتنا إلى الأمام',
     'vision.heading': 'أن نصنع تغليفاً يبقى في الذاكرة',
@@ -326,10 +326,10 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'vision.values.measure.description':
       'نادراً ما يناسب تغليف واحد كل المنتجات. كل مشروع يُطوَّر حول منتجك وعلامتك ومتطلباتك.',
     'vision.values.consistency.title': 'ثبات الجودة',
-    'vision.values.consistency.description': 'الجودة والدقة والتشطيب ذاتها عبر خط الإنتاج بالكامل.',
+    'vision.values.consistency.description': 'الحفاظ على مستوى ثابت من الجودة والدّقة والإتقان في كل دفعة إنتاج.',
     'vision.values.detail.title': 'اهتمام بالتفاصيل',
     'vision.values.detail.description':
-      'المواد والأبعاد والهيكل والتشطيب، كلها تصنع شكل النتيجة وملمسها وأداءها.',
+      'تحدّد المواد والمقاسات والهيكل والتّشطيبات المظهر النّهائي وملمس وأداء التّغليف.',
     'products.eyebrow': 'أعمالنا',
     'products.heading': 'أفكار حوّلناها إلى واقع',
     'products.intro':
@@ -343,7 +343,7 @@ export const TRANSLATIONS: Record<Lang, Record<string, string>> = {
     'products.allTypes': 'كل الأنواع',
 
     'category.hard': 'علب بغلاف صلب',
-    'category.printed': 'طباعة رقمية',
+    'category.printed': 'الطباعة الديجيتال',
     'category.cardboard': 'علب كرتون',
     'category.bags': 'أكياس كرتون',
     'category.plastic': 'علب بلاستيك',
