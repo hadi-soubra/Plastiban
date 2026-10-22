@@ -103,13 +103,13 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
     },
     {
       name: { en: 'Hard Box with Ribbon Closing', ar: 'علبة صلبة (هارد كوفر) بإغلاق بشريط' },
-      description: { en: 'Rigid box tied shut with a ribbon in your colours.', ar: 'علبة صلبة (هارد كوفر) تُربط بشريط بألوان علامتك التجارية.' },
+      description: { en: 'Hard Cover Box that closes with a ribbon of your choice.', ar: 'علبة صلبة (هارد كوفر) تُغلق بشريط من اختيارك.' },
       folder: 'ribbon_closing',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg'],
     },
     {
       name: { en: 'Drawer Hard Box', ar: 'علبة صلبة (هارد كوفر) بدرج' },
-      description: { en: 'Rigid sleeve and drawer that slides out to reveal the product.', ar: 'علبة صلبة (هارد كوفر) بدرج منزلق يكشف المنتج عند سحبه.' },
+      description: { en: 'Rigid hard box that slides out to reveal the product.', ar: 'علبة صلبة (هارد كوفر) تنزلق للخارج لتكشف المنتج.' },
       folder: 'drawer',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg'],
     },
@@ -117,19 +117,19 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
   printed: [
     {
       name: { en: 'Boxes', ar: 'علب' },
-      description: { en: 'Full-colour boxes printed straight from your artwork.', ar: 'علب مطبوعة بألوان كاملة مباشرة من تصميمك.' },
+      description: { en: 'Customized small boxes created with unique shapes & design.', ar: 'علب صغيرة مخصّصة بأشكال وتصاميم فريدة.' },
       folder: 'boxes',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', '13.jpeg'],
     },
     {
       name: { en: 'Bags', ar: 'أكياس' },
-      description: { en: 'Paper bags carrying your brand, printed to order.', ar: 'أكياس ورقية تحمل علامتك التجارية وتُطبع حسب الطلب.' },
+      description: { en: 'Cardboard bags printed with your own design.', ar: 'أكياس كرتون مطبوعة بتصميمك الخاص.' },
       folder: 'bags',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg'],
     },
     {
       name: { en: 'Cards', ar: 'بطاقات' },
-      description: { en: 'Thank-you and greeting cards for every occasion.', ar: 'بطاقات شكر وتهنئة لكل المناسبات.' },
+      description: { en: 'Customized cards for every occasion.', ar: 'بطاقات مخصّصة لكل المناسبات.' },
       folder: 'cards',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', '13.jpeg'],
     },
@@ -147,15 +147,15 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
     },
     {
       name: { en: 'Stickers', ar: 'ملصقات' },
-      description: { en: 'Die-cut stickers and labels in any shape.', ar: 'ملصقات وبطاقات مقصوصة بأي شكل تريده.' },
+      description: { en: 'Printed stickers in any shape and color.', ar: 'ملصقات مطبوعة بأي شكل ولون.' },
       folder: 'stickers',
-      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg'],
+      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg'],
     },
   ],
   cardboard: [
     {
       name: { en: 'Standard Boxes', ar: 'علب قياسية' },
-      description: { en: 'Stock cardboard box in the everyday sizes.', ar: 'علبة كرتون بالمقاسات القياسية المعتادة.' },
+      description: { en: 'One-piece cardboard box.', ar: 'علبة كرتون من قطعة واحدة.' },
       folder: 'standard',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg'],
     },
@@ -175,7 +175,7 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
       name: { en: 'Drawer/Sleeve Boxes', ar: 'علب بدرج وغلاف' },
       description: { en: 'Sleeve and drawer that slides out to reveal the product.', ar: 'غلاف ودرج منزلق يكشف المنتج عند سحبه.' },
       folder: 'drawer_sleeve',
-      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg'],
+      images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg'],
     },
     {
       name: { en: 'Cake Boxes', ar: 'علب كيك' },
@@ -185,13 +185,13 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
     },
     {
       name: { en: 'With Plastic Top', ar: 'بغطاء بلاستيكي' },
-      description: { en: 'Cardboard base under a clear plastic lid.', ar: 'كعب من الكرتون وغطاء بلاستيكي شفاف.' },
+      description: { en: 'Cardboard base with transparent cover.', ar: 'كعب من الكرتون مع غطاء شفاف.' },
       folder: 'with_plastic_top',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg'],
     },
     {
       name: { en: 'Box/Bag', ar: 'علبة/كيس' },
-      description: { en: 'Box that carries like a bag, with a handle on top.', ar: 'علبة تُحمل كالكيس بمقبض في أعلاها.' },
+      description: { en: 'Box that carries like a bag.', ar: 'علبة تُحمل كالكيس.' },
       folder: 'box_bag',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg'],
     },
@@ -199,7 +199,7 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
   bags: [
     {
       name: { en: 'Cardboard Bags', ar: 'أكياس كرتون' },
-      description: { en: 'Paper bags finished with ribbon or rope handles.', ar: 'أكياس ورقية بمقابض من الشريط أو الحبل.' },
+      description: { en: 'Cardboard bags with ribbon or rope handle.', ar: 'أكياس كرتون بمقبض من الشريط أو الحبل.' },
       // No sub-folders: these shots sit directly in `public/products/cardboard_bags`.
       folder: '',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg', '8.jpeg', '9.jpeg'],
@@ -208,7 +208,7 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
   plastic: [
     {
       name: { en: 'Standard Boxes', ar: 'علب قياسية' },
-      description: { en: 'Stock plastic box in the everyday sizes.', ar: 'علبة بلاستيكية بالمقاسات القياسية المعتادة.' },
+      description: { en: 'One-piece plastic box.', ar: 'علبة بلاستيكية من قطعة واحدة.' },
       folder: 'standard',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg'],
     },
@@ -222,7 +222,7 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
   ribbons: [
     {
       name: { en: 'Ribbons', ar: 'شرائط' },
-      description: { en: 'Satin, grosgrain and printed ribbon for finishing a box or bag.', ar: 'شرائط ساتان وغروغران ومطبوعة لتزيين العلبة أو الكيس.' },
+      description: { en: 'Printed satin or grosgrain ribbons.', ar: 'شرائط ساتان أو غروغران مطبوعة.' },
       // No sub-folders: these shots sit directly in `public/products/ribbons`.
       folder: '',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg'],
@@ -231,7 +231,7 @@ const SUBCATEGORIES_BY_CATEGORY: Record<CategoryId, SubCategory[]> = {
   souvenir: [
     {
       name: { en: 'Traditional Souvenir Boxes', ar: 'علب تذكارية تقليدية' },
-      description: { en: 'Cardboard souvenir boxes, on their own or paired with plastic.', ar: 'علب تذكارية من الكرتون، وحدها أو مع البلاستيك.' },
+      description: { en: 'Mixed cardboard with plastic boxes to meet all your traditional occasions.', ar: 'علب من الكرتون مع البلاستيك تناسب جميع مناسباتك التقليدية.' },
       // No sub-folders: these shots sit directly in `public/products/traditional_souvenir_boxes`.
       folder: '',
       images: ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '6.jpeg', '7.jpeg'],
